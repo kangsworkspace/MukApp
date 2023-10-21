@@ -13,10 +13,42 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        
+        // scene 설정
+                guard let windowScene = (scene as? UIWindowScene) else { return }
+                window = UIWindow(windowScene: windowScene)
+                
+                // 탭 바 컨트롤러 생성
+                let tabBarCon = UITabBarController()
+                
+                // 네이게이션 바 코드로 생성(루트 뷰) + 변수에 뷰 컨트롤러 담기
+                let vc1 = UINavigationController(rootViewController: mainViewController())
+                
+                // 변수에 뷰 컨트롤러 담기
+                let vc2 = addViewController()
+                let vc3 = updateViewController()
+
+                
+                // 뷰 컨트롤러 -> 탭 바 설정
+                tabBarCon.setViewControllers([vc1, vc2, vc3], animated: false)
+                tabBarCon.modalPresentationStyle = .fullScreen
+                tabBarCon.tabBar.backgroundColor = .white
+                
+                // 탭 바 이름
+                vc1.title = "Main"
+                vc2.title = "Search"
+                vc3.title = "File"
+                
+                // 탭 바 이미지
+                guard let items = tabBarCon.tabBar.items else { return }
+                items[0].image = UIImage(systemName: "trash")
+                items[1].image = UIImage(systemName: "folder")
+                items[2].image = UIImage(systemName: "paperplane")
+                
+                // 첫 화면(루트 뷰)를 설정
+                window?.rootViewController = tabBarCon
+                window?.makeKeyAndVisible()
+        
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

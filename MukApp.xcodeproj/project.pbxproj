@@ -9,23 +9,25 @@
 /* Begin PBXBuildFile section */
 		B037F73D2AE3B58500C72F63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F73C2AE3B58500C72F63 /* AppDelegate.swift */; };
 		B037F73F2AE3B58500C72F63 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F73E2AE3B58500C72F63 /* SceneDelegate.swift */; };
-		B037F7412AE3B58500C72F63 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7402AE3B58500C72F63 /* ViewController.swift */; };
-		B037F7442AE3B58500C72F63 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B037F7422AE3B58500C72F63 /* Main.storyboard */; };
+		B037F7412AE3B58500C72F63 /* mainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7402AE3B58500C72F63 /* mainViewController.swift */; };
 		B037F7472AE3B58500C72F63 /* MukApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B037F7452AE3B58500C72F63 /* MukApp.xcdatamodeld */; };
 		B037F7492AE3B58600C72F63 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B037F7482AE3B58600C72F63 /* Assets.xcassets */; };
 		B037F74C2AE3B58600C72F63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B037F74A2AE3B58600C72F63 /* LaunchScreen.storyboard */; };
+		B037F7582AE3B87100C72F63 /* addViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7572AE3B87100C72F63 /* addViewController.swift */; };
+		B037F75A2AE3B8EA00C72F63 /* updateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7592AE3B8EA00C72F63 /* updateViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B037F7392AE3B58500C72F63 /* MukApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MukApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B037F73C2AE3B58500C72F63 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B037F73E2AE3B58500C72F63 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		B037F7402AE3B58500C72F63 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		B037F7432AE3B58500C72F63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B037F7402AE3B58500C72F63 /* mainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainViewController.swift; sourceTree = "<group>"; };
 		B037F7462AE3B58500C72F63 /* MukApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MukApp.xcdatamodel; sourceTree = "<group>"; };
 		B037F7482AE3B58600C72F63 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B037F74B2AE3B58600C72F63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B037F74D2AE3B58600C72F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B037F7572AE3B87100C72F63 /* addViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addViewController.swift; sourceTree = "<group>"; };
+		B037F7592AE3B8EA00C72F63 /* updateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = updateViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,14 +62,47 @@
 			children = (
 				B037F73C2AE3B58500C72F63 /* AppDelegate.swift */,
 				B037F73E2AE3B58500C72F63 /* SceneDelegate.swift */,
-				B037F7402AE3B58500C72F63 /* ViewController.swift */,
-				B037F7422AE3B58500C72F63 /* Main.storyboard */,
+				B037F7562AE3B5D400C72F63 /* Helpers */,
+				B037F7552AE3B5CE00C72F63 /* Models */,
+				B037F7542AE3B5C700C72F63 /* ViewModels */,
+				B037F7532AE3B5BE00C72F63 /* Views */,
 				B037F7482AE3B58600C72F63 /* Assets.xcassets */,
 				B037F74A2AE3B58600C72F63 /* LaunchScreen.storyboard */,
 				B037F74D2AE3B58600C72F63 /* Info.plist */,
 				B037F7452AE3B58500C72F63 /* MukApp.xcdatamodeld */,
 			);
 			path = MukApp;
+			sourceTree = "<group>";
+		};
+		B037F7532AE3B5BE00C72F63 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B037F7402AE3B58500C72F63 /* mainViewController.swift */,
+				B037F7572AE3B87100C72F63 /* addViewController.swift */,
+				B037F7592AE3B8EA00C72F63 /* updateViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		B037F7542AE3B5C700C72F63 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		B037F7552AE3B5CE00C72F63 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B037F7562AE3B5D400C72F63 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,7 +165,6 @@
 			files = (
 				B037F74C2AE3B58600C72F63 /* LaunchScreen.storyboard in Resources */,
 				B037F7492AE3B58600C72F63 /* Assets.xcassets in Resources */,
-				B037F7442AE3B58500C72F63 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,9 +175,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B037F7412AE3B58500C72F63 /* ViewController.swift in Sources */,
+				B037F7412AE3B58500C72F63 /* mainViewController.swift in Sources */,
+				B037F75A2AE3B8EA00C72F63 /* updateViewController.swift in Sources */,
 				B037F7472AE3B58500C72F63 /* MukApp.xcdatamodeld in Sources */,
 				B037F73D2AE3B58500C72F63 /* AppDelegate.swift in Sources */,
+				B037F7582AE3B87100C72F63 /* addViewController.swift in Sources */,
 				B037F73F2AE3B58500C72F63 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -151,14 +187,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		B037F7422AE3B58500C72F63 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B037F7432AE3B58500C72F63 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		B037F74A2AE3B58600C72F63 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -300,9 +328,8 @@
 				INFOPLIST_FILE = MukApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -310,9 +337,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HoduCode.MukApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -327,9 +357,8 @@
 				INFOPLIST_FILE = MukApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -337,9 +366,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HoduCode.MukApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
