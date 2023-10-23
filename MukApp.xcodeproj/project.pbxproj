@@ -15,6 +15,15 @@
 		B037F74C2AE3B58600C72F63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B037F74A2AE3B58600C72F63 /* LaunchScreen.storyboard */; };
 		B037F7582AE3B87100C72F63 /* addViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7572AE3B87100C72F63 /* addViewController.swift */; };
 		B037F75A2AE3B8EA00C72F63 /* updateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7592AE3B8EA00C72F63 /* updateViewController.swift */; };
+		B037F7642AE43C0300C72F63 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7632AE43C0300C72F63 /* CoreDataManager.swift */; };
+		B037F7782AE55E6500C72F63 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7772AE55E6500C72F63 /* TestViewController.swift */; };
+		B037F77A2AE55F4300C72F63 /* MenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7792AE55F4300C72F63 /* MenuViewModel.swift */; };
+		B037F77C2AE55F4E00C72F63 /* TestViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F77B2AE55F4E00C72F63 /* TestViewModel.swift */; };
+		B037F7812AE564C200C72F63 /* MenuData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F77D2AE564C200C72F63 /* MenuData+CoreDataClass.swift */; };
+		B037F7822AE564C200C72F63 /* MenuData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F77E2AE564C200C72F63 /* MenuData+CoreDataProperties.swift */; };
+		B037F7832AE564C200C72F63 /* CategoryData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F77F2AE564C200C72F63 /* CategoryData+CoreDataClass.swift */; };
+		B037F7842AE564C200C72F63 /* CategoryData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7802AE564C200C72F63 /* CategoryData+CoreDataProperties.swift */; };
+		B037F7862AE60A6800C72F63 /* testTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7852AE60A6800C72F63 /* testTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +37,15 @@
 		B037F74D2AE3B58600C72F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B037F7572AE3B87100C72F63 /* addViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addViewController.swift; sourceTree = "<group>"; };
 		B037F7592AE3B8EA00C72F63 /* updateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = updateViewController.swift; sourceTree = "<group>"; };
+		B037F7632AE43C0300C72F63 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		B037F7772AE55E6500C72F63 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		B037F7792AE55F4300C72F63 /* MenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewModel.swift; sourceTree = "<group>"; };
+		B037F77B2AE55F4E00C72F63 /* TestViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewModel.swift; sourceTree = "<group>"; };
+		B037F77D2AE564C200C72F63 /* MenuData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenuData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		B037F77E2AE564C200C72F63 /* MenuData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenuData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		B037F77F2AE564C200C72F63 /* CategoryData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CategoryData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		B037F7802AE564C200C72F63 /* CategoryData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CategoryData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		B037F7852AE60A6800C72F63 /* testTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +98,8 @@
 				B037F7402AE3B58500C72F63 /* mainViewController.swift */,
 				B037F7572AE3B87100C72F63 /* addViewController.swift */,
 				B037F7592AE3B8EA00C72F63 /* updateViewController.swift */,
+				B037F7772AE55E6500C72F63 /* TestViewController.swift */,
+				B037F7852AE60A6800C72F63 /* testTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -87,6 +107,8 @@
 		B037F7542AE3B5C700C72F63 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				B037F7792AE55F4300C72F63 /* MenuViewModel.swift */,
+				B037F77B2AE55F4E00C72F63 /* TestViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -94,6 +116,11 @@
 		B037F7552AE3B5CE00C72F63 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B037F77D2AE564C200C72F63 /* MenuData+CoreDataClass.swift */,
+				B037F77E2AE564C200C72F63 /* MenuData+CoreDataProperties.swift */,
+				B037F77F2AE564C200C72F63 /* CategoryData+CoreDataClass.swift */,
+				B037F7802AE564C200C72F63 /* CategoryData+CoreDataProperties.swift */,
+				B037F7632AE43C0300C72F63 /* CoreDataManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -175,11 +202,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B037F7812AE564C200C72F63 /* MenuData+CoreDataClass.swift in Sources */,
 				B037F7412AE3B58500C72F63 /* mainViewController.swift in Sources */,
 				B037F75A2AE3B8EA00C72F63 /* updateViewController.swift in Sources */,
+				B037F7832AE564C200C72F63 /* CategoryData+CoreDataClass.swift in Sources */,
 				B037F7472AE3B58500C72F63 /* MukApp.xcdatamodeld in Sources */,
+				B037F7842AE564C200C72F63 /* CategoryData+CoreDataProperties.swift in Sources */,
 				B037F73D2AE3B58500C72F63 /* AppDelegate.swift in Sources */,
+				B037F7862AE60A6800C72F63 /* testTableViewCell.swift in Sources */,
+				B037F7642AE43C0300C72F63 /* CoreDataManager.swift in Sources */,
+				B037F7822AE564C200C72F63 /* MenuData+CoreDataProperties.swift in Sources */,
 				B037F7582AE3B87100C72F63 /* addViewController.swift in Sources */,
+				B037F77A2AE55F4300C72F63 /* MenuViewModel.swift in Sources */,
+				B037F7782AE55E6500C72F63 /* TestViewController.swift in Sources */,
+				B037F77C2AE55F4E00C72F63 /* TestViewModel.swift in Sources */,
 				B037F73F2AE3B58500C72F63 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
