@@ -8,7 +8,18 @@
 import UIKit
 import CoreData
 
-final class CoreDataManager {
+protocol CoreDataManagerType {
+    // Create
+    func saveMenuToCoreData(menuName: String, categoryName: String, categoryText: String, competion: @escaping () -> Void)
+    // Read
+    func getDataFromCoreData() -> [MenuData]
+    // Update
+    
+    // Delete
+}
+
+
+final class CoreDataManager: CoreDataManagerType {
     
     // 싱글톤
     static let shared = CoreDataManager()
@@ -22,7 +33,7 @@ final class CoreDataManager {
     // 엔터티 이름(코어 데이터에 저장된 객체)
     let modelName: String = "MenuData"
     
-
+    
     // MARK: - [CREATE]: 코어 데이터에 데이터 생성하기
     func saveMenuToCoreData(menuName: String, categoryName: String, categoryText: String, competion: @escaping () -> Void) {
         
@@ -77,11 +88,42 @@ final class CoreDataManager {
         return menuList
     }
     
-    
-    
-    // MARK: - [DELETE]: 코어 데이터에 저장된 데이터 삭제하기
-    func deleteFromCoreData() {
-    
+    // MARK: - [UPDATE]: 코어 데이터 업데이트 하기
+    func updateCoreData(newMenuData: MenuData, competion: @escaping () -> Void) {
         
+        // 요청서
+        let request = NSFetchRequest<NSManagedObject>(entityName: self.modelName)
+        
+        do {
+            // 요청서를 통해서 데이터 가져오기
+            if let fetchedMenuList = try context.fetch(request) as? [MenuData] {
+                // 배열의 첫번째
+                if var targetMenu = fetchedMenuList.first {
+                    
+                    // 실제 데이터 재할당
+                    targetMenu = newMenuData
+                    
+                    // Save the changes to the context
+                    do {
+                        try context.save()
+                        print("코어 데이터 업데이트 성공")
+                        competion()
+                    } catch {
+                        print(error)
+                        print("코어 데이터 업데이트 실패")
+                        competion()
+                    }
+                }
+            }
+        } catch {
+            print(error)
+        }
     }
-}
+        
+        
+        // MARK: - [DELETE]: 코어 데이터에 저장된 데이터 삭제하기
+        func deleteFromCoreData() {
+            
+            
+        }
+    }

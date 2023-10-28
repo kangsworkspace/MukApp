@@ -17,15 +17,17 @@ class updateViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .green
+                
+        self.title = "카테고리 관리"
+        view.backgroundColor = .white
         
         setTableView()
     }
-  
+    
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         // 화면에 재진입 할 때 -> 테이블 뷰 데이터 리로드
         tableView.reloadData()
     }
@@ -53,6 +55,10 @@ class updateViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
         ])
+    }
+    
+    @objc func plusButtonTapped() {
+        
     }
 }
 

@@ -24,6 +24,9 @@
 		B037F7832AE564C200C72F63 /* CategoryData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F77F2AE564C200C72F63 /* CategoryData+CoreDataClass.swift */; };
 		B037F7842AE564C200C72F63 /* CategoryData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7802AE564C200C72F63 /* CategoryData+CoreDataProperties.swift */; };
 		B037F7862AE60A6800C72F63 /* testTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7852AE60A6800C72F63 /* testTableViewCell.swift */; };
+		B06E01652AEC04AA0065E7FF /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06E01642AEC04AA0065E7FF /* CategoryTableViewCell.swift */; };
+		B06E01672AEC259A0065E7FF /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06E01662AEC259A0065E7FF /* APIService.swift */; };
+		B0A7B1142AEB53D300D33599 /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A7B1132AEB53D300D33599 /* Memo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +49,9 @@
 		B037F77F2AE564C200C72F63 /* CategoryData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CategoryData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		B037F7802AE564C200C72F63 /* CategoryData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CategoryData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B037F7852AE60A6800C72F63 /* testTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testTableViewCell.swift; sourceTree = "<group>"; };
+		B06E01642AEC04AA0065E7FF /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
+		B06E01662AEC259A0065E7FF /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		B0A7B1132AEB53D300D33599 /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +86,7 @@
 			children = (
 				B037F73C2AE3B58500C72F63 /* AppDelegate.swift */,
 				B037F73E2AE3B58500C72F63 /* SceneDelegate.swift */,
-				B037F7562AE3B5D400C72F63 /* Helpers */,
+				B037F7562AE3B5D400C72F63 /* APIService */,
 				B037F7552AE3B5CE00C72F63 /* Models */,
 				B037F7542AE3B5C700C72F63 /* ViewModels */,
 				B037F7532AE3B5BE00C72F63 /* Views */,
@@ -97,9 +103,10 @@
 			children = (
 				B037F7402AE3B58500C72F63 /* mainViewController.swift */,
 				B037F7572AE3B87100C72F63 /* addViewController.swift */,
+				B06E01642AEC04AA0065E7FF /* CategoryTableViewCell.swift */,
 				B037F7592AE3B8EA00C72F63 /* updateViewController.swift */,
-				B037F7772AE55E6500C72F63 /* TestViewController.swift */,
 				B037F7852AE60A6800C72F63 /* testTableViewCell.swift */,
+				B037F7772AE55E6500C72F63 /* TestViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -125,11 +132,13 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		B037F7562AE3B5D400C72F63 /* Helpers */ = {
+		B037F7562AE3B5D400C72F63 /* APIService */ = {
 			isa = PBXGroup;
 			children = (
+				B0A7B1132AEB53D300D33599 /* Memo.swift */,
+				B06E01662AEC259A0065E7FF /* APIService.swift */,
 			);
-			path = Helpers;
+			path = APIService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -205,6 +214,7 @@
 				B037F7812AE564C200C72F63 /* MenuData+CoreDataClass.swift in Sources */,
 				B037F7412AE3B58500C72F63 /* mainViewController.swift in Sources */,
 				B037F75A2AE3B8EA00C72F63 /* updateViewController.swift in Sources */,
+				B0A7B1142AEB53D300D33599 /* Memo.swift in Sources */,
 				B037F7832AE564C200C72F63 /* CategoryData+CoreDataClass.swift in Sources */,
 				B037F7472AE3B58500C72F63 /* MukApp.xcdatamodeld in Sources */,
 				B037F7842AE564C200C72F63 /* CategoryData+CoreDataProperties.swift in Sources */,
@@ -217,6 +227,8 @@
 				B037F7782AE55E6500C72F63 /* TestViewController.swift in Sources */,
 				B037F77C2AE55F4E00C72F63 /* TestViewModel.swift in Sources */,
 				B037F73F2AE3B58500C72F63 /* SceneDelegate.swift in Sources */,
+				B06E01672AEC259A0065E7FF /* APIService.swift in Sources */,
+				B06E01652AEC04AA0065E7FF /* CategoryTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -21,14 +21,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // 탭 바 컨트롤러 생성
         let tabBarCon = UITabBarController()
         
-        // 네이게이션 바 코드로 생성(루트 뷰) + 변수에 뷰 컨트롤러 담기
+        // mainViewController 생성자 값
+        let coreDatamanager = CoreDataManager()
+        let viewModel = MenuViewModel(coreDataManager: coreDatamanager)
+        
+        // 네이게이션 바 설정
         let vc1 = UINavigationController(rootViewController: mainViewController())
-        
-        // 변수에 뷰 컨트롤러 담기
-        let vc2 = addViewController()
-        let vc3 = updateViewController()
-        let vc4 = TestViewController()
-        
+        let vc2 = UINavigationController(rootViewController: addViewController(viewModel: viewModel))
+        let vc3 = UINavigationController(rootViewController: updateViewController())
+        let vc4 = UINavigationController(rootViewController: TestViewController())
         
         // 뷰 컨트롤러 -> 탭 바 설정
         tabBarCon.setViewControllers([vc1, vc2, vc3, vc4], animated: false)
@@ -41,6 +42,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         vc3.title = "File"
         vc4.title = "TEST"
         
+        
+        
         // 탭 바 이미지
         guard let items = tabBarCon.tabBar.items else { return }
         items[0].image = UIImage(systemName: "trash")
@@ -52,6 +55,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = tabBarCon
         window?.makeKeyAndVisible()
         
+        
+//        let navController1 = UINavigationController(rootViewController: mainVC)
+//        let navController2 = UINavigationController(rootViewController: vc2)
+//        let navController3 = UINavigationController(rootViewController: vc3)
+//        let navController4 = UINavigationController(rootViewController: vc4)
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

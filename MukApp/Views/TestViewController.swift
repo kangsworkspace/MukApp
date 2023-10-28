@@ -85,7 +85,8 @@ class TestViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        self.title = "카테고리 관리"
         view.backgroundColor = .white
         
         mainStackView.addArrangedSubview(menuNameTextField)
@@ -98,8 +99,10 @@ class TestViewController: UIViewController {
         setAutoLayout()
     }
     
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-            self.view.endEditing(true)
+        self.view.endEditing(true)
     }
     
     func setAutoLayout() {
@@ -107,7 +110,7 @@ class TestViewController: UIViewController {
             mainStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             mainStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             mainStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-        
+            
             menuNameTextField.heightAnchor.constraint(equalToConstant: 40),
             categoryNameTextField.heightAnchor.constraint(equalToConstant: 40),
             categoryTextTextField.heightAnchor.constraint(equalToConstant: 40),
