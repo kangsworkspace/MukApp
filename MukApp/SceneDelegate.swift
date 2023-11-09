@@ -21,15 +21,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // 탭 바 컨트롤러 생성
         let tabBarCon = UITabBarController()
         
-        // mainViewController 생성자 값
+        // CoreDataManager 객체 생성
         let coreDatamanager = CoreDataManager()
-        let viewModel = MenuViewModel(coreDataManager: coreDatamanager)
+        // APIService 객체 생성
+        let apiService = APIService()
+        
+        let menuViewModel = MenuViewModel(coreDataManager: coreDatamanager)
+        let mainViewModel = MainViewModel(coreDataManager: coreDatamanager, apiServie: apiService)
+
         
         // 네이게이션 바 설정
-        let vc1 = UINavigationController(rootViewController: mainViewController())
-        let vc2 = UINavigationController(rootViewController: addViewController(viewModel: viewModel))
-        let vc3 = UINavigationController(rootViewController: updateViewController())
-        let vc4 = UINavigationController(rootViewController: TestViewController())
+        let vc1 = UINavigationController(rootViewController: MainViewController(viewModel: menuViewModel))
+        let vc2 = UINavigationController(rootViewController: ResViewController(viewModel: mainViewModel))
+        let vc3 = UINavigationController(rootViewController: ResultViewController())
+        let vc4 = CategorySetViewController(viewModel: mainViewModel)
         
         // 뷰 컨트롤러 -> 탭 바 설정
         tabBarCon.setViewControllers([vc1, vc2, vc3, vc4], animated: false)
@@ -37,29 +42,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         tabBarCon.tabBar.backgroundColor = .white
         
         // 탭 바 이름
-        vc1.title = "Main"
-        vc2.title = "Search"
-        vc3.title = "File"
-        vc4.title = "TEST"
-        
-        
+        vc1.title = "룰렛 돌리기"
+        vc2.title = "맛집 관리하기"
+        vc3.title = "결과"
+        vc3.title = "카테고리"
         
         // 탭 바 이미지
         guard let items = tabBarCon.tabBar.items else { return }
-        items[0].image = UIImage(systemName: "trash")
+        items[0].image = UIImage(systemName: "shuffle")
         items[1].image = UIImage(systemName: "folder")
         items[2].image = UIImage(systemName: "paperplane")
-        items[3].image = UIImage(systemName: "folder")
+        items[3].image = UIImage(systemName: "paperplane")
         
         // 첫 화면(루트 뷰)를 설정
         window?.rootViewController = tabBarCon
         window?.makeKeyAndVisible()
         
-        
-//        let navController1 = UINavigationController(rootViewController: mainVC)
-//        let navController2 = UINavigationController(rootViewController: vc2)
-//        let navController3 = UINavigationController(rootViewController: vc3)
-//        let navController4 = UINavigationController(rootViewController: vc4)
+        if #available(iOS 15.0, *) {
+            window?.overrideUserInterfaceStyle = .light
+        }
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

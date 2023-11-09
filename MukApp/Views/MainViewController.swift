@@ -7,9 +7,9 @@
 
 import UIKit
 
-class addViewController: UIViewController {
+class MainViewController: UIViewController {
     
-    // MARK: - 뷰 모델
+    // MARK: - Menu뷰 모델
     let viewModel: MenuViewModel
     
     init(viewModel: MenuViewModel) {
@@ -57,10 +57,6 @@ class addViewController: UIViewController {
         label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textAlignment = .center
-        
-        // 보더 설정
-        // label.layer.borderWidth = 1
-        
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -102,6 +98,13 @@ class addViewController: UIViewController {
         setMain()
     }
     
+    // MARK: - viewWillApeear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
     // MARK: - viewDidLayoutSubviews
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -130,6 +133,9 @@ class addViewController: UIViewController {
         // menuButton 둥글게 설정
         menuButton.layer.cornerRadius = 20
         menuButton.clipsToBounds = true
+        
+        // menuButton 그림자 추가
+        menuButton.layer.shadowColor = UIColor.black.cgColor
         menuButton.layer.masksToBounds = false
         menuButton.layer.shadowOffset = CGSize(width: 1, height: 4)
         menuButton.layer.shadowRadius = 5
@@ -177,7 +183,7 @@ class addViewController: UIViewController {
         // mainLabel 오토 레이아웃
         NSLayoutConstraint.activate([
             mainLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 40),
-            mainLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            mainLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 45),
             mainLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -40),
             
             mainLabel.heightAnchor.constraint(equalToConstant: 30)
@@ -189,7 +195,7 @@ class addViewController: UIViewController {
             menuButton.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 10),
             menuButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -80),
             
-            menuButton.heightAnchor.constraint(equalToConstant: 40)
+            menuButton.heightAnchor.constraint(equalToConstant: 46)
         ])
         
         
@@ -248,13 +254,13 @@ class addViewController: UIViewController {
 }
 
 // MARK: - Extension
-extension addViewController: UITableViewDelegate {
+extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("dk")
     }
 }
 
-extension addViewController: UITableViewDataSource {
+extension MainViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categoryCnt
     }
@@ -262,6 +268,7 @@ extension addViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryTableViewCell", for: indexPath) as! CategoryTableViewCell
+        cell.backgroundColor = .white
         return cell
     }
     

@@ -3,10 +3,15 @@
     <entity name="CategoryData" representedClassName="CategoryData" syncable="YES">
         <attribute name="categoryName" optional="YES" attributeType="String"/>
         <attribute name="categoryText" optional="YES" attributeType="String"/>
-        <relationship name="menu" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="MenuData" inverseName="category" inverseEntity="MenuData"/>
+        <relationship name="menu" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="RestaurantData" inverseName="category" inverseEntity="RestaurantData"/>
     </entity>
-    <entity name="MenuData" representedClassName="MenuData" syncable="YES">
-        <attribute name="menuName" optional="YES" attributeType="String"/>
+    <entity name="RestaurantData" representedClassName="RestaurantData" syncable="YES">
+        <attribute name="address" optional="YES" attributeType="String"/>
+        <attribute name="group" optional="YES" attributeType="String"/>
+        <attribute name="phone" optional="YES" attributeType="String"/>
+        <attribute name="placeName" optional="YES" attributeType="String"/>
+        <attribute name="placeURL" optional="YES" attributeType="String"/>
+        <attribute name="roadAddress" optional="YES" attributeType="String"/>
         <relationship name="category" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CategoryData" inverseName="menu" inverseEntity="CategoryData"/>
     </entity>
 </model>

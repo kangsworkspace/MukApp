@@ -37,10 +37,6 @@ class CategoryTableViewCell: UITableViewCell {
     }
     
     func setMain() {
-        
-        // 배경 색 설정
-        self.backgroundColor = .white
-        
         // pickerview가 터치 되도록 컨텐츠 뷰 뒤로 보내기
         sendSubviewToBack(contentView)
         

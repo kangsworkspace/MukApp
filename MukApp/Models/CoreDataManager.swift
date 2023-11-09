@@ -10,9 +10,9 @@ import CoreData
 
 protocol CoreDataManagerType {
     // Create
-    func saveMenuToCoreData(menuName: String, categoryName: String, categoryText: String, competion: @escaping () -> Void)
+    // func saveResToCoreData(menuName: String, categoryName: String, categoryText: String, competion: @escaping () -> Void)
     // Read
-    func getDataFromCoreData() -> [MenuData]
+    func getDataFromCoreData() -> [RestaurantData]
     // Update
     
     // Delete
@@ -31,27 +31,39 @@ final class CoreDataManager: CoreDataManagerType {
     lazy var context = appDelegate.persistentContainer.viewContext
     
     // 엔터티 이름(코어 데이터에 저장된 객체)
-    let modelName: String = "MenuData"
+    let entityName_Res: String = "RestaurantData"
+    let entityName_Cat: String = "CategoryData"
     
+    
+//    @NSManaged public var address: String?
+//    @NSManaged public var group: String?
+//    @NSManaged public var phone: String?
+//    @NSManaged public var placeName: String?
     
     // MARK: - [CREATE]: 코어 데이터에 데이터 생성하기
-    func saveMenuToCoreData(menuName: String, categoryName: String, categoryText: String, competion: @escaping () -> Void) {
+    func saveResToCoreData(address: String, groub: String, phone: String, placeName: String, categoryName: String, categoryText: String, roadAddress: String, placeURL: String, competion: @escaping () -> Void) {
         
-        // Menu의 entity 유요한지 확인
-        if let entityMenu = NSEntityDescription.entity(forEntityName: "MenuData", in: context),
-           // Category의 entity 유요한지 확인
-           let entityCategory = NSEntityDescription.entity(forEntityName: "CategoryData", in: context) {
+        // RestaurantData의 entity 유요한지 확인
+        if let entityRestaurant = NSEntityDescription.entity(forEntityName: entityName_Res, in: context),
+           // CategoryData의 entity 유요한지 확인
+           let entityCategory = NSEntityDescription.entity(forEntityName: entityName_Cat, in: context) {
             
             // 할당할 데이터를 가진 객체 생성
-            if let newMenu = NSManagedObject(entity: entityMenu, insertInto: context) as? MenuData,
-               let newCategory = NSManagedObject(entity: entityCategory, insertInto: context) as? CategoryData {
-                
-                newMenu.menuName = menuName
-                newCategory.categoryName = categoryName
-                newCategory.categoryText = categoryText
+            if let newRes = NSManagedObject(entity: entityRestaurant, insertInto: context) as? RestaurantData,
+               let newCat = NSManagedObject(entity: entityCategory, insertInto: context) as? CategoryData {
+
+                // 객체에 데이터 할당
+                newRes.address = address
+                newRes.group = groub
+                newRes.phone = phone
+                newRes.placeName = placeName
+                newRes.roadAddress = roadAddress
+                newRes.placeURL = placeURL
+                newCat.categoryName = categoryName
+                newCat.categoryText = categoryText
                 
                 // newMenu에 newCategory 더하기
-                newMenu.addToCategory(newCategory)
+                newRes.addToCategory(newCat)
                 
                 // Save the changes to the context
                 do {
@@ -69,39 +81,39 @@ final class CoreDataManager: CoreDataManagerType {
     }
     
     // MARK: - [READ]: 코어 데이터에 저장된 데이터 모두 읽어오기
-    func getDataFromCoreData() -> [MenuData] {
+    func getDataFromCoreData() -> [RestaurantData] {
         
         // 리턴할 값 빈 배열로 초기화
-        var menuList: [MenuData] = []
+        var restaurantList: [RestaurantData] = []
         
         // 요청서
-        let request = NSFetchRequest<NSManagedObject>(entityName: self.modelName)
+        let request = NSFetchRequest<NSManagedObject>(entityName: self.entityName_Res)
         
         do {
             // 임시 저장소에서 요청서를 통해 데이터 가져오기(fetch 메서드)
-            if let fetchedMenuList = try context.fetch(request) as? [MenuData] {
-                menuList = fetchedMenuList
+            if let fetchedResList = try context.fetch(request) as? [RestaurantData] {
+                restaurantList = fetchedResList
             }
         } catch {
             print("코어데이터 가져오기 실패")
         }
-        return menuList
+        return restaurantList
     }
     
     // MARK: - [UPDATE]: 코어 데이터 업데이트 하기
-    func updateCoreData(newMenuData: MenuData, competion: @escaping () -> Void) {
+    func updateCoreData(newResData: RestaurantData, competion: @escaping () -> Void) {
         
         // 요청서
-        let request = NSFetchRequest<NSManagedObject>(entityName: self.modelName)
+        let request = NSFetchRequest<NSManagedObject>(entityName: self.entityName_Res)
         
         do {
             // 요청서를 통해서 데이터 가져오기
-            if let fetchedMenuList = try context.fetch(request) as? [MenuData] {
+            if let fetchedResList = try context.fetch(request) as? [RestaurantData] {
                 // 배열의 첫번째
-                if var targetMenu = fetchedMenuList.first {
+                if var targetRes = fetchedResList.first {
                     
                     // 실제 데이터 재할당
-                    targetMenu = newMenuData
+                    targetRes = newResData
                     
                     // Save the changes to the context
                     do {

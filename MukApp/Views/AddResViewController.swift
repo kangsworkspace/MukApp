@@ -1,0 +1,310 @@
+//
+//  TestViewController.swift
+//  MukApp
+//
+//  Created by Kang on 10/22/23.
+//
+
+import UIKit
+
+class AddResViewController: UIViewController {
+    
+    // 생성 - 이미지 URL을 전달받는 변수
+    var resData: Document! {
+        didSet {
+            configureUIWithData()
+        }
+    }
+    
+    
+    
+    // MARK: - Interface
+    // 이미지뷰
+    private lazy var resImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "person")
+        imageView.backgroundColor = .yellow
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    // 맛집 이름 레이블
+    private var resNameLabel: UILabel = {
+        let label = UILabel()
+        // 텍스트 설정
+        label.text = "어쭈꾸미?"
+        label.textColor = .black
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    // 이름 레이블
+    private var resPhoneLabel: UILabel = {
+        let label = UILabel()
+        // 텍스트 설정
+        label.text = "010 - 1234 - 5678"
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    // 주소 레이블
+    private var resAddressLabel: UILabel = {
+        let label = UILabel()
+        // 텍스트 설정
+        label.text = "올림픽대로 대로변 다리 밑1 -1234"
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    // url 레이블
+    private var resURLLabel: UILabel = {
+        let label = UILabel()
+        // 텍스트 설정
+        label.text = "httpnkjldkaflanfefaefaeflnfkan>nfek?"
+        label.numberOfLines = 0
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private var mainStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.distribution = .fill
+        stackView.spacing = 10
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    // 테이블 뷰
+    private let tableView = UITableView()
+    
+    // 저장 버튼(menuButton)
+    private var saveButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("저  장", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        button.setTitleColor(.black, for: .normal)
+        button.backgroundColor = .lightGray
+        button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    // 카테고리 추가 버튼
+    private var plusButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "plus")!.withTintColor(.darkGray, renderingMode: .alwaysOriginal), for: .normal)
+        button.backgroundColor = .white
+        button.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    // 카테고리 삭제 버튼
+    private var minusButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "minus")!.withTintColor(.darkGray, renderingMode: .alwaysOriginal), for: .normal)
+        button.backgroundColor = .white
+        button.addTarget(self, action: #selector(minusButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    // 카테고리 설정 카운트
+    private var categoryCnt: Int = 1 {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
+    // MARK: - viewDidLoad
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setMain()
+    }
+    
+    // MARK: - viewDidLayoutSubviews
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        // saveButton 원으로 설정
+        saveButton.layer.cornerRadius = 20
+        saveButton.clipsToBounds = true
+        
+        // saveButton 그림자 추가
+        saveButton.layer.shadowColor = UIColor.black.cgColor
+        saveButton.layer.masksToBounds = false
+        saveButton.layer.shadowOffset = CGSize(width: 1, height: 4)
+        saveButton.layer.shadowRadius = 5
+        saveButton.layer.shadowOpacity = 0.3
+        
+        // plusButton 원으로 설정
+        plusButton.clipsToBounds = true
+        plusButton.layer.cornerRadius = plusButton.frame.width / 2
+        
+        // plusButton 그림자 추가
+        plusButton.layer.shadowColor = UIColor.black.cgColor
+        plusButton.layer.masksToBounds = false
+        plusButton.layer.shadowOffset = CGSize(width: 1, height: 4)
+        plusButton.layer.shadowRadius = 5
+        plusButton.layer.shadowOpacity = 0.3
+        
+        // minusButton 원으로 설정
+        minusButton.clipsToBounds = true
+        minusButton.layer.cornerRadius = minusButton.frame.width / 2
+        
+        // minusButton 그림자 추가
+        minusButton.layer.shadowColor = UIColor.black.cgColor
+        minusButton.layer.masksToBounds = false
+        minusButton.layer.shadowOffset = CGSize(width: 1, height: 4)
+        minusButton.layer.shadowRadius = 5
+        minusButton.layer.shadowOpacity = 0.3
+    }
+    
+    // MARK: - Setup
+    func setMain() {
+        view.backgroundColor = .white
+        self.title = "추가"
+        
+        setAddView()
+        setAutoLayout()
+        setTableView()
+    }
+    
+    func setAddView() {
+        view.addSubview(resImageView)
+        mainStackView.addArrangedSubview(resNameLabel)
+        mainStackView.addArrangedSubview(resPhoneLabel)
+        mainStackView.addArrangedSubview(resAddressLabel)
+        mainStackView.addArrangedSubview(resURLLabel)
+        view.addSubview(mainStackView)
+        view.addSubview(tableView)
+        view.addSubview(saveButton)
+        view.addSubview(plusButton)
+        view.addSubview(minusButton)
+    }
+    
+    func setAutoLayout() {
+        
+        // resImageView 오토 레이아웃
+        NSLayoutConstraint.activate([
+            resImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
+            resImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            
+            resImageView.heightAnchor.constraint(equalToConstant: 140),
+            resImageView.widthAnchor.constraint(equalToConstant: 120)
+        ])
+        
+        // mainStackView 오토 레이아웃
+        NSLayoutConstraint.activate([
+            mainStackView.leadingAnchor.constraint(equalTo: resImageView.trailingAnchor, constant: 10),
+            mainStackView.topAnchor.constraint(equalTo: resImageView.topAnchor, constant: 30),
+            mainStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
+            mainStackView.bottomAnchor.constraint(equalTo: resImageView.bottomAnchor, constant: 0),
+        ])
+        
+        // tableView 오토 레이아웃
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
+            tableView.topAnchor.constraint(equalTo: resImageView.bottomAnchor, constant: 10),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
+            tableView.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -10)
+        ])
+        
+        // saveButton 오토 레이아웃
+        NSLayoutConstraint.activate([
+            saveButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 80),
+            saveButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -80),
+            saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            
+            saveButton.heightAnchor.constraint(equalToConstant: 46)
+        ])
+        
+        // plusButton, minusButton 오토 레이아웃
+        NSLayoutConstraint.activate([
+            // plusButton
+            plusButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            plusButton.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -10),
+            plusButton.heightAnchor.constraint(equalToConstant: 40),
+            plusButton.widthAnchor.constraint(equalToConstant: 40),
+            
+            // minusButton
+            minusButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            minusButton.bottomAnchor.constraint(equalTo: plusButton.topAnchor, constant: -10),
+            minusButton.heightAnchor.constraint(equalToConstant: 40),
+            minusButton.widthAnchor.constraint(equalToConstant: 40),
+        ])
+    }
+    
+    // 셋업 - 테이블 뷰
+    func setTableView() {
+        // 델리게이트 패턴, 데이터 처리 설정
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        // 셀의 높이 설정
+        tableView.rowHeight = 120
+        
+        // 셀 등록
+        tableView.register(AddResTableViewCell.self, forCellReuseIdentifier: "AddResTableViewCell")
+    }
+    
+    // MARK: - Function
+    // saveButton 동작
+    @objc func saveButtonTapped() {
+        
+    }
+    
+    @objc func plusButtonTapped() {
+        categoryCnt += 1
+    }
+    
+    @objc func minusButtonTapped() {
+        if categoryCnt == 1 {
+            return
+        } else {
+            categoryCnt -= 1
+        }
+    }
+    
+    func configureUIWithData() {
+        resNameLabel.text = resData.placeName
+        resPhoneLabel.text = resData.phone
+        resAddressLabel.text = resData.roadAddress
+        resURLLabel.text = resData.placeURL
+    }
+}
+
+// MARK: - Extension
+extension AddResViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("dk")
+    }
+}
+
+extension AddResViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return categoryCnt
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "AddResTableViewCell", for: indexPath) as! AddResTableViewCell
+        cell.backgroundColor = .white
+        return cell
+    }
+}

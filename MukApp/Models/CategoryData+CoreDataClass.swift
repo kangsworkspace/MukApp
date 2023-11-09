@@ -2,7 +2,7 @@
 //  CategoryData+CoreDataClass.swift
 //  MukApp
 //
-//  Created by Kang on 10/22/23.
+//  Created by Kang on 11/5/23.
 //
 //
 

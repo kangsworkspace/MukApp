@@ -1,0 +1,6 @@
+framework module Pods_MukApp {
+  umbrella header "Pods-MukApp-umbrella.h"
+
+  export *
+  module * { export * }
+}
