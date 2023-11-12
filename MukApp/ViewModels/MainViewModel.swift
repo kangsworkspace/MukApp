@@ -8,7 +8,6 @@
 import UIKit
 
 final class MainViewModel {
-    
     // MARK: - APIService
     private let apiService: APIServiceType
     
@@ -21,6 +20,9 @@ final class MainViewModel {
         self.apiService = apiServie
     }
     
+    // MARK: - CategoryModel(싱글톤)
+    let categoryModel = CategoryModel.shared
+    
     // MARK: - 데이터 모델
     // 코어 데이터 모델
     private var resDataList: [RestaurantData]?
@@ -28,8 +30,6 @@ final class MainViewModel {
     
     // APIService 데이터 모델
     private var resultResArray: [Document] = []
-    
-    
     
     // MARK: - ResViewController
     // "맛집 추가" 버튼 동작
@@ -61,126 +61,137 @@ final class MainViewModel {
     // 맛집 Cell 동작
     func handleResCellTapped(resData: Document, fromCurrentVC: UIViewController, animated: Bool) {
         let navVC = fromCurrentVC.navigationController
-        let nextVC = AddResViewController()
+        let nextVC = AddResViewController(viewModel: self)
         
         // 데이터 전달
         nextVC.resData = resData
+        
+        // CategoryModel에 데이터 전달(나중에 코어 데이터로 저장할수도 있기 때문)
+        categoryModel.setResData(resData: resData)
         
         // TestViewController로 이동
         nextVC.modalPresentationStyle = .fullScreen
         navVC?.pushViewController(nextVC, animated: true)
     }
     
-    // MARK: - AddResViewController
-    private var catNameArray: [String] = ["testing1", "카테고리 추가"]
-    private var catTextArray: [String] = []
-    private var selCatName: String = ""
-    private var selCatMenu: String = ""
     
-    // 코어 데이터에 있는 카테고리 NameArray 가져오기
-    func getCatNameArray() -> [String] {
+    // MARK: - AddResViewController
+    // 맛집저장 버튼 동작처리(맛집 추가) -> 코어데이터에 데이터 저장
+    func handleSaveResButtonTapped() {
         
-//        // 코어 데이터에서 resData 가져오기
-//        resDataList = coreDataManager.getDataFromCoreData()
-//        
-//        // 데이터가 없는 경우?
-//        guard let resDataList = resDataList else { return ["레스 데이터 없움"] }
-//        
-//        // resData 배열 -> 카테고리 -> 카테고리 이름 => 반복문으로 할당
-//        for resData in resDataList {
-//            if let category = resData.category as? Set<CategoryData> {
-//                for category in category {
-//                    if let categoryName = category.categoryName {
-//                        catNameArray.append(categoryName)
-//                    }
-//                }
-//            }
-//        }
-//        
-//        // 중복된 값 제거
-//        catNameArray = Array(Set(catNameArray))
-//        
-//        // 카테고리 추가가 없으면 더하기
-//        if !catNameArray.contains("카테고리 추가") {
-//            catNameArray.append("카테고리 추가")
-//        }
+        let resData = categoryModel.getSelResData()
+        
+        var categoryDataArray: [CategoryData] = []
+        let catNameArray = categoryModel.getSelCatNameArray()
+        let catTextArray = categoryModel.getSelCatTextArray()
+        
+        guard catNameArray.count == catTextArray.count else {
+            // 길이가 다르면 에러 처리 또는 적절한 조치를 취할 수 있음
+            fatalError("The length of catNameArray and catTextArray must be the same.")
+        }
+        
+        for index in 0..<catNameArray.count {
+            var category = CategoryData()
+            
+            category.categoryName = catNameArray[index]
+            category.categoryText = catTextArray[index]
+            
+            categoryDataArray.append(category)
+        }
+        
+   
+        coreDataManager.saveResToCoreData(resData: resData, categoryData: categoryDataArray) {
+            print("저장 완료")
+        }
+    }
+
+    // MARK: - AddResTableViewCell
+    // 코어 데이터에서 CategoryName 가져오기 -> catNameArray에 할당
+    func getCatNameFromCoreData() -> [String] {
+        
+        var catNameArray: [String] = []
+        
+        // 코어 데이터에서 resData 가져오기
+        resDataList = coreDataManager.getDataFromCoreData()
+        
+        // 데이터가 없는 경우?
+        guard let resDataList = resDataList else { return ["데이터 없음"] }
+        
+        // resData 배열 -> 카테고리 -> 카테고리 이름 => 반복문으로 할당
+        for resData in resDataList {
+            if let category = resData.category as? Set<CategoryData> {
+                for category in category {
+                    if let categoryName = category.categoryName {
+                        catNameArray.append(categoryName)
+                    }
+                }
+            }
+        }
+        
+        // 중복된 값 제거
+        catNameArray = Array(Set(catNameArray))
+        
+        // 카테고리 추가가 없으면 더하기
+        if !catNameArray.contains("카테고리 추가") {
+            catNameArray.append("카테고리 추가")
+        }
         
         return catNameArray
     }
     
-    func getCatTextArray() -> [String] {
-        return catTextArray
-    }
-    
-    var isCollectionViewEnabled = true
-    
-    // 카테고리 Name 선택 이벤트
-    func handleCategoryNamePickerView(fromVC: UIViewController, row: Int, completion: @escaping () -> Void) {
-        
-//        // 기존 카테고리가 없다면,, 바로 얼럿 창 띄우기
-//        if catNameArray == [] {
-//            addCatAlert(fromVC: fromVC) { saveText, save in
-//                if save {
-//                    guard let saveText = saveText else { return }
-//                    self.catNameArray.insert(saveText, at: self.catNameArray.count - 1)
-//                    completion()
-//                }
-//                // 취소
-//                else {
-//                    print("취소")
-//                    completion()
-//                }
-//            }
-//        }
-        
-        
-        // 카테고리 추가 이벤트
-        if catNameArray[row] == "카테고리 추가" {
+    // 카테고리 선택 이벤트
+    func handleCatSelAction(fromVC: UIViewController, item: String, category: String, completion: @escaping (String) -> Void) {
+       // 카테고리 추가 이벤트
+        if item == "카테고리 추가" {
             addCatAlert(fromVC: fromVC) { saveText, save in
                 // 저장
                 if save {
                     guard let saveText = saveText else { return }
-                    self.catNameArray.insert(saveText, at: self.catNameArray.count - 1)
-                    completion()
+                    // 데이터 저장
+                    self.categoryModel.setCategoryArray(text: saveText, category: category)
+                    completion(saveText)
                 }
                 // 취소
                 else {
-                    print("취소")
-                    completion()
+                    completion("선택해주세요")
                 }
             }
         } 
-        // 카테고리 Name 선택 이벤트
+        // 카테고리 선택 이벤트
         else {
-            print("선택된 카테고리: \(catNameArray[row])")
-            selCatName = catNameArray[row]
-            completion()
+            // 데이터 저장
+            self.categoryModel.setCategoryArray(text: item, category: category)
+            completion(item)
         }
     }
     
-    // 카테고리 Text 선택 이벤트
-    func handleCategoryTextPickerView(fromVC: UIViewController, row: Int, completion: @escaping () -> Void) {
+    // 코어 데이터에서 CategoryText 가져오기 -> catTextArray에 할당
+    func changeNameSelAction(item: String, completion: @escaping ([String]) -> Void) {
+        // 코어 데이터에서 메뉴 데이터 가져오기
+        let resDataList = coreDataManager.getDataFromCoreData()
+        
+        // 빈 배열로 초기화
+        var catTextArray: [String] = []
+        
+        // 메뉴 데이터 배열 -> 카테고리 -> 카테고리 이름을 가진 카테고리 엔티티 -> 카테고리 텍스트 -> 반복문으로 할당
+        for resData in resDataList {
+            if let category = resData.category as? Set<CategoryData> {
+                for category in category {
+                    if category.categoryName == item {
+                        guard let categoryText = category.categoryText else { return }
+                        catTextArray.append(categoryText)
+                    }
+                }
+            }
+        }
         
         // 카테고리 추가가 없으면 더하기
+        if !catTextArray.contains("카테고리 추가") {
+            catTextArray.append("카테고리 추가")
+        }
         
-        
-        
-        
-        
-        
-        
+        completion(catTextArray)
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     // 카테고리 추가 얼럿창 띄우기
     private func addCatAlert(fromVC: UIViewController, completion: @escaping (String?, Bool) -> Void) {
@@ -209,42 +220,4 @@ final class MainViewModel {
         // 얼럿 창 띄우기
         fromVC.present(alert, animated: true, completion: nil)
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // 코어 데이터에서 데이터 가져오기
-    func getDataFromCoreData() {
-        // 코어 데이터에서 데이터 가져오기
-        resDataList = coreDataManager.getDataFromCoreData()
-    }
-    
-    
-//        // 옵셔널 해제
-//        guard let menuDataList = menuDataList else { return }
-//
-//        // 메뉴 데이터 배열 -> 카테고리 -> 카테고리 이름 => 반복문으로 할당
-//        for menuData in menuDataList {
-//            if let category = menuData.category as? Set<CategoryData> {
-//                for category in category {
-//                    if let categoryName = category.categoryName {
-//                        categoryArrayN.append(categoryName)
-//                    }
-//                }
-//            }
-//        }
-//
-//        // 중복된 값 제거
-//        categoryArrayN = Array(Set(categoryArrayN))
-    
-    
 }

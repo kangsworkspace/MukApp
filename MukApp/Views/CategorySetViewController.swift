@@ -62,21 +62,8 @@ class CategorySetViewController: UIViewController {
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         setMain()
     }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        
-//        navigationController?.setNavigationBarHidden(true, animated: animated)
-//    }
-//    
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        navigationController?.setNavigationBarHidden(false, animated: animated)
-//    }
     
     // MARK: - Setup
     func setMain() {
@@ -146,6 +133,8 @@ class CategorySetViewController: UIViewController {
     // MARK: - Function
     @objc func addResButtonTapped() {
         viewModel.handleAddResButtonTapped(fromCurrentVC: self, animated: true)
+        
+        
     }
 }
 

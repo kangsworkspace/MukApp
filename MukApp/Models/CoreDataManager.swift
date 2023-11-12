@@ -10,7 +10,7 @@ import CoreData
 
 protocol CoreDataManagerType {
     // Create
-    // func saveResToCoreData(menuName: String, categoryName: String, categoryText: String, competion: @escaping () -> Void)
+    func saveResToCoreData(resData: Document, categoryData: [CategoryData], competion: @escaping () -> Void)
     // Read
     func getDataFromCoreData() -> [RestaurantData]
     // Update
@@ -35,49 +35,64 @@ final class CoreDataManager: CoreDataManagerType {
     let entityName_Cat: String = "CategoryData"
     
     
-//    @NSManaged public var address: String?
-//    @NSManaged public var group: String?
-//    @NSManaged public var phone: String?
-//    @NSManaged public var placeName: String?
+    //    @NSManaged public var address: String?
+    //    @NSManaged public var group: String?
+    //    @NSManaged public var phone: String?
+    //    @NSManaged public var placeName: String?
     
     // MARK: - [CREATE]: 코어 데이터에 데이터 생성하기
-    func saveResToCoreData(address: String, groub: String, phone: String, placeName: String, categoryName: String, categoryText: String, roadAddress: String, placeURL: String, competion: @escaping () -> Void) {
+    func saveResToCoreData(resData: Document, categoryData: [CategoryData], competion: @escaping () -> Void) {
         
         // RestaurantData의 entity 유요한지 확인
-        if let entityRestaurant = NSEntityDescription.entity(forEntityName: entityName_Res, in: context),
-           // CategoryData의 entity 유요한지 확인
-           let entityCategory = NSEntityDescription.entity(forEntityName: entityName_Cat, in: context) {
+        guard let entityRestaurant = NSEntityDescription.entity(forEntityName: entityName_Res, in: context) else {
+            print("entityRestaurant-유효하지 않음")
+            competion()
+            return
+        }
+        
+        // CategoryData의 entity 유요한지 확인
+        guard let entityCategory = NSEntityDescription.entity(forEntityName: entityName_Cat, in: context) else {
+            competion()
+            print("entityCategory-유효하지 않음")
+            return
+        }
+        
+        // 할당할 데이터를 가진 객체 생성
+        if let newRes = NSManagedObject(entity: entityRestaurant, insertInto: context) as? RestaurantData {
+            // 객체에 데이터 할당
+            newRes.address = resData.address
+            newRes.group = resData.group
+            newRes.phone = resData.phone
+            newRes.placeName = resData.placeName
+            newRes.roadAddress = resData.roadAddress
+            newRes.placeURL = resData.placeURL
             
-            // 할당할 데이터를 가진 객체 생성
-            if let newRes = NSManagedObject(entity: entityRestaurant, insertInto: context) as? RestaurantData,
-               let newCat = NSManagedObject(entity: entityCategory, insertInto: context) as? CategoryData {
-
-                // 객체에 데이터 할당
-                newRes.address = address
-                newRes.group = groub
-                newRes.phone = phone
-                newRes.placeName = placeName
-                newRes.roadAddress = roadAddress
-                newRes.placeURL = placeURL
-                newCat.categoryName = categoryName
-                newCat.categoryText = categoryText
-                
-                // newMenu에 newCategory 더하기
-                newRes.addToCategory(newCat)
-                
-                // Save the changes to the context
-                do {
-                    try context.save()
-                    print("코어 데이터 생성 성공")
-                    competion()
-                } catch {
-                    print(error)
-                    print("코어 데이터 생성 실패")
-                    competion()
+            // 카테고리 배열 할당
+            for categoryData in categoryData {
+                if let newCat = NSManagedObject(entity: entityCategory, insertInto: context) as? CategoryData {
+                    
+                    newCat.categoryName = categoryData.categoryName
+                    newCat.categoryText = categoryData.categoryText
+                    
+                    // newMenu에 newCategory 더하기
+                    newRes.addToCategory(newCat)
                 }
             }
+            
+            // Save the changes to the context
+            do {
+                try context.save()
+                print("코어 데이터 생성 성공")
+                competion()
+            } catch {
+                print(error)
+                print("코어 데이터 생성 실패")
+                competion()
+            }
+        } else {
+            print("초기화 실패")
+            competion()
         }
-        competion()
     }
     
     // MARK: - [READ]: 코어 데이터에 저장된 데이터 모두 읽어오기
@@ -131,11 +146,11 @@ final class CoreDataManager: CoreDataManagerType {
             print(error)
         }
     }
+    
+    
+    // MARK: - [DELETE]: 코어 데이터에 저장된 데이터 삭제하기
+    func deleteFromCoreData() {
         
         
-        // MARK: - [DELETE]: 코어 데이터에 저장된 데이터 삭제하기
-        func deleteFromCoreData() {
-            
-            
-        }
     }
+}

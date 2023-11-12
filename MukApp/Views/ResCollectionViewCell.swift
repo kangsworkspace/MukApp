@@ -16,7 +16,7 @@ class ResCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    // 생성 - 메인 이미지 뷰
+    // 생성 - 메인 이미지 뷰 
     lazy var mainImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person")

@@ -60,3 +60,37 @@ import UIKit
 //    viewModel.handleMenuButtonTapped()
 //    menuLabel.text = viewModel.getSelectedMenu
 //}
+
+
+// 블로그용
+//        // 옵셔널 해제
+//        guard let menuDataList = menuDataList else { return }
+//
+//        // 메뉴 데이터 배열 -> 카테고리 -> 카테고리 이름 => 반복문으로 할당
+//        for menuData in menuDataList {
+//            if let category = menuData.category as? Set<CategoryData> {
+//                for category in category {
+//                    if let categoryName = category.categoryName {
+//                        categoryArrayN.append(categoryName)
+//                    }
+//                }
+//            }
+//        }
+//
+//        // 중복된 값 제거
+//        categoryArrayN = Array(Set(categoryArrayN))
+
+
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//
+//        navigationController?.setNavigationBarHidden(true, animated: animated)
+//    }
+//
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        navigationController?.setNavigationBarHidden(false, animated: animated)
+//    }
+
+
+// Cell에서 카테고리 선택할 때 커스텀 델리게이트 -> 컨트롤러의 cellforRowAt에서 배열로 받아서 저장해두기 -> 저장버튼 누르면 배열을 데이터 매니저로 호로록

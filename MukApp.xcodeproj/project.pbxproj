@@ -24,6 +24,7 @@
 		B037F7642AE43C0300C72F63 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7632AE43C0300C72F63 /* CoreDataManager.swift */; };
 		B037F7782AE55E6500C72F63 /* AddResViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7772AE55E6500C72F63 /* AddResViewController.swift */; };
 		B037F77A2AE55F4300C72F63 /* MenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7792AE55F4300C72F63 /* MenuViewModel.swift */; };
+		B04EB0E62B00756E006AD277 /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04EB0E52B00756E006AD277 /* CategoryModel.swift */; };
 		B064C3402AFBDCCB00B33189 /* CategorySetCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064C33F2AFBDCCB00B33189 /* CategorySetCollectionViewCell.swift */; };
 		B06E01652AEC04AA0065E7FF /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06E01642AEC04AA0065E7FF /* CategoryTableViewCell.swift */; };
 		B06E01672AEC259A0065E7FF /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06E01662AEC259A0065E7FF /* APIService.swift */; };
@@ -55,6 +56,7 @@
 		B037F7632AE43C0300C72F63 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		B037F7772AE55E6500C72F63 /* AddResViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddResViewController.swift; sourceTree = "<group>"; };
 		B037F7792AE55F4300C72F63 /* MenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewModel.swift; sourceTree = "<group>"; };
+		B04EB0E52B00756E006AD277 /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
 		B064C33F2AFBDCCB00B33189 /* CategorySetCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySetCollectionViewCell.swift; sourceTree = "<group>"; };
 		B06E01642AEC04AA0065E7FF /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 		B06E01662AEC259A0065E7FF /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 			children = (
 				B037F7792AE55F4300C72F63 /* MenuViewModel.swift */,
 				B074977E2AF6112D00D66CB1 /* MainViewModel.swift */,
+				B04EB0E52B00756E006AD277 /* CategoryModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 				B037F73D2AE3B58500C72F63 /* AppDelegate.swift in Sources */,
 				B0A320842AF78D2300E74138 /* AddResTableViewCell.swift in Sources */,
 				B037F7642AE43C0300C72F63 /* CoreDataManager.swift in Sources */,
+				B04EB0E62B00756E006AD277 /* CategoryModel.swift in Sources */,
 				B064C3402AFBDCCB00B33189 /* CategorySetCollectionViewCell.swift in Sources */,
 				B037F7582AE3B87100C72F63 /* MainViewController.swift in Sources */,
 				B02C5B5F2AF7B4C400A53314 /* RestaurantData+CoreDataClass.swift in Sources */,

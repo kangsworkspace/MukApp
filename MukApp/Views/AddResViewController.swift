@@ -9,14 +9,24 @@ import UIKit
 
 class AddResViewController: UIViewController {
     
+    // MARK: - 뷰 모델
+    let viewModel: MainViewModel
+    
+    init(viewModel: MainViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // 생성 - 이미지 URL을 전달받는 변수
     var resData: Document! {
         didSet {
             configureUIWithData()
         }
     }
-    
-    
     
     // MARK: - Interface
     // 이미지뷰
@@ -91,13 +101,13 @@ class AddResViewController: UIViewController {
     private let tableView = UITableView()
     
     // 저장 버튼(menuButton)
-    private var saveButton: UIButton = {
+    private var addResButton: UIButton = {
         let button = UIButton()
         button.setTitle("저  장", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         button.setTitleColor(.black, for: .normal)
         button.backgroundColor = .lightGray
-        button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(addResButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -141,15 +151,15 @@ class AddResViewController: UIViewController {
         super.viewDidLayoutSubviews()
         
         // saveButton 원으로 설정
-        saveButton.layer.cornerRadius = 20
-        saveButton.clipsToBounds = true
+        addResButton.layer.cornerRadius = 20
+        addResButton.clipsToBounds = true
         
         // saveButton 그림자 추가
-        saveButton.layer.shadowColor = UIColor.black.cgColor
-        saveButton.layer.masksToBounds = false
-        saveButton.layer.shadowOffset = CGSize(width: 1, height: 4)
-        saveButton.layer.shadowRadius = 5
-        saveButton.layer.shadowOpacity = 0.3
+        addResButton.layer.shadowColor = UIColor.black.cgColor
+        addResButton.layer.masksToBounds = false
+        addResButton.layer.shadowOffset = CGSize(width: 1, height: 4)
+        addResButton.layer.shadowRadius = 5
+        addResButton.layer.shadowOpacity = 0.3
         
         // plusButton 원으로 설정
         plusButton.clipsToBounds = true
@@ -192,7 +202,7 @@ class AddResViewController: UIViewController {
         mainStackView.addArrangedSubview(resURLLabel)
         view.addSubview(mainStackView)
         view.addSubview(tableView)
-        view.addSubview(saveButton)
+        view.addSubview(addResButton)
         view.addSubview(plusButton)
         view.addSubview(minusButton)
     }
@@ -222,23 +232,23 @@ class AddResViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
             tableView.topAnchor.constraint(equalTo: resImageView.bottomAnchor, constant: 10),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
-            tableView.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -10)
+            tableView.bottomAnchor.constraint(equalTo: addResButton.topAnchor, constant: -10)
         ])
         
-        // saveButton 오토 레이아웃
+        // addResButton 오토 레이아웃
         NSLayoutConstraint.activate([
-            saveButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 80),
-            saveButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -80),
-            saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            addResButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 80),
+            addResButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -80),
+            addResButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             
-            saveButton.heightAnchor.constraint(equalToConstant: 46)
+            addResButton.heightAnchor.constraint(equalToConstant: 46)
         ])
         
         // plusButton, minusButton 오토 레이아웃
         NSLayoutConstraint.activate([
             // plusButton
             plusButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            plusButton.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -10),
+            plusButton.bottomAnchor.constraint(equalTo: addResButton.topAnchor, constant: -10),
             plusButton.heightAnchor.constraint(equalToConstant: 40),
             plusButton.widthAnchor.constraint(equalToConstant: 40),
             
@@ -257,17 +267,19 @@ class AddResViewController: UIViewController {
         tableView.delegate = self
         
         // 셀의 높이 설정
-        tableView.rowHeight = 120
+        tableView.rowHeight = 60
         
         // 셀 등록
         tableView.register(AddResTableViewCell.self, forCellReuseIdentifier: "AddResTableViewCell")
     }
     
     // MARK: - Function
-    // saveButton 동작
-    @objc func saveButtonTapped() {
-        
+    // addResButton 동작
+    @objc func addResButtonTapped() {
+        viewModel.handleSaveResButtonTapped()
     }
+    
+    var handleAddResButtonTapped: (() -> ()) = {}
     
     @objc func plusButtonTapped() {
         categoryCnt += 1
@@ -292,7 +304,7 @@ class AddResViewController: UIViewController {
 // MARK: - Extension
 extension AddResViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("dk")
+        
     }
 }
 
@@ -302,9 +314,13 @@ extension AddResViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "AddResTableViewCell", for: indexPath) as! AddResTableViewCell
+        cell.selectionStyle = .none
         cell.backgroundColor = .white
+        
         return cell
     }
 }
+
+
+

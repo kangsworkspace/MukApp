@@ -6,26 +6,110 @@
 //
 
 import UIKit
+import DropDown
 
 class AddResTableViewCell: UITableViewCell {
     
     // MARK: - 뷰 모델
     let viewModel: MainViewModel
     
+    // MARK: - DropDown
+    // nameDropDown: 카테고리 이름
+    var nameDropDown: DropDown = {
+        let dropDown = DropDown()
+        dropDown.dismissMode = .automatic // 팝업을 닫을 모드 설정
+        return dropDown
+    }()
     
-    
+    // textDropDown: 카테고리 내용
+    var textDropDown: DropDown = {
+        let dropDown = DropDown()
+        dropDown.dismissMode = .automatic // 팝업을 닫을 모드 설정
+        return dropDown
+    }()
     
     // MARK: - Interface
-    // 카테고리를 표시할 피커뷰
-    lazy var pickerView: UIPickerView = {
-        let picker = UIPickerView()
-        picker.backgroundColor = .white
-        picker.isUserInteractionEnabled = true
-        picker.delegate = self
-        picker.dataSource = self
-        picker.translatesAutoresizingMaskIntoConstraints = false
-        return picker
+    // nameDropDown UI: 카테고리 이름 UI
+    var nameDropView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        view.layer.cornerRadius = 8
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
+    
+    var nameDropLabel: UILabel = {
+        let label = UILabel()
+        label.text = "선택해주세요"
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.backgroundColor = .clear
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    lazy var nameDropImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.tintColor = UIColor.gray
+        imageView.image = UIImage(systemName: "arrowtriangle.down.fill")
+        imageView.backgroundColor = .lightGray
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    var nameDropButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(nameDropButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    // TextDropDown UI: 카테고리 내용 UI
+    var textDropView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        view.layer.cornerRadius = 8
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    var textDropLabel: UILabel = {
+        let label = UILabel()
+        label.text = "선택해주세요"
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.backgroundColor = .lightGray
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var textDropImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.tintColor = UIColor.gray
+        imageView.image = UIImage(systemName: "arrowtriangle.down.fill")
+        imageView.backgroundColor = .lightGray
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    var textDropButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(textDropButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    var dropDownStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.alignment = .fill
+        stackView.spacing = 10
+        stackView.backgroundColor = .clear
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
     
     // MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -39,77 +123,150 @@ class AddResTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
     func setMain() {
         // pickerview가 터치 되도록 컨텐츠 뷰 뒤로 보내기
         sendSubviewToBack(contentView)
         
-        setData()
+        // setData()
+        setDropDown()
+        setCatNameData()
         setAddView()
         setAutoLayout()
     }
     
-    func setData() {
-        viewModel.getDataFromCoreData()
+    func setDropDown() {
+        DropDown.appearance().textColor = UIColor.black // 아이템 텍스트 색상
+        DropDown.appearance().selectedTextColor = UIColor.black // 선택된 아이템 텍스트 색상
+        DropDown.appearance().backgroundColor = UIColor.white // 아이템 팝업 배경 색상
+        DropDown.appearance().selectionBackgroundColor = UIColor.lightGray // 선택한 아이템 배경 색상
+        DropDown.appearance().setupCornerRadius(8)
+        
+        // 드롭다운 표시되는 위치 설정
+        nameDropDown.anchorView = nameDropButton
+        textDropDown.anchorView = textDropButton
+        nameDropDown.bottomOffset = CGPoint(x:0, y: 40)
+        textDropDown.bottomOffset = CGPoint(x:0, y: 40)
+        
+        // nameDropDown 선택 시 이벤트 처리
+        nameDropDown.selectionAction = { [weak self] (index, item) in
+            self!.viewModel.handleCatSelAction(fromVC: (self?.window!.rootViewController!)!, item: item, category: "name") {item in
+                self!.nameDropLabel.text = item
+                self!.setCatTextData(item: item)
+            }
+        }
+        
+        // textDropDown 선택 시 이벤트 처리
+        textDropDown.selectionAction = { [weak self] (index, item) in
+            self!.viewModel.handleCatSelAction(fromVC: (self?.window!.rootViewController!)!, item: item, category: "text") {item in
+                self!.textDropLabel.text = item
+            }
+        }
+    }
+    
+    func setCatNameData() {
+        nameDropDown.dataSource = viewModel.getCatNameFromCoreData()
+        textDropDown.dataSource = []
+    }
+    
+    func setCatTextData(item: String) {
+        viewModel.changeNameSelAction(item: item, completion: { categoryTextArray in
+            self.textDropDown.dataSource = categoryTextArray
+        })
     }
     
     // 셋업 - 애드뷰
     func setAddView() {
-        self.addSubview(pickerView)
+        nameDropView.addSubview(nameDropLabel)
+        nameDropView.addSubview(nameDropImageView)
+        nameDropView.addSubview(nameDropButton)
+        
+        textDropView.addSubview(textDropLabel)
+        textDropView.addSubview(textDropImageView)
+        textDropView.addSubview(textDropButton)
+        
+        dropDownStackView.addArrangedSubview(nameDropView)
+        dropDownStackView.addArrangedSubview(textDropView)
+        
+        self.addSubview(dropDownStackView)
     }
     
     // 셋업 - 오토 레이아웃
     func setAutoLayout() {
-        // pickerView
+        
+        // nameDropLabel, textDropLabel 오토 레이아웃
         NSLayoutConstraint.activate([
-            pickerView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 0),
-            pickerView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 10),
-            pickerView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-            pickerView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            // nameDropLabel
+            nameDropLabel.leadingAnchor.constraint(equalTo: nameDropView.leadingAnchor, constant: 10),
+            nameDropLabel.topAnchor.constraint(equalTo: nameDropView.topAnchor, constant: 10),
+            nameDropLabel.bottomAnchor.constraint(equalTo: nameDropView.bottomAnchor, constant: -10),
+
+            // textDropLabel
+            textDropLabel.leadingAnchor.constraint(equalTo: textDropView.leadingAnchor, constant: 10),
+            textDropLabel.topAnchor.constraint(equalTo: textDropView.topAnchor, constant: 10),
+            textDropLabel.bottomAnchor.constraint(equalTo: textDropView.bottomAnchor, constant: -10)
         ])
+        
+        // nameDropImageView, textDropImageView 오토 레이아웃
+        NSLayoutConstraint.activate([
+            // nameDropImageView
+            nameDropImageView.trailingAnchor.constraint(equalTo: nameDropView.trailingAnchor, constant: -10),
+            nameDropImageView.centerYAnchor.constraint(equalTo: nameDropLabel.centerYAnchor, constant: 0),
+            
+            nameDropImageView.heightAnchor.constraint(equalToConstant: 16),
+            nameDropImageView.widthAnchor.constraint(equalToConstant: 16),
+                        
+            // textDropImageView
+            textDropImageView.trailingAnchor.constraint(equalTo: textDropView.trailingAnchor, constant: -10),
+            textDropImageView.centerYAnchor.constraint(equalTo: textDropView.centerYAnchor, constant: 0),
+            
+            textDropImageView.heightAnchor.constraint(equalToConstant: 16),
+            textDropImageView.widthAnchor.constraint(equalToConstant: 16),
+        ])
+        
+        // nameDropButton, textDropButton 오토 레이아웃
+        NSLayoutConstraint.activate([
+            // nameDropButton
+            nameDropButton.leadingAnchor.constraint(equalTo: nameDropView.leadingAnchor, constant: 0),
+            nameDropButton.topAnchor.constraint(equalTo: nameDropView.topAnchor, constant: 0),
+            nameDropButton.trailingAnchor.constraint(equalTo: nameDropView.trailingAnchor, constant: 0),
+            nameDropButton.bottomAnchor.constraint(equalTo: nameDropView.bottomAnchor, constant: 0),
+                        
+            // textDropButton
+            textDropButton.leadingAnchor.constraint(equalTo: textDropView.leadingAnchor, constant: 0),
+            textDropButton.topAnchor.constraint(equalTo: textDropView.topAnchor, constant: 0),
+            textDropButton.trailingAnchor.constraint(equalTo: textDropView.trailingAnchor, constant: 0),
+            textDropButton.bottomAnchor.constraint(equalTo: textDropView.bottomAnchor, constant: 0)
+        ])
+ 
+        // dropDownStackView 오토 레이아웃
+        NSLayoutConstraint.activate([
+            dropDownStackView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            dropDownStackView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            dropDownStackView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0),
+            dropDownStackView.heightAnchor.constraint(equalToConstant: 40)
+        ])
+    }
+    
+    // MARK: - Function
+    @objc func nameDropButtonTapped() {
+        nameDropDown.show()
+    }
+    
+    @objc func textDropButtonTapped() {
+        textDropDown.show()
     }
 }
 
 // MARK: - Extension
-// 피커뷰 이벤트 처리
-extension AddResTableViewCell: UIPickerViewDelegate {
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        // 카테고리 Name
-        if component == 0 {
-            viewModel.handleCategoryNamePickerView(fromVC: (self.window?.rootViewController!)!, row: row) {
-                pickerView.reloadComponent(0)
-                pickerView.reloadComponent(1)
-            }
-        }
-        // 카테고리 Text
-        else
-        {
-            
-        }
-    }
-}
 
-// 피커뷰 데이터 처리
-extension AddResTableViewCell: UIPickerViewDataSource {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 2
-    }
-    
-    // 표시할 피커뷰 셀의 갯수
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if component == 0 {
-            return viewModel.getCatNameArray().count
-        } else {
-            return viewModel.getCatTextArray().count
-        }
-    }
-    
-    // 표시할 피커뷰 셀의 내용
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if component == 0 {
-            return viewModel.getCatNameArray()[row]
-        } else {
-            return viewModel.getCatTextArray()[row]
-        }
-    }
-    
-}
+// 데이터 처리 할 일
+// 1.코어 데이터로 데이터 가져오기.
+// 2.직접 추가 맨 뒤에 생기게 하기
+// 3.선택하면 뒤 카테고리 변화.
+// 4.저장 -> 정보들을 코어데이터로 저장하기
+// 5.에러 처리 ->
+// 6.삭제 기능 바꾸기 (버튼 -> 꾹 눌러서 삭제)
+
+// Name 선택 시 -> Text 카테고리 세팅
+// Name 다시 선택 시 -> Text 카테고리 초기화
