@@ -158,7 +158,7 @@ extension CategorySetViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // viewModel.handleResCellTapped(fromCurrentVC: self, animated: true)
+
     }
 }
 

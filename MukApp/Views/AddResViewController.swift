@@ -318,6 +318,8 @@ extension AddResViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         cell.backgroundColor = .white
         
+        
+        
         return cell
     }
 }

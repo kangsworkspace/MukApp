@@ -175,12 +175,18 @@ extension ResViewController: UICollectionViewDelegateFlowLayout {
 
 extension ResViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return viewModel.getDataFromCoreData().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ResCollectionViewCell", for: indexPath) as! ResCollectionViewCell
         cell.backgroundColor = .lightGray
+        
+        let resData = viewModel.getDataFromCoreData()
+        
+        cell.addressLabel.text = resData[indexPath.row].address
+        cell.retaurantNameLabel.text = resData[indexPath.row].placeName
+        
         return cell
     }
 }

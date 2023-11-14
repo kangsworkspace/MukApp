@@ -143,9 +143,9 @@
 				B00080672AED22A7003C55EE /* ResCollectionViewCell.swift */,
 				B037F7402AE3B58500C72F63 /* SearchViewController.swift */,
 				B0D5FE252AF4966300D4B751 /* SearchTableViewCell.swift */,
-				B0D5FE232AEFA6A300D4B751 /* ResultViewController.swift */,
 				B037F7772AE55E6500C72F63 /* AddResViewController.swift */,
 				B0A320832AF78D2300E74138 /* AddResTableViewCell.swift */,
+				B0D5FE232AEFA6A300D4B751 /* ResultViewController.swift */,
 				B0D871052AFA846E00758187 /* CategorySetViewController.swift */,
 				B064C33F2AFBDCCB00B33189 /* CategorySetCollectionViewCell.swift */,
 			);

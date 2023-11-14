@@ -21,7 +21,7 @@ final class MainViewModel {
     }
     
     // MARK: - CategoryModel(싱글톤)
-    let categoryModel = CategoryModel.shared
+    private let categoryModel = CategoryModel.shared
     
     // MARK: - 데이터 모델
     // 코어 데이터 모델
@@ -32,6 +32,13 @@ final class MainViewModel {
     private var resultResArray: [Document] = []
     
     // MARK: - ResViewController
+    // 코어 데이터에서 저장된 데이터 가져오기
+    func getDataFromCoreData() -> [RestaurantData] {
+        var resList = coreDataManager.getDataFromCoreData()
+        return resList
+    }
+    
+    
     // "맛집 추가" 버튼 동작
     func handleAddResButtonTapped(fromCurrentVC: UIViewController, animated: Bool) {
         let navVC = fromCurrentVC.navigationController

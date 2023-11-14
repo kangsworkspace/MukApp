@@ -24,23 +24,23 @@ class ResCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    private var addressLabel: UILabel = {
+    var addressLabel: UILabel = {
         let label = UILabel()
         // 텍스트 설정
         label.text = "상리 1길 우엥엥호 1222동 4012412호"
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 10)
+        label.numberOfLines = 0
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private var retaurantNameLabel: UILabel = {
+    var retaurantNameLabel: UILabel = {
         let label = UILabel()
         // 텍스트 설정
         label.text = "어쭈꾸미"
         label.textColor = .black
-        label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -91,10 +91,10 @@ class ResCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             addressLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 10),
             addressLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            addressLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -30)
+            addressLabel.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -10)
         ])
         
-        // addressLabel 오토 레이아웃
+        // retaurantNameLabel 오토 레이아웃
         NSLayoutConstraint.activate([
             retaurantNameLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 10),
             retaurantNameLabel.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -10),
