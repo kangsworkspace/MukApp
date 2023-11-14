@@ -35,6 +35,13 @@ final class CategoryModel {
     
     // 코어 데이터에 저장할 resData 배열 세팅
     func setResData(resData: Document) {
+        print("setResData")
+        print(resData.phone ?? "")
+        print(resData.placeName ?? "")
+        print(resData.placeURL ?? "")
+        print(resData.roadAddress ?? "")
+        print(resData.address ?? "")
+        print(resData.group ?? "")
         selResData = resData
     }
     

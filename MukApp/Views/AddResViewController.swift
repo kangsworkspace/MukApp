@@ -276,7 +276,7 @@ class AddResViewController: UIViewController {
     // MARK: - Function
     // addResButton 동작
     @objc func addResButtonTapped() {
-        viewModel.handleSaveResButtonTapped()
+        viewModel.handeTestingCoreData()
     }
     
     var handleAddResButtonTapped: (() -> ()) = {}

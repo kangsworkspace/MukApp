@@ -81,26 +81,30 @@ final class MainViewModel {
         
         let resData = categoryModel.getSelResData()
         
-        var categoryDataArray: [CategoryData] = []
-        let catNameArray = categoryModel.getSelCatNameArray()
-        let catTextArray = categoryModel.getSelCatTextArray()
+        let categoryData = CategoryData()
+        categoryData.categoryName = "잇힝"
+        categoryData.categoryText = "오홍"
         
-        guard catNameArray.count == catTextArray.count else {
-            // 길이가 다르면 에러 처리 또는 적절한 조치를 취할 수 있음
-            fatalError("The length of catNameArray and catTextArray must be the same.")
-        }
+//        categoryDataArray.categoryName = categoryModel.getSelCatNameArray()
+//        categoryDataArray.categoryText = categoryModel.getSelCatTextArray()
+//        let catNameArray = categoryModel.getSelCatNameArray()
+//        let catTextArray = categoryModel.getSelCatTextArray()
         
-        for index in 0..<catNameArray.count {
-            var category = CategoryData()
-            
-            category.categoryName = catNameArray[index]
-            category.categoryText = catTextArray[index]
-            
-            categoryDataArray.append(category)
-        }
+//        guard catNameArray.count == catTextArray.count else {
+//            // 길이가 다르면 에러 처리 또는 적절한 조치를 취할 수 있음
+//            fatalError("The length of catNameArray and catTextArray must be the same.")
+//        }
         
+//        for index in 0..<catNameArray.count {
+//            var category = CategoryData()
+//            
+//            category.categoryName = catNameArray[index]
+//            category.categoryText = catTextArray[index]
+//            
+//            categoryDataArray.append(category)
+//        }
    
-        coreDataManager.saveResToCoreData(resData: resData, categoryData: categoryDataArray) {
+        coreDataManager.saveResToCoreData(resData: resData, categoryData: categoryData) {
             print("저장 완료")
         }
     }
@@ -220,4 +224,34 @@ final class MainViewModel {
         // 얼럿 창 띄우기
         fromVC.present(alert, animated: true, completion: nil)
     }
+    
+    // MARK: - 코어 데이터 테스팅
+    func handeTestingCoreData() {
+        
+        let resData = categoryModel.getSelResData()
+        let address = resData.address ?? ""
+        let group = resData.group ?? ""
+        let phone = resData.phone ?? ""
+        let placeName = resData.placeName ?? ""
+        let roadAddress = resData.roadAddress ?? ""
+        let placeURL = resData.placeURL ?? ""
+        
+        let catNameArray = categoryModel.getSelCatNameArray()
+        let catTextArray = categoryModel.getSelCatTextArray()
+        
+        guard catNameArray.count == catTextArray.count else {
+            fatalError("The length of catNameArray and catTextArray must be the same.")
+        }
+        
+        let categoryName = catNameArray
+        let categoryText = catTextArray
+        
+    
+        coreDataManager.testCreateCoreData(address: address, group: group, phone: phone, placeName: placeName, roadAddress: roadAddress, placeURL: placeURL, categoryName: categoryName, categoryText: categoryText) {
+            print("테스트 최종 성공 텍스트")
+        }
+        
+    }
 }
+
+

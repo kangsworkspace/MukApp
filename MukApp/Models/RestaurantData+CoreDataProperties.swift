@@ -2,7 +2,7 @@
 //  RestaurantData+CoreDataProperties.swift
 //  MukApp
 //
-//  Created by Kang on 11/5/23.
+//  Created by Kang on 11/13/23.
 //
 //
 

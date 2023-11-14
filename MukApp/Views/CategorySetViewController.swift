@@ -38,11 +38,11 @@ class CategorySetViewController: UIViewController {
     // 맛집 추가 버튼(addResButtonTapped)
     private var addResButton: UIButton = {
         let button = UIButton()
-        button.setTitle("맛집 추가", for: .normal)
+        button.setTitle("코어 데이터 테스트", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
         button.setTitleColor(.black, for: .normal)
         button.backgroundColor = .lightGray
-        button.addTarget(self, action: #selector(addResButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(testButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -131,10 +131,9 @@ class CategorySetViewController: UIViewController {
     }
     
     // MARK: - Function
-    @objc func addResButtonTapped() {
-        viewModel.handleAddResButtonTapped(fromCurrentVC: self, animated: true)
-        
-        
+    @objc func testButtonTapped() {
+        print("테스트 버튼 연결")
+        viewModel.handeTestingCoreData()
     }
 }
 
