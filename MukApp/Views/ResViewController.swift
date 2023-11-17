@@ -61,7 +61,7 @@ class ResViewController: UIViewController {
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-             
+        
         setMain()
     }
     
@@ -80,7 +80,7 @@ class ResViewController: UIViewController {
     func setMain() {
         // 백그라운드 컬러 설정
         view.backgroundColor = .white
-
+        
         setAddView()
         setAutoLayout()
         setCollectionView()
@@ -97,7 +97,7 @@ class ResViewController: UIViewController {
         addResButton.layer.shadowRadius = 5
         addResButton.layer.shadowOpacity = 0.3
     }
-
+    
     // 셋업 - 애드 뷰
     func setAddView() {
         view.addSubview(mainLabel)
@@ -167,8 +167,10 @@ extension ResViewController: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }
     
+    // 셀이 눌렸을 때
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // viewModel.handleResCellTapped(fromCurrentVC: self, animated: true)
+        let resData = viewModel.getDataFromCoreData()
+        viewModel.handleEditCellTapped(resData: resData[indexPath.row], fromCurrentVC: self, animated: true)
     }
 }
 

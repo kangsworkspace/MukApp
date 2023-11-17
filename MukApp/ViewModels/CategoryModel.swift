@@ -19,15 +19,17 @@ final class CategoryModel {
     private var selCatTextArray: [String] = []
     private var selResData: Document?
     
+    private var isCatSelected = false
+    
+    private var resListNum = 0
+    
     // 코어 데이터에 저장할 카테고리 배열 세팅
     func setCategoryArray(text: String, category: String) {
         // 선택된 카테고리에 더하기(이후 코어 데이터에 저장)
         if category == "name" {
-            print("저장 전 selCatNameArray: \(self.selCatNameArray)")
             self.selCatNameArray.append(text)
             print("저장 후 selCatNameArray: \(self.selCatNameArray)")
         } else {
-            print("저장 전 selCatTextArray: \(self.selCatTextArray)")
             self.selCatTextArray.append(text)
             print("저장 후 selCatTextArray: \(self.selCatTextArray)")
         }
@@ -44,6 +46,28 @@ final class CategoryModel {
         print(resData.group ?? "")
         selResData = resData
     }
+    
+    // 선택된 카테고리 세팅
+    func setIsCatSelected() {
+        isCatSelected.toggle()
+    }
+    
+    // 선택된 카테고리 리턴
+    func getIsCatSelected() -> Bool {
+        return isCatSelected
+    }
+    
+    // 후보 식당 숫자 세팅
+    func setResListNum(resNum: Int) {
+        resListNum = resNum
+    }
+    
+    // 후보 식당 숫자 리턴
+    func getResListNum() -> Int {
+        return resListNum
+    }
+    
+    
     
     // Name 카테고리 리턴
     func getSelCatNameArray () -> ([String]) {

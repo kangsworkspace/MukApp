@@ -7,7 +7,10 @@
 
 import UIKit
 
-class AddResViewController: UIViewController {
+class EditResViewController: UIViewController {
+    
+    private var nameT: [String] = []
+    private var textT: [String] = []
     
     // MARK: - 뷰 모델
     let viewModel: MainViewModel
@@ -21,8 +24,7 @@ class AddResViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // 생성 - 이미지 URL을 전달받는 변수
-    var resData: Document! {
+    var resData: RestaurantData! {
         didSet {
             configureUIWithData()
         }
@@ -133,7 +135,7 @@ class AddResViewController: UIViewController {
     }()
     
     // 카테고리 설정 카운트
-    private var categoryCnt: Int = 1 {
+    private var categoryCnt: Int = 0 {
         didSet {
             tableView.reloadData()
         }
@@ -144,6 +146,10 @@ class AddResViewController: UIViewController {
         super.viewDidLoad()
         
         setMain()
+        viewModel.setNameDropLabel(resData: resData) { nameArray, textArray in
+            self.nameT = nameArray
+            self.textT = textArray
+        }
     }
     
     // MARK: - viewDidLayoutSubviews
@@ -270,7 +276,7 @@ class AddResViewController: UIViewController {
         tableView.rowHeight = 60
         
         // 셀 등록
-        tableView.register(AddResTableViewCell.self, forCellReuseIdentifier: "AddResTableViewCell")
+        tableView.register(EditResTableViewCell.self, forCellReuseIdentifier: "EditResTableViewCell")
     }
     
     // MARK: - Function
@@ -302,21 +308,29 @@ class AddResViewController: UIViewController {
 }
 
 // MARK: - Extension
-extension AddResViewController: UITableViewDelegate {
+extension EditResViewController: UITableViewDelegate {
+    // 테이블 뷰 셀이 눌렸을 때
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
 }
 
-extension AddResViewController: UITableViewDataSource {
+extension EditResViewController: UITableViewDataSource {
+    // 표시할 테이블 뷰 셀 갯수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryCnt
+        return (resData.category?.count ?? 0) + categoryCnt
     }
     
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "AddResTableViewCell", for: indexPath) as! AddResTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "EditResTableViewCell", for: indexPath) as! EditResTableViewCell
+        
         cell.selectionStyle = .none
         cell.backgroundColor = .white
+        
+        cell.nameDropLabel.text = nameT[indexPath.row]
+        cell.textDropLabel.text = textT[indexPath.row]
+        
         return cell
     }
 }

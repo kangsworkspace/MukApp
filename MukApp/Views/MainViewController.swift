@@ -9,15 +9,14 @@ import UIKit
 
 class MainViewController: UIViewController {
     
-    // MARK: - Menu뷰 모델
-    let viewModel: MenuViewModel
+    // MARK: - Main뷰 모델
+    let viewModel: MainViewModel
     
-    init(viewModel: MenuViewModel) {
+    init(viewModel: MainViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
-    // 필수 생성자
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -28,9 +27,9 @@ class MainViewController: UIViewController {
         let label = UILabel()
         
         // 텍스트 설정
-        label.text = "지금 먹을 메뉴는?"
+        label.text = "# 뭐 먹지?"
         label.textColor = .black
-        label.font = UIFont.boldSystemFont(ofSize: 25)
+        label.font = UIFont.boldSystemFont(ofSize: 28)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -42,7 +41,7 @@ class MainViewController: UIViewController {
         button.setTitle("룰렛 돌리기", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
         button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = .lightGray
+        button.backgroundColor = MyColor.themeColor
         button.addTarget(self, action: #selector(menuButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -63,6 +62,19 @@ class MainViewController: UIViewController {
     
     // 테이블 뷰
     private let tableView = UITableView()
+    
+    // resListLabel
+    var resListLabel: UILabel = {
+        let label = UILabel()
+        
+        // 텍스트 설정
+        label.text = "해당되는 맛집: 3개"
+        label.textColor = .black
+        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
     // 카테고리 추가 버튼
     private var plusButton: UIButton = {
@@ -160,6 +172,7 @@ class MainViewController: UIViewController {
         view.addSubview(menuButton)
         view.addSubview(categoryTextLabel)
         view.addSubview(tableView)
+        view.addSubview(resListLabel)
         view.addSubview(plusButton)
         view.addSubview(minusButton)
     }
@@ -171,10 +184,11 @@ class MainViewController: UIViewController {
         tableView.delegate = self
         
         // 셀의 높이 설정
-        tableView.rowHeight = 120
+        tableView.rowHeight = CommonCGSize.hashTagTableHeight
+        tableView.separatorStyle = .none
         
         // 셀 등록
-        tableView.register(CategoryTableViewCell.self, forCellReuseIdentifier: "CategoryTableViewCell")
+        tableView.register(MainViewControllerTableViewCell.self, forCellReuseIdentifier: "MainViewControllerTableViewCell")
     }
     
     // MARK: - AutoLayout
@@ -183,7 +197,7 @@ class MainViewController: UIViewController {
         // mainLabel 오토 레이아웃
         NSLayoutConstraint.activate([
             mainLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 40),
-            mainLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 45),
+            mainLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
             mainLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -40),
             
             mainLabel.heightAnchor.constraint(equalToConstant: 30)
@@ -192,30 +206,35 @@ class MainViewController: UIViewController {
         // menuButton 오토 레이아웃
         NSLayoutConstraint.activate([
             menuButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 80),
-            menuButton.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 10),
+            menuButton.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 40),
             menuButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -80),
             
-            menuButton.heightAnchor.constraint(equalToConstant: 46)
+            menuButton.heightAnchor.constraint(equalToConstant: CommonCGSize.buttonHeight)
         ])
-        
-        
         
         // categoryTextLabel 오토 레이아웃
         NSLayoutConstraint.activate([
             categoryTextLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
-            categoryTextLabel.topAnchor.constraint(equalTo: menuButton.bottomAnchor, constant: 10),
+            categoryTextLabel.topAnchor.constraint(equalTo: menuButton.bottomAnchor, constant: 40),
             categoryTextLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
             
-            categoryTextLabel.heightAnchor.constraint(equalToConstant: 40)
+            categoryTextLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
         
         // tableView 오토 레이아웃
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
-            tableView.topAnchor.constraint(equalTo: categoryTextLabel.bottomAnchor, constant: 10),
+            tableView.topAnchor.constraint(equalTo: categoryTextLabel.bottomAnchor, constant: 5),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -60)
+            tableView.bottomAnchor.constraint(equalTo: resListLabel.topAnchor, constant: -20)
+        ])
+        
+        // resListLabel 오토 레이아웃
+        NSLayoutConstraint.activate([
+            resListLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
+            resListLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
+            resListLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
         
         // plusButton, minusButton 오토 레이아웃
@@ -236,12 +255,11 @@ class MainViewController: UIViewController {
     
     // MARK: - Function
     @objc func menuButtonTapped() {
-        print("메뉴 버튼이 눌렸습니다.")
-        viewModel.handleMenuButtonTapped()
+        viewModel.handleRouletteTapped(fromCurrentVC: self, animated: true)
     }
     
     @objc func plusButtonTapped() {
-        categoryCnt += 1
+        categoryCnt += viewModel.handleMainPlusButtonTapped()
     }
     
     @objc func minusButtonTapped() {
@@ -267,8 +285,9 @@ extension MainViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryTableViewCell", for: indexPath) as! CategoryTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MainViewControllerTableViewCell", for: indexPath) as! MainViewControllerTableViewCell
         cell.backgroundColor = .white
+        cell.selectionStyle = .none
         return cell
     }
     
