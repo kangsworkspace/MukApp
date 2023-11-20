@@ -145,7 +145,6 @@ class MainViewControllerTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     func setMain() {
         // pickerview가 터치 되도록 컨텐츠 뷰 뒤로 보내기
         sendSubviewToBack(contentView)
@@ -172,16 +171,21 @@ class MainViewControllerTableViewCell: UITableViewCell {
         
         // nameDropDown 선택 시 이벤트 처리
         nameDropDown.selectionAction = { [weak self] (index, item) in
-            self!.viewModel.handleMainCatSelAction(item: item, category: "name") {item in
+            self!.viewModel.handleMainCatNameSelAction(fromVC: (self?.window!.rootViewController!)!, item: item) {item, isNeedToFixText in
                 self!.nameDropLabel.text = item
                 // 텍스트 데이터 설정
                 self!.setCatTextData(item: item)
+                
+                // 선택한 텍스트 레이블 초기화
+                if isNeedToFixText {
+                    self!.textDropLabel.text = "선택해주세요"
+                }
             }
         }
         
         // textDropDown 선택 시 이벤트 처리
         textDropDown.selectionAction = { [weak self] (index, item) in
-            self!.viewModel.handleCatSelAction(fromVC: (self?.window!.rootViewController!)!, item: item, category: "text") {item in
+            self!.viewModel.handleCatTextSelAction(fromVC: (self?.window!.rootViewController!)!, item: item) {item in
                 self!.textDropLabel.text = item
                 self!.viewModel.selCatText()
                 self!.viewModel.setIsCatSelected()
@@ -195,7 +199,7 @@ class MainViewControllerTableViewCell: UITableViewCell {
         textDropDown.dataSource = []
     }
     
-    
+    // nameDropDown 선택 시 해당하는 Text 가져오기
     func setCatTextData(item: String) {
         viewModel.changeMainNameSelAction(item: item, completion: { categoryTextArray in
             self.textDropDown.dataSource = categoryTextArray

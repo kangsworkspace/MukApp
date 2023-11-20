@@ -52,7 +52,7 @@ class MainViewController: UIViewController {
         let label = UILabel()
         
         // 텍스트 설정
-        label.text = "최소 1개의 카테고리를 정해주세요"
+        label.text = "최소 1개의 해시태그를 정해주세요"
         label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textAlignment = .center
@@ -97,11 +97,7 @@ class MainViewController: UIViewController {
     }()
     
     // 카테고리 설정 카운트
-    private var categoryCnt: Int = 1 {
-        didSet {
-            tableView.reloadData()
-        }
-    }
+    private var categoryCnt: Int = 1
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
@@ -158,7 +154,6 @@ class MainViewController: UIViewController {
     // 셋업 - 메인
     func setMain() {
         
-        viewModel.getDataFromCoreData()
         view.backgroundColor = .white
         
         setAddView()
@@ -259,14 +254,26 @@ class MainViewController: UIViewController {
     }
     
     @objc func plusButtonTapped() {
-        categoryCnt += viewModel.handleMainPlusButtonTapped()
+        if viewModel.handleMainPlusButtonTapped() {
+            categoryCnt += 1
+            print("categoryCnt: \(categoryCnt)")
+            tableView.insertRows(at: [IndexPath(row: categoryCnt - 1, section: 0)], with: .fade)
+            let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! MainViewControllerTableViewCell
+            cell.nameDropLabel.text = "선택해주세요"
+            cell.textDropLabel.text = "선택해주세요"
+        } else {
+            return
+        }
     }
     
     @objc func minusButtonTapped() {
         if categoryCnt == 1 {
             return
         } else {
+            viewModel.handleMainMinusButtonTapped()
             categoryCnt -= 1
+            print("categoryCnt: \(categoryCnt)")
+            tableView.deleteRows(at: [IndexPath(row: categoryCnt, section: 0)], with: .fade)
         }
     }
 }
@@ -289,7 +296,7 @@ extension MainViewController: UITableViewDataSource {
         cell.backgroundColor = .white
         cell.selectionStyle = .none
         return cell
+        
+    
     }
-    
-    
 }

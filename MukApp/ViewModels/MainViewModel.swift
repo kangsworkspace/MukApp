@@ -80,12 +80,6 @@ final class MainViewModel {
         navVC?.pushViewController(nextVC, animated: true)
     }
     
-    // 카테고리 네임 선택 이벤트
-    func handleMainCatSelAction(item: String, category: String, completion: @escaping (String) -> Void) {
-        self.categoryModel.setCategoryArray(text: item, category: category)
-        completion(item)
-    }
-    
     // 카테고리 텍스트가 결정되었을 때
     func selCatText() {
         
@@ -151,7 +145,7 @@ final class MainViewModel {
         return catNameArray
     }
     
-    // 코어 데이터에서 CategoryText 가져오기
+    // (카테고리 Name 선택 시) -> 코어 데이터에서 해당하는 CategoryText 가져오기
     func changeMainNameSelAction(item: String, completion: @escaping ([String]) -> Void) {
         // 코어 데이터에서 메뉴 데이터 가져오기
         let resDataList = coreDataManager.getDataFromCoreData()
@@ -183,15 +177,37 @@ final class MainViewModel {
     }
     
     
-    func handleMainPlusButtonTapped() -> Int {
+    func handleMainPlusButtonTapped() -> Bool {
         if categoryModel.getIsCatSelected() {
             print("진행시켜")
-            categoryModel.setIsCatSelected()
-            return 1
+            categoryModel.setIsNameAppendingTrue()
+            categoryModel.setIsCatSelectedFalse()
+            return true
         } else {
             print("진행불가")
-            return 0
+            return false
         }
+    }
+    
+    func handleMainMinusButtonTapped() {
+        // category 모델의 (행렬 == categoryCnt -1)번째 데이터 삭제해주기.
+        categoryModel.handleMinusAction()
+    }
+    
+    // 카테고리 선택 이벤트
+    func handleMainCatNameSelAction(fromVC: UIViewController, item: String, completion: @escaping (String, Bool) -> Void) {
+        // 데이터 저장
+        self.categoryModel.setCategoryNameArray(text: item)
+        let isNeedToFix = categoryModel.getIsNeedToFix()
+        completion(item, isNeedToFix)
+    }
+    
+    // 카테고리 텍스트 선택 이벤트
+    func handleCatTextSelAction(fromVC: UIViewController, item: String, completion: @escaping (String) -> Void) {
+        
+        // 데이터 저장
+        self.categoryModel.setCategoryTextArray(text: (item))
+        completion(item)
     }
     
     // MARK: - ResViewController
@@ -335,7 +351,7 @@ final class MainViewModel {
         return catNameArray
     }
     
-    // 카테고리 선택 이벤트
+    // 카테고리 텍스트 선택 이벤트
     func handleCatSelAction(fromVC: UIViewController, item: String, category: String, completion: @escaping (String) -> Void) {
         // 카테고리 추가 이벤트
         if item == "카테고리 추가" {
@@ -344,7 +360,7 @@ final class MainViewModel {
                 if save {
                     guard let saveText = saveText else { return }
                     // 데이터 저장
-                    self.categoryModel.setCategoryArray(text: saveText, category: category)
+                    self.categoryModel.setCategoryTextArray(text: saveText)
                     completion(saveText)
                 }
                 // 취소
@@ -356,7 +372,7 @@ final class MainViewModel {
         // 카테고리 선택 이벤트
         else {
             // 데이터 저장
-            self.categoryModel.setCategoryArray(text: item, category: category)
+            self.categoryModel.setCategoryTextArray(text: (item))
             completion(item)
         }
     }
@@ -448,7 +464,6 @@ final class MainViewModel {
     func setIsCatSelected() {
         categoryModel.setIsCatSelected()
     }
-    
 }
 
 
