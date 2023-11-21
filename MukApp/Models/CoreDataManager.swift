@@ -196,15 +196,6 @@ final class CoreDataManager: CoreDataManagerType {
         newRes.placeURL = placeURL
         print("newRes 객체에 데이터 할당 성공")
         
-        //        // 객체에 데이터 할당
-        //        newCat.categoryName = categoryName
-        //        newCat.categoryText = categoryText
-        //        print("newCat 객체에 데이터 할당 성공")
-        //
-        //        // newMenu에 newCategory 더하기
-        //        newRes.addToCategory(newCat)
-        //        print("newCat 객체에 데이터 할당 성공")
-        
         // 카테고리 배열 할당
         for index in 0...categoryName.count-1 {
             

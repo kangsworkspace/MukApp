@@ -132,7 +132,6 @@ class MainViewControllerTableViewCell: UITableViewCell {
         return stackView
     }()
     
-    
     // MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.viewModel = MainViewModel(coreDataManager: CoreDataManager(), apiServie: APIService())
@@ -190,7 +189,7 @@ class MainViewControllerTableViewCell: UITableViewCell {
             
             // 레이블 텍스트 변경
             self!.textDropLabel.text = item
-            
+            self!.catTextSet()
         }
     }
     
@@ -297,6 +296,8 @@ class MainViewControllerTableViewCell: UITableViewCell {
             dropDownStackView.heightAnchor.constraint(equalToConstant: CommonCGSize.hashTagHeight)
         ])
     }
+    
+    var catTextSet: () -> () = {}
     
     // MARK: - Function
     @objc func nameDropButtonTapped() {

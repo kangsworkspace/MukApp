@@ -41,7 +41,7 @@ class MainViewController: UIViewController {
         button.setTitle("룰렛 돌리기", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
         button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = MyColor.themeColor
+        button.backgroundColor = MyColor.disableColor
         button.addTarget(self, action: #selector(menuButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -68,7 +68,7 @@ class MainViewController: UIViewController {
         let label = UILabel()
         
         // 텍스트 설정
-        label.text = "해당되는 맛집: 3개"
+        label.text = ""
         label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: 12)
         label.textAlignment = .center
@@ -80,7 +80,7 @@ class MainViewController: UIViewController {
     private var plusButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "plus")!.withTintColor(.darkGray, renderingMode: .alwaysOriginal), for: .normal)
-        button.backgroundColor = .white
+        button.backgroundColor = MyColor.disableColor
         button.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -90,7 +90,7 @@ class MainViewController: UIViewController {
     private var minusButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "minus")!.withTintColor(.darkGray, renderingMode: .alwaysOriginal), for: .normal)
-        button.backgroundColor = .white
+        button.backgroundColor = MyColor.disableColor
         button.addTarget(self, action: #selector(minusButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -262,6 +262,9 @@ class MainViewController: UIViewController {
             
             // Cell에 접근해서 다음 Cat Name Array 설정
             setNextCatName()
+            
+            // 버튼 색상 설정
+            setPlusButtonTappedColor()
         }
         // 뷰 모델의 handleMainPlusButtonTapped이 False 일 때 -> 리턴
         else {
@@ -281,6 +284,9 @@ class MainViewController: UIViewController {
             
             // Cell 삭제
             deleteCell()
+            
+            // 버튼 컬러 설정
+            setMinusButtonTappedColor()
         }
     }
     
@@ -317,6 +323,37 @@ class MainViewController: UIViewController {
         // 셀에 데이터 할당
         cell.nameDropDown.dataSource = viewModel.getNextCatNameArray()
     }
+    
+    // 후보 맛집 레이블 바꾸기
+    func setResListText(resListNum: Int) {
+        resListLabel.text = "해당되는 맛집: \(resListNum)개"
+    }
+    
+    // 룰렛 색상 변경하기
+    func setRouletteColor(resListNum: Int) {
+        if resListNum > 0 {
+            menuButton.backgroundColor = MyColor.themeColor
+        } else {
+            menuButton.backgroundColor = MyColor.disableColor
+        }
+    }
+    
+    func setPlusButtonColorWhite() {
+        plusButton.backgroundColor = .white
+    }
+    
+    func setPlusButtonTappedColor() {
+        plusButton.backgroundColor = MyColor.disableColor
+        minusButton.backgroundColor = .white
+    }
+    
+    func setMinusButtonTappedColor() {
+        if categoryCnt == 1 {
+            minusButton.backgroundColor = MyColor.disableColor
+        }
+        
+        plusButton.backgroundColor = .white
+    }
 }
 
 // MARK: - Extension
@@ -335,6 +372,22 @@ extension MainViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MainViewControllerTableViewCell", for: indexPath) as! MainViewControllerTableViewCell
         cell.backgroundColor = .white
         cell.selectionStyle = .none
+        
+        // 카테고리 텍스트가 바뀌었을 때
+        cell.catTextSet = {
+            // 후보 식당 갯수 가져오기
+            let resListNum = self.viewModel.getResListNum()
+
+            // 룰렛 색상 설정하기
+            self.setRouletteColor(resListNum: resListNum)
+            
+            // 후보 식당 텍스트 바꾸기
+            self.setResListText(resListNum: resListNum)
+            
+            // +버튼 색상 설정하기?
+            self.setPlusButtonColorWhite()
+        }
+        
         return cell
     }
 }

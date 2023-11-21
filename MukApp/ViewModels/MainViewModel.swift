@@ -194,6 +194,11 @@ final class MainViewModel {
         return categoryModel.getNextNameArray()
     }
     
+    // 후보 식당 수 리턴
+    func getResListNum() -> Int {
+        return categoryModel.getResListNum()
+    }
+    
     // MARK: - ResViewController
     // 코어 데이터에서 저장된 데이터 가져오기
     func getDataFromCoreData() -> [RestaurantData] {

@@ -8,6 +8,9 @@
 import UIKit
 
 public enum MyColor {
-    // 분홍
+    // 테마 컬러 - 분홍
     static let themeColor = UIColor(hexString: "#ff477e")
+    
+    // 테마 컬러 - 동작하지 않을 때
+    static let disableColor = UIColor(hexString: "#b2b2b2")
 }
