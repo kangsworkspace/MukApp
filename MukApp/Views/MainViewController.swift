@@ -253,28 +253,69 @@ class MainViewController: UIViewController {
         viewModel.handleRouletteTapped(fromCurrentVC: self, animated: true)
     }
     
+    // 플러스 버튼 눌림
     @objc func plusButtonTapped() {
+        // 뷰 모델의 handleMainPlusButtonTapped이 True 일 때
         if viewModel.handleMainPlusButtonTapped() {
-            categoryCnt += 1
-            print("categoryCnt: \(categoryCnt)")
-            tableView.insertRows(at: [IndexPath(row: categoryCnt - 1, section: 0)], with: .fade)
-            let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! MainViewControllerTableViewCell
-            cell.nameDropLabel.text = "선택해주세요"
-            cell.textDropLabel.text = "선택해주세요"
-        } else {
+            // 셀 추가 함수
+            addNewCell()
+            
+            // Cell에 접근해서 다음 Cat Name Array 설정
+            setNextCatName()
+        }
+        // 뷰 모델의 handleMainPlusButtonTapped이 False 일 때 -> 리턴
+        else {
             return
         }
     }
     
+    // 마이너스 버튼 눌림
     @objc func minusButtonTapped() {
+        // categoryCnt가 1이면 진행 X
         if categoryCnt == 1 {
             return
+        // categoryCnt가 1이 아니면 진행
         } else {
+            // 싱글톤 데이터 삭제
             viewModel.handleMainMinusButtonTapped()
-            categoryCnt -= 1
-            print("categoryCnt: \(categoryCnt)")
-            tableView.deleteRows(at: [IndexPath(row: categoryCnt, section: 0)], with: .fade)
+            
+            // Cell 삭제
+            deleteCell()
         }
+    }
+    
+    // 새로운 Cell 생성
+    func addNewCell() {
+        // 카테고리 카운트 + 1
+        categoryCnt += 1
+        print("categoryCnt: \(categoryCnt)")
+
+        // 테이블 뷰 마지막 순서에 셀 생성
+        tableView.insertRows(at: [IndexPath(row: categoryCnt - 1, section: 0)], with: .fade)
+        
+        // 셀의 Label.text = "선택해주세요"
+        let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! MainViewControllerTableViewCell
+        
+        cell.nameDropLabel.text = "선택해주세요"
+        cell.textDropLabel.text = "선택해주세요"
+    }
+    
+    // 마지막 Cell 삭제
+    func deleteCell() {
+        categoryCnt -= 1
+        print("categoryCnt: \(categoryCnt)")
+        tableView.deleteRows(at: [IndexPath(row: categoryCnt, section: 0)], with: .fade)
+    }
+    
+    func setNextCatName() {
+        // 셀 가져오기
+        let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! MainViewControllerTableViewCell
+        
+        // 싱글톤 데이터에 데이터 세팅
+        viewModel.setNextCatNameArray()
+        
+        // 셀에 데이터 할당
+        cell.nameDropDown.dataSource = viewModel.getNextCatNameArray()
     }
 }
 
@@ -291,12 +332,9 @@ extension MainViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "MainViewControllerTableViewCell", for: indexPath) as! MainViewControllerTableViewCell
         cell.backgroundColor = .white
         cell.selectionStyle = .none
         return cell
-        
-    
     }
 }

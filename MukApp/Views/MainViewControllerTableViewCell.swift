@@ -171,29 +171,30 @@ class MainViewControllerTableViewCell: UITableViewCell {
         
         // nameDropDown 선택 시 이벤트 처리
         nameDropDown.selectionAction = { [weak self] (index, item) in
-            self!.viewModel.handleMainCatNameSelAction(fromVC: (self?.window!.rootViewController!)!, item: item) {item, isNeedToFixText in
-                self!.nameDropLabel.text = item
-                // 텍스트 데이터 설정
-                self!.setCatTextData(item: item)
-                
-                // 선택한 텍스트 레이블 초기화
-                if isNeedToFixText {
-                    self!.textDropLabel.text = "선택해주세요"
-                }
-            }
+            // 싱글톤 데이터 설정
+            self!.viewModel.handleMainCatNameSelAction(item: item)
+            
+            // 레이블 텍스트 변경
+            self!.nameDropLabel.text = item
+            
+            // 텍스트 데이터 설정
+            self!.setCatTextData(item: item)
         }
         
         // textDropDown 선택 시 이벤트 처리
         textDropDown.selectionAction = { [weak self] (index, item) in
-            self!.viewModel.handleCatTextSelAction(fromVC: (self?.window!.rootViewController!)!, item: item) {item in
-                self!.textDropLabel.text = item
-                self!.viewModel.selCatText()
-                self!.viewModel.setIsCatSelected()
+            // 싱글톤 데이터 설정
+            self!.viewModel.handleCatTextSelAction(item: item) {item in
+                
             }
+            
+            // 레이블 텍스트 변경
+            self!.textDropLabel.text = item
+            
         }
     }
     
-    // 데이터 소스 설정
+    // 초기 데이터 소스 설정
     func setDropDownData() {
         nameDropDown.dataSource = viewModel.getCatNameFromCoreDataToMain()
         textDropDown.dataSource = []
@@ -201,6 +202,10 @@ class MainViewControllerTableViewCell: UITableViewCell {
     
     // nameDropDown 선택 시 해당하는 Text 가져오기
     func setCatTextData(item: String) {
+        // 텍스트 = "선택해주세요"
+        self.textDropLabel.text = "선택해주세요"
+        
+        // Name에 해당하는 데이터 가져와서 할당하기
         viewModel.changeMainNameSelAction(item: item, completion: { categoryTextArray in
             self.textDropDown.dataSource = categoryTextArray
         })
@@ -226,7 +231,6 @@ class MainViewControllerTableViewCell: UITableViewCell {
     
     // 셋업 - 오토 레이아웃
     func setAutoLayout() {
-        
         // nameHashLabel, textHashLabel 오토 레이아웃
         NSLayoutConstraint.activate([
             // nameDropLabel
