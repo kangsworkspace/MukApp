@@ -9,6 +9,19 @@ import UIKit
 
 class RouletteViewController: UIViewController {
     
+    let viewModel: MainViewModel
+    
+    init(viewModel: MainViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    var TargetResData: RestaurantData?
+    
     // MARK: - Interface
     // 피커뷰 (룰렛)
     let pickerView = UIPickerView()
@@ -17,37 +30,30 @@ class RouletteViewController: UIViewController {
         super.viewDidLoad()
         
         setMain()
-        setAddView()
-        setAutoLayout()
-        setPickerView()
-        trigger()
     }
-    
-    override func viewDidLayoutSubviews() {
-        // UIPickerView indicator 숨기기(hide indicator)
-        // UIPickerView를 생성하게 되면 selectedRow부분이 회색 바탕으로 표시되거나, 구분선으로 표시가 되는데,
-        // Custom 하기 위해서 이 부분을 숨기는 코드이다.
-        // pickerView.subviews[index].isHidden = true
-    }
-    
-    
+        
     func setMain() {
         // 백그라운드 색상 설정
         view.backgroundColor = .white
+        
+        setAddView()
+        setAutoLayout()
+        setPickerView()
+        rouletteTrigger()
     }
     
     func setAddView() {
         view.addSubview(pickerView)
     }
     
+    // 오토 레이아웃 설정
     func setAutoLayout() {
-        
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             pickerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             pickerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             pickerView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: 0),
-            pickerView.heightAnchor.constraint(equalToConstant: 120)
+            pickerView.heightAnchor.constraint(equalToConstant: 260)
         ])
     }
     
@@ -60,28 +66,42 @@ class RouletteViewController: UIViewController {
     }
     
     // 트리거
-    func trigger() {
-        let timer = Timer.scheduledTimer(timeInterval: 0.25, target: self, selector: #selector(scrollRandomly), userInfo: nil, repeats: true);
+    func rouletteTrigger() {
+        // 0.25초마다 scrollRandomly 실행하는 타이머 생성
+        let timer = Timer.scheduledTimer(timeInterval: 0.25, target: self, selector: #selector(scrollRandomly), userInfo: nil, repeats: true)
         
+        // 메인 큐에서 실행 timer 실행 (2초 후 타이머 동작 멈춤)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(2*NSEC_PER_SEC))/Double(NSEC_PER_SEC)) {
+            // 타이머 동작 멈춤
             timer.invalidate()
-            self.scrollRandomly()
+            self.scrollTargetRes()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                self.viewModel.goResultViewController(fromCurrentVC: self, animated: true)
+            }
         }
     }
     
     // 랜덤 스크롤
     @objc func scrollRandomly() {
-        let row: Int = Int.random(in: 0..<100)
+        let row: Int = Int.random(in: 0..<99)
         self.pickerView.selectRow(row, inComponent: 0, animated: true)
     }
     
-    var testArray: [String] = (1...100).map { String($0) }
+    // 타켓 레스토랑 스크롤
+    func scrollTargetRes() {
+        self.pickerView.selectRow(49, inComponent: 0, animated: true)
+    }
 }
 
 // MARK: - Extension
 extension RouletteViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return 60
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        scrollTargetRes()
     }
 }
 
@@ -95,7 +115,14 @@ extension RouletteViewController: UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return testArray[row]
+        
+        let exampleRes: [String] = ["배가 안고파져버렸다", "차타고 4시간 맛집", "커피가 맛없는 카페", "베이글이 맛있는 한정식집", "마카롱이 맛있는 라멘집", "닭개장만 파는 치킨집", "생선없는 초밥집", "깍두기 없는 국밥집", "마법의 알약", "정신적 배부름", "냉동실에 있는 닭가슴살", "드레싱 없는 샐러드", "마라탕 먹지 마라탕", "팅!팅! 탱!탱! 후라이팬", "탕! 수육", "탕 수!육", "탕! 후루", "딸기가 좋아, 딸기가 좋아",  "단백질 쉐이크", "소금없는 소금빵", "빵 없는 소금빵", "딩 동 냉 동", "올 때 메로나"]
+        
+        var randomArray: [String] = (1...100).map { _ in exampleRes.randomElement() ?? "존재하지 않는 맛집" }
+        
+
+        randomArray[49] = "Target Res"
+        return randomArray[row]
     }
 }
 

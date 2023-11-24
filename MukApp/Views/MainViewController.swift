@@ -52,7 +52,7 @@ class MainViewController: UIViewController {
         let label = UILabel()
         
         // 텍스트 설정
-        label.text = "최소 1개의 해시태그를 정해주세요"
+        label.text = "1개 이상의 해시태그를 정해주세요"
         label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textAlignment = .center
@@ -340,11 +340,16 @@ class MainViewController: UIViewController {
     
     func setPlusButtonColorWhite() {
         plusButton.backgroundColor = .white
+        
     }
     
     func setPlusButtonTappedColor() {
         plusButton.backgroundColor = MyColor.disableColor
         minusButton.backgroundColor = .white
+        // 마지막 이전 셀 색상 변경
+        let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 2, section: 0)) as! MainViewControllerTableViewCell
+        cell.nameDropView.backgroundColor = MyColor.themeColor
+        cell.textDropView.backgroundColor = MyColor.themeColor
     }
     
     func setMinusButtonTappedColor() {
@@ -353,6 +358,11 @@ class MainViewController: UIViewController {
         }
         
         plusButton.backgroundColor = .white
+        
+        // 마지막 이전 셀 색상 변경
+        let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! MainViewControllerTableViewCell
+        cell.nameDropView.backgroundColor = .white
+        cell.textDropView.backgroundColor = .white
     }
 }
 

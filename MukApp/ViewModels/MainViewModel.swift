@@ -73,7 +73,7 @@ final class MainViewModel {
         
         // 화면 이동 로직
         let navVC = fromCurrentVC.navigationController
-        let nextVC = RouletteViewController()
+        let nextVC = RouletteViewController(viewModel: self)
         
         // TestViewController로 이동
         nextVC.modalPresentationStyle = .fullScreen
@@ -198,6 +198,15 @@ final class MainViewModel {
     func getResListNum() -> Int {
         return categoryModel.getResListNum()
     }
+    
+    // MARK: - RouletteViewController
+    func goResultViewController(fromCurrentVC: UIViewController, animated: Bool) {
+        let resultVC = ResultViewController()
+        goNextVC(fromCurrentVC: fromCurrentVC, nextViewController: resultVC, animated: animated)
+    }
+    
+    
+    
     
     // MARK: - ResViewController
     // 코어 데이터에서 저장된 데이터 가져오기
@@ -514,7 +523,16 @@ final class MainViewModel {
     }
     
     // MARK: - Common
-    func setIsCatSelected() {
+    private func setIsCatSelected() {
         categoryModel.setIsCatSelected()
+    }
+    
+    // 화면 이동 로직
+    private func goNextVC(fromCurrentVC: UIViewController, nextViewController: UIViewController, animated: Bool) {
+        // 화면 이동 로직
+        let navVC = fromCurrentVC.navigationController
+        
+        nextViewController.modalPresentationStyle = .fullScreen
+        navVC!.pushViewController(nextViewController, animated: true)
     }
 }
