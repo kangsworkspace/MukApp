@@ -20,7 +20,9 @@ class RouletteViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var TargetResData: RestaurantData?
+    var targetResDataList: [RestaurantData]?
+    
+    var targetRes: RestaurantData?
     
     // MARK: - Interface
     // 피커뷰 (룰렛)
@@ -31,6 +33,13 @@ class RouletteViewController: UIViewController {
         
         setMain()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        getTargetRes()
+        rouletteTrigger()
+    }
         
     func setMain() {
         // 백그라운드 색상 설정
@@ -39,7 +48,6 @@ class RouletteViewController: UIViewController {
         setAddView()
         setAutoLayout()
         setPickerView()
-        rouletteTrigger()
     }
     
     func setAddView() {
@@ -74,10 +82,12 @@ class RouletteViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(2*NSEC_PER_SEC))/Double(NSEC_PER_SEC)) {
             // 타이머 동작 멈춤
             timer.invalidate()
+            
+            // 타겟 레스토랑으로 스크롤 하기
             self.scrollTargetRes()
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                self.viewModel.goResultViewController(fromCurrentVC: self, animated: true)
+                self.viewModel.goResultViewController(fromCurrentVC: self, targetRes: self.targetRes!, animated: true)
             }
         }
     }
@@ -91,6 +101,10 @@ class RouletteViewController: UIViewController {
     // 타켓 레스토랑 스크롤
     func scrollTargetRes() {
         self.pickerView.selectRow(49, inComponent: 0, animated: true)
+    }
+    
+    func getTargetRes() {
+        targetRes = targetResDataList?.randomElement()
     }
 }
 
@@ -116,12 +130,12 @@ extension RouletteViewController: UIPickerViewDataSource {
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
-        let exampleRes: [String] = ["배가 안고파져버렸다", "차타고 4시간 맛집", "커피가 맛없는 카페", "베이글이 맛있는 한정식집", "마카롱이 맛있는 라멘집", "닭개장만 파는 치킨집", "생선없는 초밥집", "깍두기 없는 국밥집", "마법의 알약", "정신적 배부름", "냉동실에 있는 닭가슴살", "드레싱 없는 샐러드", "마라탕 먹지 마라탕", "팅!팅! 탱!탱! 후라이팬", "탕! 수육", "탕 수!육", "탕! 후루", "딸기가 좋아, 딸기가 좋아",  "단백질 쉐이크", "소금없는 소금빵", "빵 없는 소금빵", "딩 동 냉 동", "올 때 메로나"]
+        let exampleRes: [String] = ["배가 안고파져버렸다", "차타고 4시간 맛집", "커피만 맛없는 카페", "크루아상 전문 한정식집", "닭개장만 파는 치킨집", "생선없는 초밥집", "깍두기 없는 국밥집", "배가 불러지는 마법의 알약", "맛집보단 정신적 배부름", "냉동실에 있는 닭가슴살", "드레싱 없는 샐러드", "마라탕 먹지 마라탕", "팅!팅! 탱!탱! 후라이팬", "탕! 수육", "탕 수!육", "탕! 후루", "딸기가 좋아, 딸기가 좋아",  "단백질 쉐이크", "소금없는 소금빵", "빵 없는 소금빵", "딩 동 냉-동", "올 때 메로나", "아이스 핫초코"]
         
         var randomArray: [String] = (1...100).map { _ in exampleRes.randomElement() ?? "존재하지 않는 맛집" }
         
-
-        randomArray[49] = "Target Res"
+        randomArray[49] = targetRes?.placeName ?? "에러 - 존재하지 않는 맛집"
+        
         return randomArray[row]
     }
 }

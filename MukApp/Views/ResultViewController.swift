@@ -9,6 +9,10 @@ import UIKit
 
 class ResultViewController: UIViewController {
 
+    // MARK: - 변수
+    // Target Restaurant 정보
+    var targetRes: RestaurantData?
+    
     // MARK: - Interface
     // 메인 레이블 (mainLabel)
     private var mainLabel: UILabel = {
@@ -69,6 +73,7 @@ class ResultViewController: UIViewController {
         let button = UIButton()
         button.setTitle("다시 돌리기!", for: .normal)
         button.backgroundColor = .blue
+        button.addTarget(self, action: #selector(rerollButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -108,6 +113,7 @@ class ResultViewController: UIViewController {
         
         setAddView()
         setAutoLayout()
+        setUI()
     }
     
     // 셋업 - 애드뷰
@@ -176,5 +182,19 @@ class ResultViewController: UIViewController {
             
             editButton.heightAnchor.constraint(equalToConstant: 50)
         ])
+    }
+    
+    // UI 세팅
+    func setUI() {
+        // 식당 이름
+        resNameLabel.text = targetRes?.placeName
+        // 식당 주소
+        resAddressLabel.text = targetRes?.roadAddress
+    }
+    
+    // 리롤 버튼이 눌렸을 때
+    @objc func rerollButtonTapped() {
+        print("다시 돌리기!")
+        self.navigationController?.popViewController(animated: true)
     }
 }

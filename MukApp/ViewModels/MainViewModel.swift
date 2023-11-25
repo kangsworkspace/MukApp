@@ -53,6 +53,7 @@ final class MainViewModel {
         
         // 해당하는 식당을 담을 빈 배열
         var resArray: [String] = []
+        var targetResDataList: [RestaurantData] = []
         
         // 메뉴 데이터 배열 -> 카테고리 -> 카테고리 이름을 가진 카테고리 엔티티 -> 카테고리 텍스트 -> 반복문으로 할당
         for resData in resDataList {
@@ -61,19 +62,21 @@ final class MainViewModel {
                     if category.categoryText == selCatTextArray {
                         guard let resName = resData.placeName else { return }
                         resArray.append(resName)
+                        targetResDataList.append(resData)
                     }
                 }
             }
         }
         
+        // *** 삭제할 코드 ***
         print("후보 식당: \(resArray)")
-        // 랜덤으로 하나 뽑아서 메뉴 데이터에 넣기.
-        var selectedMenu = resArray.randomElement() ?? "해당하는 메뉴가 없습니다."
-        print("결정된 식당\(selectedMenu)")
         
         // 화면 이동 로직
         let navVC = fromCurrentVC.navigationController
         let nextVC = RouletteViewController(viewModel: self)
+        
+        // 데이터 전달
+        nextVC.targetResDataList = targetResDataList
         
         // TestViewController로 이동
         nextVC.modalPresentationStyle = .fullScreen
@@ -200,8 +203,9 @@ final class MainViewModel {
     }
     
     // MARK: - RouletteViewController
-    func goResultViewController(fromCurrentVC: UIViewController, animated: Bool) {
+    func goResultViewController(fromCurrentVC: UIViewController, targetRes: RestaurantData,animated: Bool) {
         let resultVC = ResultViewController()
+        resultVC.targetRes = targetRes
         goNextVC(fromCurrentVC: fromCurrentVC, nextViewController: resultVC, animated: animated)
     }
     
