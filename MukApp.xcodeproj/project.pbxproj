@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		077EFDFB116BBD23DAE83801 /* Pods_MukApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7151ED8FBF918F2626EF22B3 /* Pods_MukApp.framework */; };
 		B00080682AED22A7003C55EE /* ResCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00080672AED22A7003C55EE /* ResCollectionViewCell.swift */; };
+		B02253282B135AD3002E9BCE /* RestaurantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02253272B135AD3002E9BCE /* RestaurantViewController.swift */; };
+		B022532A2B135BA3002E9BCE /* RestaurantTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02253292B135BA3002E9BCE /* RestaurantTableViewCell.swift */; };
 		B037F73D2AE3B58500C72F63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F73C2AE3B58500C72F63 /* AppDelegate.swift */; };
 		B037F73F2AE3B58500C72F63 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F73E2AE3B58500C72F63 /* SceneDelegate.swift */; };
 		B037F7412AE3B58500C72F63 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7402AE3B58500C72F63 /* SearchViewController.swift */; };
@@ -44,6 +46,8 @@
 /* Begin PBXFileReference section */
 		7151ED8FBF918F2626EF22B3 /* Pods_MukApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MukApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B00080672AED22A7003C55EE /* ResCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResCollectionViewCell.swift; sourceTree = "<group>"; };
+		B02253272B135AD3002E9BCE /* RestaurantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantViewController.swift; sourceTree = "<group>"; };
+		B02253292B135BA3002E9BCE /* RestaurantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantTableViewCell.swift; sourceTree = "<group>"; };
 		B037F7392AE3B58500C72F63 /* MukApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MukApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B037F73C2AE3B58500C72F63 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B037F73E2AE3B58500C72F63 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -162,6 +166,8 @@
 				B0A320832AF78D2300E74138 /* AddResTableViewCell.swift */,
 				B0D871052AFA846E00758187 /* CategorySetViewController.swift */,
 				B064C33F2AFBDCCB00B33189 /* CategorySetCollectionViewCell.swift */,
+				B02253272B135AD3002E9BCE /* RestaurantViewController.swift */,
+				B02253292B135BA3002E9BCE /* RestaurantTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -321,6 +327,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B03AA67F2B01F6040048E47C /* RestaurantData+CoreDataProperties.swift in Sources */,
+				B02253282B135AD3002E9BCE /* RestaurantViewController.swift in Sources */,
 				B037F7412AE3B58500C72F63 /* SearchViewController.swift in Sources */,
 				B037F75A2AE3B8EA00C72F63 /* ResViewController.swift in Sources */,
 				B0A7B1142AEB53D300D33599 /* Memo.swift in Sources */,
@@ -338,6 +345,7 @@
 				B04EB0E62B00756E006AD277 /* CategoryModel.swift in Sources */,
 				B064C3402AFBDCCB00B33189 /* CategorySetCollectionViewCell.swift in Sources */,
 				B037F7582AE3B87100C72F63 /* MainViewController.swift in Sources */,
+				B022532A2B135BA3002E9BCE /* RestaurantTableViewCell.swift in Sources */,
 				B0A6BE622B05D144007779CF /* UIColor+Extension.swift in Sources */,
 				B0D5FE262AF4966300D4B751 /* SearchTableViewCell.swift in Sources */,
 				B03AA67C2B01F6040048E47C /* CategoryData+CoreDataClass.swift in Sources */,

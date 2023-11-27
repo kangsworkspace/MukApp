@@ -12,25 +12,42 @@ enum CellState {
     case set
 }
 
-
 final class CategoryModel {
-    
     // MARK: - 싱글톤
     static let shared = CategoryModel()
     private init() {}
     
-    // MARK: - MainViewController
-    
+    // MARK: - Common
     // 선택된 카테고리 Name 배열
     private var selCatNameArray: [String] = [""]
+    
+    // Get -> 선택된 카테고리 Name
+    func getSelCatNameArray () -> ([String]) {
+        return selCatNameArray
+    }
+    
     // 선택된 카테고리 Text 배열
     private var selCatTextArray: [String] = [""]
+    
+    // Get -> 선택된 카테고리 Text
+    func getSelCatTextArray () -> ([String]) {
+        return selCatTextArray
+    }
+    
+    // MARK: - MainViewController
+    // 화면 이동 시 초기화해야할 데이터
+    // selCatNameArray
+    // selCatTextArray
+    // resListNum
+    // nextCatNameArray
+    
     // 룰렛을 돌릴 때 나올 후보 식당 수
     private var resListNum = 0
+    
     // 다음 Category Name 후보
     private var nextCatNameArray: [String] = []
     
-    // 플러스 버튼이 눌렸을 때 -> New
+    // 플러스 버튼이 눌렸을 때 -> 새로운 카테고리 설정(New)
     func plusButtonTapped() -> Bool {
         // cellState 확인
         let cellState = checkCellState()
@@ -67,12 +84,12 @@ final class CategoryModel {
         print("저장 후 selCatTextArray: \(self.selCatTextArray)")
     }
 
-    // set Next Category Name
+    // +버튼을 눌렀을 때 Set -> Next Category Name)
     func setNextNameArray(catNameArray: [String]) {
         nextCatNameArray = catNameArray
     }
     
-    // get Next Category Name
+    // Get -> Next Category Name
     func getNextNameArray() -> [String] {
         return nextCatNameArray
     }
@@ -109,7 +126,7 @@ final class CategoryModel {
         }
     }
 
-    // 후보 식당 숫자 세팅
+    // 후보 식당 숫자 세팅 **** 코드 필요한지 체크하기 ****
     func setResListNum(resNum: Int) {
         resListNum = resNum
     }
@@ -118,27 +135,14 @@ final class CategoryModel {
     func getResListNum() -> Int {
         return resListNum
     }
+ 
+    // MARK: - RestaurantViewController
     
-    // Name 카테고리 리턴
-    func getSelCatNameArray () -> ([String]) {
-        return selCatNameArray
-    }
-    
-    // Text 카테고리 리턴
-    func getSelCatTextArray () -> ([String]) {
-        return selCatTextArray
-    }
-    
-    // resData 배열 리턴
-    func getSelResData () -> (Document) {
-        return selResData!
-    }
-    
-    // MARK: - Common
-
+  
     
     
     // MARK: - 기타
+
     
     // 코어 데이터에 저장할 카테고리 배열 세팅
     func setCategoryNameArray(text: String, category: String) {
@@ -155,16 +159,14 @@ final class CategoryModel {
             print("저장 후 selCatTextArray: \(self.selCatTextArray)")
         }
     }
-    
+
     // 저장할 때 사용?
     private var selResData: Document?
     
-    // *** 삭제할 코드 ***
-    private var isCatSelected = false
-    private var isCatNameAppending = true
-    private var isNeedToFixText = false
-    private var isNeedToDeleteCat = false
-    //
+    // resData 배열 리턴
+    func getSelResData () -> (Document) {
+        return selResData!
+    }
     
     // 코어 데이터에 저장할 resData 배열 세팅
     func setResData(resData: Document) {
@@ -178,6 +180,7 @@ final class CategoryModel {
         selResData = resData
     }
     
+    // **** 삭제할 코드 *******
     // 선택된 카테고리 세팅
     func setIsCatSelected() {
         isCatSelected.toggle()
@@ -195,6 +198,12 @@ final class CategoryModel {
     func getIsCatSelected() -> Bool {
         return isCatSelected
     }
+    
+    // *** 삭제할 코드 ***
+    private var isCatSelected = false
+    private var isCatNameAppending = true
+    private var isNeedToFixText = false
+    private var isNeedToDeleteCat = false
     
     // *** 삭제할 코드 ***
     // category 모델의 (행렬 == categoryCnt -1)번째 데이터 삭제해주기.

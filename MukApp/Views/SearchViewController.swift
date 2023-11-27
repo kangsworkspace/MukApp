@@ -40,8 +40,6 @@ class SearchViewController: UIViewController {
     func setMain() {
         // 배경 색 설정
         view.backgroundColor = .white
-        // 서치 컨트롤러 바로 보이기
-        
         
         setAddView()
         setSearchBar()
@@ -86,8 +84,6 @@ class SearchViewController: UIViewController {
     
     // MARK: - AutoLayout
     func setAutoLayout() {
-        
-        
         // tableView 오토 레이아웃 설정
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

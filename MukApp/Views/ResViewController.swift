@@ -69,6 +69,7 @@ class ResViewController: UIViewController {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        collectionView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -169,7 +170,9 @@ extension ResViewController: UICollectionViewDelegateFlowLayout {
     
     // 셀이 눌렸을 때
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // 코어 데이터의 맛집 정보
         let resData = viewModel.getDataFromCoreData()
+        // EditCell
         viewModel.handleEditCellTapped(resData: resData[indexPath.row], fromCurrentVC: self, animated: true)
     }
 }

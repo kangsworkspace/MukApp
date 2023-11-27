@@ -277,6 +277,9 @@ class AddResViewController: UIViewController {
     // addResButton 동작
     @objc func addResButtonTapped() {
         viewModel.handeTestingCoreData()
+        
+        // 화면 돌아가기
+        self.navigationController?.popToRootViewController(animated: true)
     }
     
     var handleAddResButtonTapped: (() -> ()) = {}

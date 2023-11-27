@@ -263,7 +263,7 @@ class MainViewController: UIViewController {
             // Cell에 접근해서 다음 Cat Name Array 설정
             setNextCatName()
             
-            // 버튼 색상 설정
+            // + 버튼 색상 설정
             setPlusButtonTappedColor()
         }
         // 뷰 모델의 handleMainPlusButtonTapped이 False 일 때 -> 리턴
@@ -313,6 +313,7 @@ class MainViewController: UIViewController {
         tableView.deleteRows(at: [IndexPath(row: categoryCnt, section: 0)], with: .fade)
     }
     
+    // 다음 Cell의 CategoryName 설정하기
     func setNextCatName() {
         // 셀 가져오기
         let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! MainViewControllerTableViewCell
@@ -338,18 +339,24 @@ class MainViewController: UIViewController {
         }
     }
     
+    // + 버튼의 색 하얗게 하기
     func setPlusButtonColorWhite() {
         plusButton.backgroundColor = .white
-        
     }
     
+    // + 버튼이 눌렸을 때 관련 색상 변경
     func setPlusButtonTappedColor() {
+        // + 버튼 회색
         plusButton.backgroundColor = MyColor.disableColor
+        // - 버튼 흰색
         minusButton.backgroundColor = .white
         // 마지막 이전 셀 색상 변경
         let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 2, section: 0)) as! MainViewControllerTableViewCell
         cell.nameDropView.backgroundColor = MyColor.themeColor
         cell.textDropView.backgroundColor = MyColor.themeColor
+        
+        // cell 터치 불가 처리
+        cell.isUserInteractionEnabled = false
     }
     
     func setMinusButtonTappedColor() {
@@ -363,6 +370,9 @@ class MainViewController: UIViewController {
         let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! MainViewControllerTableViewCell
         cell.nameDropView.backgroundColor = .white
         cell.textDropView.backgroundColor = .white
+        
+        // cell 터치 가능 처리
+        cell.isUserInteractionEnabled = true
     }
 }
 

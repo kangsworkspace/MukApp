@@ -65,6 +65,7 @@ class ResultViewController: UIViewController {
         let button = UIButton()
         button.setTitle("결정!", for: .normal)
         button.backgroundColor = .blue
+        button.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -196,5 +197,10 @@ class ResultViewController: UIViewController {
     @objc func rerollButtonTapped() {
         print("다시 돌리기!")
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func confirmButtonTapped() {
+        print("메인 화면으로")
+        self.navigationController?.popToRootViewController(animated: true)
     }
 }

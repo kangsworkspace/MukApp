@@ -34,7 +34,6 @@ final class MainViewModel {
     // MARK: - MainViewController
     // 룰렛 버튼이 눌렸을 때
     func handleRouletteTapped(fromCurrentVC: UIViewController, animated: Bool) {
-        
         if categoryModel.getResListNum() == 0 {
             print("후보가 없습니다!")
             return
@@ -42,8 +41,6 @@ final class MainViewModel {
         
         // 선택된 카테고리 배열 가져오기
         let selCatTextArray = categoryModel.getSelCatTextArray()[0]
-        
-        // 코어 데이터에서 selCatTextArray를 포함하는 데이터 가져오기 -> 새로운 배열로 리턴 -> 랜덤으로 출력..
         
         // 코어 데이터에서 맛집 데이터 가져오기
         resDataList = coreDataManager.getDataFromCoreData()
@@ -68,7 +65,6 @@ final class MainViewModel {
             }
         }
         
-        // *** 삭제할 코드 ***
         print("후보 식당: \(resArray)")
         
         // 화면 이동 로직
@@ -213,29 +209,23 @@ final class MainViewModel {
     
     
     // MARK: - ResViewController
-    // 코어 데이터에서 저장된 데이터 가져오기
-    func getDataFromCoreData() -> [RestaurantData] {
-        let resList = coreDataManager.getDataFromCoreData()
-        return resList
-    }
-    
     // 저장된 맛집 셀 동작
     func handleEditCellTapped(resData: RestaurantData, fromCurrentVC: UIViewController, animated: Bool) {
         let navVC = fromCurrentVC.navigationController
-        let nextVC = EditResViewController(viewModel: self)
+        let nextVC = RestaurantViewController(viewModel: self)
         
         // 데이터 전달
-        nextVC.resData = resData
+        nextVC.restaurantCoreData = resData
         
         // CategoryModel에 데이터 전달(나중에 코어 데이터로 저장할수도 있기 때문)
         // categoryModel.setResData(resData: resData)
         
-        // TestViewController로 이동
+        // RestaurantViewController로 이동
         nextVC.modalPresentationStyle = .fullScreen
         navVC?.pushViewController(nextVC, animated: true)
     }
     
-    // "맛집 추가" 버튼 동작
+    // "맛집 추가" 버튼 동작 후 화면 이동
     func handleAddResButtonTapped(fromCurrentVC: UIViewController, animated: Bool) {
         let navVC = fromCurrentVC.navigationController
         
@@ -305,33 +295,12 @@ final class MainViewModel {
                 }
             }
         }
-        
         return targetResArray
     }
     
     // MARK: - EditResViewController
-    func setNameDropLabel(resData: RestaurantData, completion: @escaping (_ nameArray: [String], _ textArray: [String]) -> Void) {
-        
-        var catNameArray: [String] = []
-        var catTextArray: [String] = []
-        
-        print("반복문 시작 전전")
-        
-        if let categorySet = resData.category as? Set<CategoryData> {
-            print("반복문 시작 전")
-            for category in categorySet {
-                if let categoryName = category.categoryName, let categoryText = category.categoryText {
-                    print("categoryName = \(categoryName)")
-                    print("categoryText = \(categoryText)")
-                    catNameArray.append(categoryName)
-                    catTextArray.append(categoryText)
-                    print("반복문 끝")
-                }
-            }
-        }
-        
-        completion(catNameArray, catTextArray)
-    }
+    
+
     
     
     // MARK: - SearchViewController
@@ -386,7 +355,6 @@ final class MainViewModel {
     // MARK: - AddResTableViewCell
     // 코어 데이터에서 CategoryName 가져오기 -> catNameArray에 할당
     func getCatNameFromCoreData() -> [String] {
-        
         var catNameArray: [String] = []
         
         // 코어 데이터에서 resData 가져오기
@@ -501,7 +469,6 @@ final class MainViewModel {
     
     // MARK: - 코어 데이터 테스팅
     func handeTestingCoreData() {
-        
         let resData = categoryModel.getSelResData()
         let address = resData.address ?? ""
         let group = resData.group ?? ""
@@ -526,9 +493,37 @@ final class MainViewModel {
         }
     }
     
+    // MARK: - 코어 데이터 테스팅(추가)
+    func addResToCoreData(restaurantData: Document, CatNameArray: [String], CatTextArray: [String]) {
+        // 데이터 할당
+        let address = restaurantData.address ?? ""
+        let group = restaurantData.group ?? ""
+        let phone = restaurantData.phone ?? ""
+        let placeName = restaurantData.placeName ?? ""
+        let roadAddress = restaurantData.roadAddress ?? ""
+        let placeURL = restaurantData.placeURL ?? ""
+        
+        let catNameArray = categoryModel.getSelCatNameArray()
+        let catTextArray = categoryModel.getSelCatTextArray()
+        
+        guard catNameArray.count == catTextArray.count else {
+            fatalError("The length of catNameArray and catTextArray must be the same.")
+        }
+        
+        let categoryName = catNameArray
+        let categoryText = catTextArray
+        
+        
+        coreDataManager.testCreateCoreData(address: address, group: group, phone: phone, placeName: placeName, roadAddress: roadAddress, placeURL: placeURL, categoryName: categoryName, categoryText: categoryText) {
+            print("테스트 최종 성공 텍스트")
+        }
+    }
+    
     // MARK: - Common
-    private func setIsCatSelected() {
-        categoryModel.setIsCatSelected()
+    // 코어 데이터에서 저장된 맛집 데이터 가져오기
+    func getDataFromCoreData() -> [RestaurantData] {
+        let resList = coreDataManager.getDataFromCoreData()
+        return resList
     }
     
     // 화면 이동 로직
@@ -539,4 +534,39 @@ final class MainViewModel {
         nextViewController.modalPresentationStyle = .fullScreen
         navVC!.pushViewController(nextViewController, animated: true)
     }
+    
+    
+    
+    
+    
+    // ********* 삭제할 코드 **********
+    private func setIsCatSelected() {
+        categoryModel.setIsCatSelected()
+    }
+    
+    // *** 삭제할 코드 *** (뷰에서 직접 구하기)
+    // 저장한 맛집의 CategoryName과 CategoryText를 구하는 로직.
+    func setNameDropLabel(resData: RestaurantData, completion: @escaping (_ nameArray: [String], _ textArray: [String]) -> Void) {
+        
+        var catNameArray: [String] = []
+        var catTextArray: [String] = []
+        
+        print("반복문 시작 전전")
+        
+        if let categorySet = resData.category as? Set<CategoryData> {
+            print("반복문 시작 전")
+            for category in categorySet {
+                if let categoryName = category.categoryName, let categoryText = category.categoryText {
+                    print("categoryName = \(categoryName)")
+                    print("categoryText = \(categoryText)")
+                    catNameArray.append(categoryName)
+                    catTextArray.append(categoryText)
+                    print("반복문 끝")
+                }
+            }
+        }
+        
+        completion(catNameArray, catTextArray)
+    }
+    // *******
 }

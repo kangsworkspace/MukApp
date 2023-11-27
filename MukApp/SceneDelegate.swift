@@ -31,7 +31,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // 네이게이션 바 설정
         let vc1 = UINavigationController(rootViewController: MainViewController(viewModel: mainViewModel))
         let vc2 = UINavigationController(rootViewController: ResViewController(viewModel: mainViewModel))
-        let vc3 = ResultViewController()
+        let vc3 = RestaurantViewController(viewModel: mainViewModel)
         
         // 뷰 컨트롤러 -> 탭 바 설정
         tabBarCon.setViewControllers([vc1, vc2, vc3], animated: false)
@@ -41,13 +41,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // 탭 바 이름
         vc1.title = "룰렛 돌리기"
         vc2.title = "맛집 관리하기"
-        vc3.title = "룰렛 결과"
+        vc3.title = "테스팅"
         
         // 탭 바 이미지
         guard let items = tabBarCon.tabBar.items else { return }
         items[0].image = UIImage(systemName: "shuffle")
         items[1].image = UIImage(systemName: "folder")
-        items[2].image = UIImage(systemName: "shuffle")
+        items[2].image = UIImage(systemName: "folder")
         
         // 첫 화면(루트 뷰)를 설정
         window?.rootViewController = tabBarCon
@@ -88,7 +88,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Save changes in the application's managed object context when the application transitions to the background.
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
-    
-    
 }
 
