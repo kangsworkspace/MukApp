@@ -31,7 +31,7 @@ final class MainViewModel {
     // APIService 데이터 모델
     private var resultResArray: [Document] = []
     
-    // MARK: - MainViewController
+    // MARK: - MainViewController(메인 화면, 룰렛 돌리는 페이지)
     // 룰렛 버튼이 눌렸을 때
     func handleRouletteTapped(fromCurrentVC: UIViewController, animated: Bool) {
         if categoryModel.getResListNum() == 0 {
@@ -198,17 +198,15 @@ final class MainViewModel {
         return categoryModel.getResListNum()
     }
     
-    // MARK: - RouletteViewController
+    // MARK: - RouletteViewController(룰렛 돌아가는 페이지)
     func goResultViewController(fromCurrentVC: UIViewController, targetRes: RestaurantData,animated: Bool) {
         let resultVC = ResultViewController()
         resultVC.targetRes = targetRes
         goNextVC(fromCurrentVC: fromCurrentVC, nextViewController: resultVC, animated: animated)
     }
     
-    
-    
-    
-    // MARK: - ResViewController
+
+    // MARK: - ResViewController (맛집 추가/관리 페이지)
     // 저장된 맛집 셀 동작
     func handleEditCellTapped(resData: RestaurantData, fromCurrentVC: UIViewController, animated: Bool) {
         let navVC = fromCurrentVC.navigationController
@@ -300,11 +298,51 @@ final class MainViewModel {
     
     // MARK: - EditResViewController
     
+    // MARK: - RestaurantViewController
+    // 맛집 정보 수정 (수정 버튼 눌렸을 때)
+    func handleUpdateResData(restaurantData: RestaurantData) {
+        // 카테고리 Text, Name 가져오기
+        var catNameArray = categoryModel.getSelCatNameArray()
+        var catTextArray = categoryModel.getSelCatTextArray()
+        
+        catNameArray.append("Name수정됨")
+        catTextArray.append("Name수정됨")
+        
+        coreDataManager.updateCoreData(newResData: restaurantData, catNameArray: catNameArray, catTextArray: catTextArray) {
+            print("정보 수정 완료")
+        }
+    }
+    
+    // 카테고리 선택 이벤트
+    func handleCatSelActionT(fromVC: UIViewController, item: String, category: String, completion: @escaping (String) -> Void) {
+        // 카테고리 추가 이벤트
+        if item == "카테고리 추가" {
+            addCatAlert(fromVC: fromVC) { saveText, save in
+                // 저장
+                if save {
+                    guard let saveText = saveText else { return }
+                    // 데이터 저장
+                    self.categoryModel.setCategoryTextArray(text: saveText)
+                    completion(saveText)
+                }
+                // 취소
+                else {
+                    completion("선택해주세요")
+                }
+            }
+        }
+        // 카테고리 선택 이벤트
+        else {
+            // 데이터 저장
+            self.categoryModel.setCategoryTextArray(text: (item))
+            completion(item)
+        }
+    }
+    
+    
 
-    
-    
-    // MARK: - SearchViewController
-    // API 결과
+    // MARK: - SearchViewController (맛집 검색 페이지)
+    // API 결과 리턴
     func getResArray() -> [Document] {
         return resultResArray
     }
@@ -322,15 +360,15 @@ final class MainViewModel {
     // 검색된 맛집 Cell 동작
     func handleResCellTapped(resData: Document, fromCurrentVC: UIViewController, animated: Bool) {
         let navVC = fromCurrentVC.navigationController
-        let nextVC = AddResViewController(viewModel: self)
+        let nextVC = RestaurantViewController(viewModel: self)
         
         // 데이터 전달
-        nextVC.resData = resData
+        nextVC.retaurantAPIData = resData
         
         // CategoryModel에 데이터 전달(나중에 코어 데이터로 저장할수도 있기 때문)
         categoryModel.setResData(resData: resData)
         
-        // TestViewController로 이동
+        // RestaurantViewController로 이동
         nextVC.modalPresentationStyle = .fullScreen
         navVC?.pushViewController(nextVC, animated: true)
     }
@@ -338,7 +376,7 @@ final class MainViewModel {
     
     // MARK: - AddResViewController
     // 맛집저장 버튼 동작처리(맛집 추가) -> 코어데이터에 데이터 저장
-    // test로 대체됨
+    // test로 대체됨 **** 삭제할 코드 ****
     func handleSaveResButtonTapped() {
         
         let resData = categoryModel.getSelResData()
@@ -385,7 +423,7 @@ final class MainViewModel {
         return catNameArray
     }
     
-    // 카테고리 텍스트 선택 이벤트
+    // 카테고리 선택 이벤트
     func handleCatSelAction(fromVC: UIViewController, item: String, category: String, completion: @escaping (String) -> Void) {
         // 카테고리 추가 이벤트
         if item == "카테고리 추가" {
@@ -526,7 +564,7 @@ final class MainViewModel {
         return resList
     }
     
-    // 화면 이동 로직
+    // 화면 이동 로직(필요한가?)
     private func goNextVC(fromCurrentVC: UIViewController, nextViewController: UIViewController, animated: Bool) {
         // 화면 이동 로직
         let navVC = fromCurrentVC.navigationController
@@ -535,7 +573,7 @@ final class MainViewModel {
         navVC!.pushViewController(nextViewController, animated: true)
     }
     
-    
+
     
     
     

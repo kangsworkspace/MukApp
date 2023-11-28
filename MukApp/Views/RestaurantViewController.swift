@@ -108,7 +108,7 @@ class RestaurantViewController: UIViewController {
     // 테이블 뷰
     private let tableView = UITableView()
     
-    // 저장 버튼(menuButton)
+    // 저장 버튼(addResButton)
     private var addResButton: UIButton = {
         let button = UIButton()
         button.setTitle("저     장", for: .normal)
@@ -281,21 +281,28 @@ class RestaurantViewController: UIViewController {
     
     // MARK: - Function
     @objc func addResButtonTapped() {
-        viewModel.handeTestingCoreData()
+        // 정보를 수정하는 경우
+        if let restaurantCoreData {
+            viewModel.handleUpdateResData(restaurantData: restaurantCoreData)
+        }
+        // 맛집을 추가하는 경우
+        else {
+            viewModel.handeTestingCoreData()
+        }
     }
     
     // addResButtonTapped이 눌렸을 때 -> 델리게이트로 사용 ****코드 필요한지 체크하기 ******
     var handleAddResButtonTapped: (() -> ()) = {}
     
     @objc func plusButtonTapped() {
-        categoryCnt += 1
+        addNewCell()
     }
     
     @objc func minusButtonTapped() {
-        if categoryCnt == 1 {
+        if (restaurantCoreData?.category?.count ?? 0) + categoryCnt < 1 {
             return
         } else {
-            categoryCnt -= 1
+            deleteCell()
         }
     }
     
@@ -320,28 +327,28 @@ class RestaurantViewController: UIViewController {
         }
     }
     
-//    // 새로운 Cell 생성  ******* 코드 체크하기 ********
-//    func addNewCell() {
-//        // 카테고리 카운트 + 1
-//        categoryCnt += 1
-//        print("categoryCnt: \(categoryCnt)")
-//
-//        // 테이블 뷰 마지막 순서에 셀 생성
-//        tableView.insertRows(at: [IndexPath(row: categoryCnt - 1, section: 0)], with: .fade)
-//        
-//        // 셀의 Label.text = "선택해주세요"
-//        let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! RestaurantTableViewCell
-//        
-//        cell.nameDropLabel.text = "선택해주세요"
-//        cell.textDropLabel.text = "선택해주세요"
-//    }
-//    
-//    // 마지막 Cell 삭제  ******* 코드 체크하기 ********
-//    func deleteCell() {
-//        categoryCnt -= 1
-//        print("categoryCnt: \(categoryCnt)")
-//        tableView.deleteRows(at: [IndexPath(row: categoryCnt, section: 0)], with: .fade)
-//    }
+    // 새로운 Cell 생성
+    func addNewCell() {
+        // 카테고리 카운트 + 1
+        categoryCnt += 1
+        print("categoryCnt: \(categoryCnt)")
+
+        // 테이블 뷰 마지막 순서에 셀 생성
+        tableView.insertRows(at: [IndexPath(row: categoryCnt - 1, section: 0)], with: .fade)
+        
+        // 셀의 Label.text = "선택해주세요"
+        let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! RestaurantTableViewCell
+        
+        cell.nameDropLabel.text = "선택해주세요"
+        cell.textDropLabel.text = "선택해주세요"
+    }
+    
+    // 마지막 Cell 삭제
+    func deleteCell() {
+        categoryCnt -= 1
+        print("categoryCnt: \(categoryCnt)")
+        tableView.deleteRows(at: [IndexPath(row: categoryCnt, section: 0)], with: .fade)
+    }
 }
 
 // MARK: - Extension
@@ -361,7 +368,8 @@ extension RestaurantViewController: UITableViewDataSource {
         }
         // 맛집 추가 -> 기본 categoryCnt
         else {
-            return categoryCnt + 1
+            categoryCnt += 1
+            return categoryCnt
         }
     }
     

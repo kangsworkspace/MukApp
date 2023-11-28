@@ -11,7 +11,7 @@ import DropDown
 class MainViewControllerTableViewCell: UITableViewCell {
     
     // MARK: - 뷰 모델
-    let viewModel: MainViewModel
+    var viewModel: MainViewModel
     
     // MARK: - DropDown
     // nameDropDown: 카테고리 이름

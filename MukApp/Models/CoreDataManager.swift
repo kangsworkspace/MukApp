@@ -10,15 +10,19 @@ import CoreData
 
 protocol CoreDataManagerType {
     // Create
-    func saveResToCoreData(resData: Document, categoryData: CategoryData, competion: @escaping () -> Void)
+    func testCreateCoreData(address: String, group: String, phone: String, placeName: String, roadAddress: String, placeURL: String, categoryName: [String], categoryText: [String], competion: @escaping () -> Void)
+    
     // Read
     func getDataFromCoreData() -> [RestaurantData]
+    
     // Update
+    func updateCoreData(newResData: RestaurantData, catNameArray: [String], catTextArray: [String], competion: @escaping () -> Void)
     
     // Delete
     
-    // testing
-    func testCreateCoreData(address: String, group: String, phone: String, placeName: String, roadAddress: String, placeURL: String, categoryName: [String], categoryText: [String], competion: @escaping () -> Void)
+
+    // 삭제할 데이터
+    func saveResToCoreData(resData: Document, categoryData: CategoryData, competion: @escaping () -> Void)
 }
 
 
@@ -39,6 +43,7 @@ final class CoreDataManager: CoreDataManagerType {
     
     
     // MARK: - [CREATE]: 코어 데이터에 데이터 생성하기
+    // ****** 삭제할 코드 *******
     func saveResToCoreData(resData: Document, categoryData: CategoryData, competion: @escaping () -> Void) {
         
         print("코어 데이터 생성 시작")
@@ -123,19 +128,37 @@ final class CoreDataManager: CoreDataManagerType {
     }
     
     // MARK: - [UPDATE]: 코어 데이터 업데이트 하기
-    func updateCoreData(newResData: RestaurantData, competion: @escaping () -> Void) {
+    func updateCoreData(newResData: RestaurantData, catNameArray: [String], catTextArray: [String], competion: @escaping () -> Void) {
+        // 옵셔널 해제
+        guard let placeName = newResData.placeName else { return }
+        guard let categoryList = newResData.category as? Set<CategoryData> else { return }
+        
+        // 찾기 위한 조건(식당 이름)
+        let predicateName = NSPredicate(format: "placeName == %@", placeName)
+        
+        // AND 연산자로 모든 조건을 결합
+        let compoundPredicate = NSCompoundPredicate(type: .and, subpredicates: [predicateName])
         
         // 요청서
         let request = NSFetchRequest<NSManagedObject>(entityName: self.entityName_Res)
+        request.predicate = predicateName
         
         do {
             // 요청서를 통해서 데이터 가져오기
             if let fetchedResList = try context.fetch(request) as? [RestaurantData] {
-                // 배열의 첫번째
+                // 배열의 첫번째(예상 조건)?
                 if var targetRes = fetchedResList.first {
+                    // 기존 데이터 삭제
+                    guard var categoryList = targetRes.category as? Set<CategoryData> else { return }
+                    categoryList.removeAll()
                     
-                    // 실제 데이터 재할당
-                    targetRes = newResData
+                    // 새로운 데이터 할당
+                    for (catName, catText) in zip(catNameArray, catTextArray) {
+                        let newCategory = CategoryData(context: context)
+                        newCategory.categoryName = catName
+                        newCategory.categoryText = catText
+                        categoryList.insert(newCategory)
+                    }
                     
                     // Save the changes to the context
                     do {
