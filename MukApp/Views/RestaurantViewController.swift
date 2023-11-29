@@ -27,14 +27,14 @@ class RestaurantViewController: UIViewController {
             configureUIWithData()
         }
     }
-        
+    
     // API에서 받아온 맛집 데이터
     var retaurantAPIData: Document? {
         didSet {
             configureUIWithData()
         }
     }
-
+    
     
     // MARK: - Interface
     // 이미지뷰
@@ -141,11 +141,10 @@ class RestaurantViewController: UIViewController {
     }()
     
     // 카테고리 설정 카운트
-    private var categoryCnt: Int = 0 {
-        didSet {
-            tableView.reloadData()
-        }
-    }
+    private var categoryCnt: Int = 1
+    
+    // 초기에만 데이터 셋팅하도록 설정해줄 변수
+    var isConfigured = false
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
@@ -299,7 +298,7 @@ class RestaurantViewController: UIViewController {
     }
     
     @objc func minusButtonTapped() {
-        if (restaurantCoreData?.category?.count ?? 0) + categoryCnt < 1 {
+        if categoryCnt == 1 {
             return
         } else {
             deleteCell()
@@ -316,7 +315,13 @@ class RestaurantViewController: UIViewController {
             resURLLabel.text = restaurantCoreData.placeURL
             addResButton.setTitle("UPDATE", for: .normal)
             
+            guard let categorySet = restaurantCoreData.category as? Set<CategoryData> else { return }
+            let categoryArray = Array(categorySet)
+
+            categoryCnt = categoryArray.count
+            tableView.reloadData()
         }
+        
         // 맛집 추가 -> APIData 데이터 할당
         else if let retaurantAPIData {
             resNameLabel.text = retaurantAPIData.placeName
@@ -332,13 +337,20 @@ class RestaurantViewController: UIViewController {
         // 카테고리 카운트 + 1
         categoryCnt += 1
         print("categoryCnt: \(categoryCnt)")
-
+        
+        
+        // 테이블 뷰 마지막 순서에 셀 생성
+        tableView.beginUpdates() // 업데이트 시작
+        
         // 테이블 뷰 마지막 순서에 셀 생성
         tableView.insertRows(at: [IndexPath(row: categoryCnt - 1, section: 0)], with: .fade)
         
+        // 행의 개수 업데이트가 끝났음을 알림
+        tableView.endUpdates()
+        
+        
         // 셀의 Label.text = "선택해주세요"
         let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! RestaurantTableViewCell
-        
         cell.nameDropLabel.text = "선택해주세요"
         cell.textDropLabel.text = "선택해주세요"
     }
@@ -362,15 +374,8 @@ extension RestaurantViewController: UITableViewDelegate {
 extension RestaurantViewController: UITableViewDataSource {
     // 표시할 테이블 뷰 셀 갯수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // 저장된 맛집 수정 -> 카테고리의 갯수
-        if let restaurantCoreData {
-            return (restaurantCoreData.category?.count ?? 0) + categoryCnt
-        }
-        // 맛집 추가 -> 기본 categoryCnt
-        else {
-            categoryCnt += 1
-            return categoryCnt
-        }
+        
+        return categoryCnt
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -379,15 +384,19 @@ extension RestaurantViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         cell.backgroundColor = .white
         
-        // 저장된 맛집 수정 -> DropDown 테이블 설정하기
-        if let restaurantCoreData {
-            if let categorySet = restaurantCoreData.category as? Set<CategoryData> {
-                let categoryArray = Array(categorySet)
-                
-                cell.nameDropLabel.text = categoryArray[indexPath.row].categoryName
-                cell.textDropLabel.text = categoryArray[indexPath.row].categoryText
+        // 초기에 한번만 실행
+        if !isConfigured {
+            if let restaurantCoreData {
+                if let categorySet = restaurantCoreData.category as? Set<CategoryData> {
+                    let categoryArray = Array(categorySet)
+                    cell.nameDropLabel.text = categoryArray[indexPath.row].categoryName
+                    cell.textDropLabel.text = categoryArray[indexPath.row].categoryText
+                    print("restaurantCoreData 적용")
+                }
             }
+            isConfigured = true
         }
+        
         return cell
     }
 }
