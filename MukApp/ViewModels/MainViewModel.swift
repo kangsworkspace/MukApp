@@ -322,7 +322,6 @@ final class MainViewModel {
                 if save {
                     guard let saveText = saveText else { return }
                     // 데이터 저장
-                    self.categoryModel.setCategoryTextArray(text: saveText)
                     completion(saveText)
                 }
                 // 취소
@@ -334,12 +333,40 @@ final class MainViewModel {
         // 카테고리 선택 이벤트
         else {
             // 데이터 저장
-            self.categoryModel.setCategoryTextArray(text: (item))
             completion(item)
         }
     }
     
-    
+    // Category Name에 해당하는 CategoryText 가져오기
+    func changeNameSelAction(item: String, completion: @escaping ([String]) -> Void) {
+        // 코어 데이터에서 메뉴 데이터 가져오기
+        let resDataList = coreDataManager.getDataFromCoreData()
+        
+        // 빈 배열로 초기화
+        var catTextArray: [String] = []
+        
+        // 메뉴 데이터 배열 -> 카테고리 -> 카테고리 이름을 가진 카테고리 엔티티 -> 카테고리 텍스트 -> 반복문으로 할당
+        for resData in resDataList {
+            if let category = resData.category as? Set<CategoryData> {
+                for category in category {
+                    if category.categoryName == item {
+                        guard let categoryText = category.categoryText else { return }
+                        catTextArray.append(categoryText)
+                    }
+                }
+            }
+        }
+        
+        // 중복값 빼기
+        catTextArray = Array(Set(catTextArray))
+        
+        // 카테고리 추가가 없으면 더하기
+        if !catTextArray.contains("카테고리 추가") {
+            catTextArray.append("카테고리 추가")
+        }
+        
+        completion(catTextArray)
+    }
 
     // MARK: - SearchViewController (맛집 검색 페이지)
     // API 결과 리턴
@@ -391,7 +418,7 @@ final class MainViewModel {
     }
     
     // MARK: - AddResTableViewCell
-    // 코어 데이터에서 CategoryName 가져오기 -> catNameArray에 할당
+    // 코어 데이터에서 CategoryName 가져오기 -> catNameArray에 할당 // ********** 필요한지 체크해보기 **************
     func getCatNameFromCoreData() -> [String] {
         var catNameArray: [String] = []
         
@@ -423,7 +450,7 @@ final class MainViewModel {
         return catNameArray
     }
     
-    // 카테고리 선택 이벤트
+    // 카테고리 선택 이벤트 // ********* 삭제할 코드 ***********
     func handleCatSelAction(fromVC: UIViewController, item: String, category: String, completion: @escaping (String) -> Void) {
         // 카테고리 추가 이벤트
         if item == "카테고리 추가" {
@@ -447,36 +474,10 @@ final class MainViewModel {
             self.categoryModel.setCategoryTextArray(text: (item))
             completion(item)
         }
-    }
+    } // ********* 삭제할 코드 ***********
     
-    // 코어 데이터에서 CategoryText 가져오기 -> catTextArray에 할당
-    func changeNameSelAction(item: String, completion: @escaping ([String]) -> Void) {
-        // 코어 데이터에서 메뉴 데이터 가져오기
-        let resDataList = coreDataManager.getDataFromCoreData()
-        
-        // 빈 배열로 초기화
-        var catTextArray: [String] = []
-        
-        // 메뉴 데이터 배열 -> 카테고리 -> 카테고리 이름을 가진 카테고리 엔티티 -> 카테고리 텍스트 -> 반복문으로 할당
-        for resData in resDataList {
-            if let category = resData.category as? Set<CategoryData> {
-                for category in category {
-                    if category.categoryName == item {
-                        guard let categoryText = category.categoryText else { return }
-                        catTextArray.append(categoryText)
-                    }
-                }
-            }
-        }
-        
-        // 카테고리 추가가 없으면 더하기
-        if !catTextArray.contains("카테고리 추가") {
-            catTextArray.append("카테고리 추가")
-        }
-        
-        completion(catTextArray)
-    }
     
+        
     // 카테고리 추가 얼럿창 띄우기
     private func addCatAlert(fromVC: UIViewController, completion: @escaping (String?, Bool) -> Void) {
         let alert = UIAlertController(title: "카테고리 추가", message: "추가하려는 카테고리를 입력해주세요", preferredStyle: .alert)
@@ -532,7 +533,7 @@ final class MainViewModel {
     }
     
     // MARK: - 코어 데이터 테스팅(추가)
-    func addResToCoreData(restaurantData: Document, CatNameArray: [String], CatTextArray: [String]) {
+    func addResToCoreData(restaurantData: Document, catNameArray: [String], catTextArray: [String]) {
         // 데이터 할당
         let address = restaurantData.address ?? ""
         let group = restaurantData.group ?? ""
@@ -564,7 +565,7 @@ final class MainViewModel {
         return resList
     }
     
-    // 화면 이동 로직(필요한가?)
+    // 화면 이동 로직(필요한가?) ********* 삭제할 코드 ********** 데이터 전달이 필요할 때 안쓰는 코드
     private func goNextVC(fromCurrentVC: UIViewController, nextViewController: UIViewController, animated: Bool) {
         // 화면 이동 로직
         let navVC = fromCurrentVC.navigationController
@@ -572,10 +573,6 @@ final class MainViewModel {
         nextViewController.modalPresentationStyle = .fullScreen
         navVC!.pushViewController(nextViewController, animated: true)
     }
-    
-
-    
-    
     
     // ********* 삭제할 코드 **********
     private func setIsCatSelected() {

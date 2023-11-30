@@ -150,15 +150,17 @@ class RestaurantTableViewCell: UITableViewCell {
         
         // nameDropDown 선택 시 이벤트 처리
         nameDropDown.selectionAction = { [weak self] (index, item) in
-            self!.viewModel.handleCatSelAction(fromVC: (self?.window!.rootViewController!)!, item: item, category: "name") {item in
+            self!.viewModel.handleCatSelActionT(fromVC: (self?.window!.rootViewController!)!, item: item, category: "name") {item in
+                // NameDropLabel 변경
                 self!.nameDropLabel.text = item
+                // setCatTextData에 item 전달 -> item에 해당하는 text 찾는 로직 실행
                 self!.setCatTextData(item: item)
             }
         }
         
         // textDropDown 선택 시 이벤트 처리
         textDropDown.selectionAction = { [weak self] (index, item) in
-            self!.viewModel.handleCatSelAction(fromVC: (self?.window!.rootViewController!)!, item: item, category: "text") {item in
+            self!.viewModel.handleCatSelActionT(fromVC: (self?.window!.rootViewController!)!, item: item, category: "text") {item in
                 self!.textDropLabel.text = item
             }
         }
@@ -170,6 +172,7 @@ class RestaurantTableViewCell: UITableViewCell {
     }
     
     func setCatTextData(item: String) {
+        // 전달받은 setCatName -> 뷰 모델에서 해당하는 Text 가져오기
         viewModel.changeNameSelAction(item: item, completion: { categoryTextArray in
             self.textDropDown.dataSource = categoryTextArray
         })

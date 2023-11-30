@@ -280,8 +280,29 @@ class RestaurantViewController: UIViewController {
     
     // MARK: - Function
     @objc func addResButtonTapped() {
+        
+        var catNameArray: [String] = []
+        var catTextArray: [String] = []
+                
+        for index in 0...categoryCnt - 1 {
+            let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as! RestaurantTableViewCell
+            catNameArray.append(cell.nameDropLabel.text ?? "")
+            print("\(index)번째 Name 텍스트: \(cell.nameDropLabel.text ?? "")")
+            
+            catTextArray.append(cell.textDropLabel.text ?? "")
+            print("\(index)번째 Text 텍스트: \(cell.textDropLabel.text ?? "")")
+        }
+    
+        // 포함되면 안되는 문자열을 가진 경우 리턴
+        if catNameArray.contains("") || catNameArray.contains("선택해주세요") || catTextArray.contains("") || catTextArray.contains("선택해주세요") {
+            
+            // 텍스트 안내문 추가해주기
+            print("포함되면 안되는 문자열 포함")
+            
+            return
+        }
         // 정보를 수정하는 경우
-        if let restaurantCoreData {
+        else if let restaurantCoreData {
             viewModel.handleUpdateResData(restaurantData: restaurantCoreData)
         }
         // 맛집을 추가하는 경우
