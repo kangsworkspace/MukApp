@@ -367,7 +367,54 @@ final class MainViewModel {
         
         completion(catTextArray)
     }
-
+    
+    // 코어 데이터에 맛집 추가
+    func addResToCoreData(restaurantData: Document, catNameArray: [String], catTextArray: [String]) {
+        // 데이터 할당
+        let address = restaurantData.address ?? ""
+        let group = restaurantData.group ?? ""
+        let phone = restaurantData.phone ?? ""
+        let placeName = restaurantData.placeName ?? ""
+        let roadAddress = restaurantData.roadAddress ?? ""
+        let placeURL = restaurantData.placeURL ?? ""
+                
+        guard catNameArray.count == catTextArray.count else {
+            fatalError("The length of catNameArray and catTextArray must be the same.")
+        }
+        
+        coreDataManager.testCreateCoreData(address: address, group: group, phone: phone, placeName: placeName, roadAddress: roadAddress, placeURL: placeURL, categoryNameArray: catNameArray, categoryTextArray: catTextArray) {
+            print("테스트 최종 성공 텍스트")
+        }
+    }
+    
+    // 카테고리 추가 얼럿창 띄우기
+    private func addCatAlert(fromVC: UIViewController, completion: @escaping (String?, Bool) -> Void) {
+        let alert = UIAlertController(title: "카테고리 추가", message: "추가하려는 카테고리를 입력해주세요", preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.placeholder = "새로운 카테고리"
+        }
+        
+        // 저장할 텍스트
+        var savedText: String? = ""
+        
+        // alert창 1
+        let save = UIAlertAction(title: "저장", style: .default) { saveAction in
+            savedText = alert.textFields?[0].text
+            completion(savedText, true)
+        }
+        
+        // alert창 2
+        let cancel = UIAlertAction(title: "취소", style: .default) { cancelAction in
+            completion(nil, false)
+        }
+        
+        alert.addAction(save)
+        alert.addAction(cancel)
+        
+        // 얼럿 창 띄우기
+        fromVC.present(alert, animated: true, completion: nil)
+    }
+    
     // MARK: - SearchViewController (맛집 검색 페이지)
     // API 결과 리턴
     func getResArray() -> [Document] {
@@ -390,7 +437,7 @@ final class MainViewModel {
         let nextVC = RestaurantViewController(viewModel: self)
         
         // 데이터 전달
-        nextVC.retaurantAPIData = resData
+        nextVC.restaurantAPIData = resData
         
         // CategoryModel에 데이터 전달(나중에 코어 데이터로 저장할수도 있기 때문)
         categoryModel.setResData(resData: resData)
@@ -478,35 +525,9 @@ final class MainViewModel {
     
     
         
-    // 카테고리 추가 얼럿창 띄우기
-    private func addCatAlert(fromVC: UIViewController, completion: @escaping (String?, Bool) -> Void) {
-        let alert = UIAlertController(title: "카테고리 추가", message: "추가하려는 카테고리를 입력해주세요", preferredStyle: .alert)
-        alert.addTextField { textField in
-            textField.placeholder = "새로운 카테고리"
-        }
-        
-        // 저장할 텍스트
-        var savedText: String? = ""
-        
-        // alert창 1
-        let save = UIAlertAction(title: "저장", style: .default) { saveAction in
-            savedText = alert.textFields?[0].text
-            completion(savedText, true)
-        }
-        
-        // alert창 2
-        let cancel = UIAlertAction(title: "취소", style: .default) { cancelAction in
-            completion(nil, false)
-        }
-        
-        alert.addAction(save)
-        alert.addAction(cancel)
-        
-        // 얼럿 창 띄우기
-        fromVC.present(alert, animated: true, completion: nil)
-    }
     
-    // MARK: - 코어 데이터 테스팅
+    
+    // MARK: - 코어 데이터 테스팅 *** 삭제할 코드 ***
     func handeTestingCoreData() {
         let resData = categoryModel.getSelResData()
         let address = resData.address ?? ""
@@ -527,36 +548,11 @@ final class MainViewModel {
         let categoryText = catTextArray
         
         
-        coreDataManager.testCreateCoreData(address: address, group: group, phone: phone, placeName: placeName, roadAddress: roadAddress, placeURL: placeURL, categoryName: categoryName, categoryText: categoryText) {
+        coreDataManager.testCreateCoreData(address: address, group: group, phone: phone, placeName: placeName, roadAddress: roadAddress, placeURL: placeURL, categoryNameArray: categoryName, categoryTextArray: categoryText) {
             print("테스트 최종 성공 텍스트")
         }
     }
     
-    // MARK: - 코어 데이터 테스팅(추가)
-    func addResToCoreData(restaurantData: Document, catNameArray: [String], catTextArray: [String]) {
-        // 데이터 할당
-        let address = restaurantData.address ?? ""
-        let group = restaurantData.group ?? ""
-        let phone = restaurantData.phone ?? ""
-        let placeName = restaurantData.placeName ?? ""
-        let roadAddress = restaurantData.roadAddress ?? ""
-        let placeURL = restaurantData.placeURL ?? ""
-        
-        let catNameArray = categoryModel.getSelCatNameArray()
-        let catTextArray = categoryModel.getSelCatTextArray()
-        
-        guard catNameArray.count == catTextArray.count else {
-            fatalError("The length of catNameArray and catTextArray must be the same.")
-        }
-        
-        let categoryName = catNameArray
-        let categoryText = catTextArray
-        
-        
-        coreDataManager.testCreateCoreData(address: address, group: group, phone: phone, placeName: placeName, roadAddress: roadAddress, placeURL: placeURL, categoryName: categoryName, categoryText: categoryText) {
-            print("테스트 최종 성공 텍스트")
-        }
-    }
     
     // MARK: - Common
     // 코어 데이터에서 저장된 맛집 데이터 가져오기

@@ -10,7 +10,7 @@ import CoreData
 
 protocol CoreDataManagerType {
     // Create
-    func testCreateCoreData(address: String, group: String, phone: String, placeName: String, roadAddress: String, placeURL: String, categoryName: [String], categoryText: [String], competion: @escaping () -> Void)
+    func testCreateCoreData(address: String, group: String, phone: String, placeName: String, roadAddress: String, placeURL: String, categoryNameArray: [String], categoryTextArray: [String], competion: @escaping () -> Void)
     
     // Read
     func getDataFromCoreData() -> [RestaurantData]
@@ -186,7 +186,7 @@ final class CoreDataManager: CoreDataManagerType {
     
     
     // MARK: - 코어 데이터 생성 테스팅
-    func testCreateCoreData(address: String, group: String, phone: String, placeName: String, roadAddress: String, placeURL: String, categoryName: [String], categoryText: [String], competion: @escaping () -> Void) {
+    func testCreateCoreData(address: String, group: String, phone: String, placeName: String, roadAddress: String, placeURL: String, categoryNameArray: [String], categoryTextArray: [String], competion: @escaping () -> Void) {
         print("코어 데이터 생성 시작")
         
         // RestaurantData의 entity 유효한지 확인
@@ -217,10 +217,11 @@ final class CoreDataManager: CoreDataManagerType {
         newRes.placeName = placeName
         newRes.roadAddress = roadAddress
         newRes.placeURL = placeURL
+        newRes.date = Date()
         print("newRes 객체에 데이터 할당 성공")
         
         // 카테고리 배열 할당
-        for index in 0...categoryName.count-1 {
+        for index in 0...categoryNameArray.count - 1 {
             
             // 할당할 데이터를 가진 객체 생성
             guard let newCat = NSManagedObject(entity: entityCategory, insertInto: context) as? CategoryData else {
@@ -229,8 +230,8 @@ final class CoreDataManager: CoreDataManagerType {
                 return
             }
             
-            newCat.categoryName = categoryName[index]
-            newCat.categoryText = categoryText[index]
+            newCat.categoryName = categoryNameArray[index]
+            newCat.categoryText = categoryTextArray[index]
             
             // newMenu에 newCategory 더하기
             newRes.addToCategory(newCat)

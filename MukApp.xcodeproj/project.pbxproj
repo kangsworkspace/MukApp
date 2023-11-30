@@ -21,15 +21,15 @@
 		B037F75A2AE3B8EA00C72F63 /* ResViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7592AE3B8EA00C72F63 /* ResViewController.swift */; };
 		B037F7642AE43C0300C72F63 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7632AE43C0300C72F63 /* CoreDataManager.swift */; };
 		B037F7782AE55E6500C72F63 /* AddResViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B037F7772AE55E6500C72F63 /* AddResViewController.swift */; };
-		B03AA67C2B01F6040048E47C /* CategoryData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03AA6782B01F6040048E47C /* CategoryData+CoreDataClass.swift */; };
-		B03AA67D2B01F6040048E47C /* CategoryData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03AA6792B01F6040048E47C /* CategoryData+CoreDataProperties.swift */; };
-		B03AA67E2B01F6040048E47C /* RestaurantData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03AA67A2B01F6040048E47C /* RestaurantData+CoreDataClass.swift */; };
-		B03AA67F2B01F6040048E47C /* RestaurantData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03AA67B2B01F6040048E47C /* RestaurantData+CoreDataProperties.swift */; };
 		B04EB0E62B00756E006AD277 /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04EB0E52B00756E006AD277 /* CategoryModel.swift */; };
 		B064C3402AFBDCCB00B33189 /* CategorySetCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064C33F2AFBDCCB00B33189 /* CategorySetCollectionViewCell.swift */; };
 		B06E01652AEC04AA0065E7FF /* MainViewControllerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06E01642AEC04AA0065E7FF /* MainViewControllerTableViewCell.swift */; };
 		B06E01672AEC259A0065E7FF /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06E01662AEC259A0065E7FF /* APIService.swift */; };
 		B074977F2AF6112D00D66CB1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B074977E2AF6112D00D66CB1 /* MainViewModel.swift */; };
+		B0773FC42B18E5FA00491E89 /* CategoryData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0773FC02B18E5FA00491E89 /* CategoryData+CoreDataClass.swift */; };
+		B0773FC52B18E5FA00491E89 /* CategoryData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0773FC12B18E5FA00491E89 /* CategoryData+CoreDataProperties.swift */; };
+		B0773FC62B18E5FA00491E89 /* RestaurantData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0773FC22B18E5FA00491E89 /* RestaurantData+CoreDataClass.swift */; };
+		B0773FC72B18E5FA00491E89 /* RestaurantData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0773FC32B18E5FA00491E89 /* RestaurantData+CoreDataProperties.swift */; };
 		B09E9D0E2B03964700896622 /* EditResViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09E9D0D2B03964700896622 /* EditResViewController.swift */; };
 		B09E9D102B0396AE00896622 /* EditResTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09E9D0F2B0396AE00896622 /* EditResTableViewCell.swift */; };
 		B0A320842AF78D2300E74138 /* AddResTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A320832AF78D2300E74138 /* AddResTableViewCell.swift */; };
@@ -60,15 +60,15 @@
 		B037F7592AE3B8EA00C72F63 /* ResViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResViewController.swift; sourceTree = "<group>"; };
 		B037F7632AE43C0300C72F63 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		B037F7772AE55E6500C72F63 /* AddResViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddResViewController.swift; sourceTree = "<group>"; };
-		B03AA6782B01F6040048E47C /* CategoryData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CategoryData+CoreDataClass.swift"; sourceTree = "<group>"; };
-		B03AA6792B01F6040048E47C /* CategoryData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CategoryData+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		B03AA67A2B01F6040048E47C /* RestaurantData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RestaurantData+CoreDataClass.swift"; sourceTree = "<group>"; };
-		B03AA67B2B01F6040048E47C /* RestaurantData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RestaurantData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B04EB0E52B00756E006AD277 /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
 		B064C33F2AFBDCCB00B33189 /* CategorySetCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySetCollectionViewCell.swift; sourceTree = "<group>"; };
 		B06E01642AEC04AA0065E7FF /* MainViewControllerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewControllerTableViewCell.swift; sourceTree = "<group>"; };
 		B06E01662AEC259A0065E7FF /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		B074977E2AF6112D00D66CB1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		B0773FC02B18E5FA00491E89 /* CategoryData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CategoryData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		B0773FC12B18E5FA00491E89 /* CategoryData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CategoryData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		B0773FC22B18E5FA00491E89 /* RestaurantData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RestaurantData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		B0773FC32B18E5FA00491E89 /* RestaurantData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RestaurantData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B09E9D0D2B03964700896622 /* EditResViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditResViewController.swift; sourceTree = "<group>"; };
 		B09E9D0F2B0396AE00896622 /* EditResTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditResTableViewCell.swift; sourceTree = "<group>"; };
 		B0A320832AF78D2300E74138 /* AddResTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddResTableViewCell.swift; sourceTree = "<group>"; };
@@ -184,10 +184,10 @@
 		B037F7552AE3B5CE00C72F63 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				B03AA6782B01F6040048E47C /* CategoryData+CoreDataClass.swift */,
-				B03AA6792B01F6040048E47C /* CategoryData+CoreDataProperties.swift */,
-				B03AA67A2B01F6040048E47C /* RestaurantData+CoreDataClass.swift */,
-				B03AA67B2B01F6040048E47C /* RestaurantData+CoreDataProperties.swift */,
+				B0773FC02B18E5FA00491E89 /* CategoryData+CoreDataClass.swift */,
+				B0773FC12B18E5FA00491E89 /* CategoryData+CoreDataProperties.swift */,
+				B0773FC22B18E5FA00491E89 /* RestaurantData+CoreDataClass.swift */,
+				B0773FC32B18E5FA00491E89 /* RestaurantData+CoreDataProperties.swift */,
 				B037F7632AE43C0300C72F63 /* CoreDataManager.swift */,
 			);
 			path = Models;
@@ -326,31 +326,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B03AA67F2B01F6040048E47C /* RestaurantData+CoreDataProperties.swift in Sources */,
 				B02253282B135AD3002E9BCE /* RestaurantViewController.swift in Sources */,
 				B037F7412AE3B58500C72F63 /* SearchViewController.swift in Sources */,
 				B037F75A2AE3B8EA00C72F63 /* ResViewController.swift in Sources */,
 				B0A7B1142AEB53D300D33599 /* Memo.swift in Sources */,
-				B03AA67D2B01F6040048E47C /* CategoryData+CoreDataProperties.swift in Sources */,
+				B0773FC72B18E5FA00491E89 /* RestaurantData+CoreDataProperties.swift in Sources */,
 				B0A6BE672B05D483007779CF /* Constants.swift in Sources */,
 				B00080682AED22A7003C55EE /* ResCollectionViewCell.swift in Sources */,
 				B0D871062AFA846E00758187 /* CategorySetViewController.swift in Sources */,
 				B074977F2AF6112D00D66CB1 /* MainViewModel.swift in Sources */,
-				B03AA67E2B01F6040048E47C /* RestaurantData+CoreDataClass.swift in Sources */,
 				B037F7472AE3B58500C72F63 /* MukApp.xcdatamodeld in Sources */,
 				B037F73D2AE3B58500C72F63 /* AppDelegate.swift in Sources */,
 				B0A320842AF78D2300E74138 /* AddResTableViewCell.swift in Sources */,
 				B037F7642AE43C0300C72F63 /* CoreDataManager.swift in Sources */,
 				B09E9D0E2B03964700896622 /* EditResViewController.swift in Sources */,
 				B04EB0E62B00756E006AD277 /* CategoryModel.swift in Sources */,
+				B0773FC42B18E5FA00491E89 /* CategoryData+CoreDataClass.swift in Sources */,
 				B064C3402AFBDCCB00B33189 /* CategorySetCollectionViewCell.swift in Sources */,
+				B0773FC62B18E5FA00491E89 /* RestaurantData+CoreDataClass.swift in Sources */,
 				B037F7582AE3B87100C72F63 /* MainViewController.swift in Sources */,
 				B022532A2B135BA3002E9BCE /* RestaurantTableViewCell.swift in Sources */,
 				B0A6BE622B05D144007779CF /* UIColor+Extension.swift in Sources */,
 				B0D5FE262AF4966300D4B751 /* SearchTableViewCell.swift in Sources */,
-				B03AA67C2B01F6040048E47C /* CategoryData+CoreDataClass.swift in Sources */,
 				B037F7782AE55E6500C72F63 /* AddResViewController.swift in Sources */,
 				B0A6BE652B05D247007779CF /* MyColor.swift in Sources */,
+				B0773FC52B18E5FA00491E89 /* CategoryData+CoreDataProperties.swift in Sources */,
 				B037F73F2AE3B58500C72F63 /* SceneDelegate.swift in Sources */,
 				B09E9D102B0396AE00896622 /* EditResTableViewCell.swift in Sources */,
 				B0ED529E2B049DAF00F74816 /* RouletteViewController.swift in Sources */,

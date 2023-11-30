@@ -29,7 +29,7 @@ class RestaurantViewController: UIViewController {
     }
     
     // API에서 받아온 맛집 데이터
-    var retaurantAPIData: Document? {
+    var restaurantAPIData: Document? {
         didSet {
             configureUIWithData()
         }
@@ -144,7 +144,9 @@ class RestaurantViewController: UIViewController {
     private var categoryCnt: Int = 1
     
     // 초기에만 데이터 셋팅하도록 설정해줄 변수
-    var isConfigured = false
+    var isConfigured: Int = 0
+    // category 갯수 맞추기
+    var dropCnt = 0
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
@@ -199,7 +201,13 @@ class RestaurantViewController: UIViewController {
         setAddView()
         setAutoLayout()
         setTableView()
+        setDropDown()
     }
+    
+    func setDropDown() {
+        dropCnt = categoryCnt
+    }
+    
     
     func setAddView() {
         view.addSubview(resImageView)
@@ -283,7 +291,8 @@ class RestaurantViewController: UIViewController {
         
         var catNameArray: [String] = []
         var catTextArray: [String] = []
-                
+        
+        // 각 셀의 Text 가져오기.
         for index in 0...categoryCnt - 1 {
             let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as! RestaurantTableViewCell
             catNameArray.append(cell.nameDropLabel.text ?? "")
@@ -301,13 +310,14 @@ class RestaurantViewController: UIViewController {
             
             return
         }
+        
         // 정보를 수정하는 경우
         else if let restaurantCoreData {
             viewModel.handleUpdateResData(restaurantData: restaurantCoreData)
         }
         // 맛집을 추가하는 경우
-        else {
-            viewModel.handeTestingCoreData()
+        else if let restaurantAPIData {
+            viewModel.addResToCoreData(restaurantData: restaurantAPIData, catNameArray: catNameArray, catTextArray: catTextArray)
         }
     }
     
@@ -339,16 +349,18 @@ class RestaurantViewController: UIViewController {
             guard let categorySet = restaurantCoreData.category as? Set<CategoryData> else { return }
             let categoryArray = Array(categorySet)
 
+            // categoryCnt 갯수 맞추기
             categoryCnt = categoryArray.count
+                        
             tableView.reloadData()
         }
         
         // 맛집 추가 -> APIData 데이터 할당
-        else if let retaurantAPIData {
-            resNameLabel.text = retaurantAPIData.placeName
-            resPhoneLabel.text = retaurantAPIData.phone
-            resAddressLabel.text = retaurantAPIData.roadAddress
-            resURLLabel.text = retaurantAPIData.placeURL
+        else if let restaurantAPIData {
+            resNameLabel.text = restaurantAPIData.placeName
+            resPhoneLabel.text = restaurantAPIData.phone
+            resAddressLabel.text = restaurantAPIData.roadAddress
+            resURLLabel.text = restaurantAPIData.placeURL
             addResButton.setTitle("SAVE", for: .normal)
         }
     }
@@ -359,16 +371,8 @@ class RestaurantViewController: UIViewController {
         categoryCnt += 1
         print("categoryCnt: \(categoryCnt)")
         
-        
-        // 테이블 뷰 마지막 순서에 셀 생성
-        tableView.beginUpdates() // 업데이트 시작
-        
         // 테이블 뷰 마지막 순서에 셀 생성
         tableView.insertRows(at: [IndexPath(row: categoryCnt - 1, section: 0)], with: .fade)
-        
-        // 행의 개수 업데이트가 끝났음을 알림
-        tableView.endUpdates()
-        
         
         // 셀의 Label.text = "선택해주세요"
         let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! RestaurantTableViewCell
@@ -395,7 +399,6 @@ extension RestaurantViewController: UITableViewDelegate {
 extension RestaurantViewController: UITableViewDataSource {
     // 표시할 테이블 뷰 셀 갯수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return categoryCnt
     }
     
@@ -405,8 +408,8 @@ extension RestaurantViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         cell.backgroundColor = .white
         
-        // 초기에 한번만 실행
-        if !isConfigured {
+        // 초기에 categoryCnt만큼 실행
+        if isConfigured != dropCnt {
             if let restaurantCoreData {
                 if let categorySet = restaurantCoreData.category as? Set<CategoryData> {
                     let categoryArray = Array(categorySet)
@@ -415,8 +418,9 @@ extension RestaurantViewController: UITableViewDataSource {
                     print("restaurantCoreData 적용")
                 }
             }
-            isConfigured = true
+            isConfigured += 1
         }
+        
         
         return cell
     }
