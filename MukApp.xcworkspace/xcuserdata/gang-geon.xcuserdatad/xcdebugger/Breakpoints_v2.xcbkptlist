@@ -30,8 +30,8 @@
             filePath = "MukApp/ViewModels/MainViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "529"
-            endingLineNumber = "529"
+            startingLineNumber = "523"
+            endingLineNumber = "523"
             landmarkName = "MainViewModel"
             landmarkType = "3">
          </BreakpointContent>

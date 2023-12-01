@@ -129,35 +129,44 @@ final class CoreDataManager: CoreDataManagerType {
     
     // MARK: - [UPDATE]: 코어 데이터 업데이트 하기
     func updateCoreData(newResData: RestaurantData, catNameArray: [String], catTextArray: [String], competion: @escaping () -> Void) {
-        // 옵셔널 해제
-        guard let placeName = newResData.placeName else { return }
-        guard let categoryList = newResData.category as? Set<CategoryData> else { return }
-        
-        // 찾기 위한 조건(식당 이름)
-        let predicateName = NSPredicate(format: "placeName == %@", placeName)
-        
-        // AND 연산자로 모든 조건을 결합
-        let compoundPredicate = NSCompoundPredicate(type: .and, subpredicates: [predicateName])
+        // 옵셔널 해제(타겟 식당을 찾을 조건 -> date)
+        guard let date = newResData.date else { return }
+
+        // CategoryData의 entity 유효한지 확인
+        guard let entityCategory = NSEntityDescription.entity(forEntityName: entityName_Cat, in: context) else {
+            print("entityCategory-유효하지 않음")
+            competion()
+            return
+        }
         
         // 요청서
         let request = NSFetchRequest<NSManagedObject>(entityName: self.entityName_Res)
-        request.predicate = predicateName
+        // 예상 조건 = 날짜로 찾기
+        request.predicate = NSPredicate(format: "date = %@", date as CVarArg)
         
         do {
             // 요청서를 통해서 데이터 가져오기
             if let fetchedResList = try context.fetch(request) as? [RestaurantData] {
-                // 배열의 첫번째(예상 조건)?
-                if var targetRes = fetchedResList.first {
-                    // 기존 데이터 삭제
-                    guard var categoryList = targetRes.category as? Set<CategoryData> else { return }
-                    categoryList.removeAll()
-                    
-                    // 새로운 데이터 할당
-                    for (catName, catText) in zip(catNameArray, catTextArray) {
-                        let newCategory = CategoryData(context: context)
-                        newCategory.categoryName = catName
-                        newCategory.categoryText = catText
-                        categoryList.insert(newCategory)
+                // 배열의 첫번째(예상 조건 충족)
+                if let targetRes = fetchedResList.first {
+                    // 기존 카테고리 데이터 삭제( *** 삭제가 안대에 ***)
+                    guard let category = targetRes.category else { return }
+                    targetRes.removeFromCategory(category)
+
+                    // 카테고리 다시 생성하고 할당
+                    for index in 0...catNameArray.count - 1 {
+                        // 할당할 데이터를 가진 객체 생성
+                        guard let newCat = NSManagedObject(entity: entityCategory, insertInto: context) as? CategoryData else {
+                            print("newCat 객체 생성 실패")
+                            competion()
+                            return
+                        }
+                        
+                        newCat.categoryName = catNameArray[index]
+                        newCat.categoryText = catTextArray[index]
+                        
+                        // newMenu에 newCategory 더하기
+                        targetRes.addToCategory(newCat)
                     }
                     
                     // Save the changes to the context

@@ -147,6 +147,8 @@ class RestaurantViewController: UIViewController {
     var isConfigured: Int = 0
     // category 갯수 맞추기
     var dropCnt = 0
+    var arrayedCatName: [String] = []
+    var arrayedCatText: [String] = []
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
@@ -206,6 +208,16 @@ class RestaurantViewController: UIViewController {
     
     func setDropDown() {
         dropCnt = categoryCnt
+        
+        if let restaurantCoreData {
+            guard let categorySet = restaurantCoreData.category as? Set<CategoryData> else { return }
+            let categoryArray = Array(categorySet)
+            
+            for category in categoryArray {
+                arrayedCatName.append(category.categoryName ?? "데이터 없음")
+                arrayedCatText.append(category.categoryText ?? "데이터 없음")
+            }
+        }
     }
     
     
@@ -313,7 +325,7 @@ class RestaurantViewController: UIViewController {
         
         // 정보를 수정하는 경우
         else if let restaurantCoreData {
-            viewModel.handleUpdateResData(restaurantData: restaurantCoreData)
+            viewModel.handleUpdateResData(restaurantData: restaurantCoreData, catNameArray: catNameArray, catTextArray: catTextArray)
         }
         // 맛집을 추가하는 경우
         else if let restaurantAPIData {
@@ -354,7 +366,6 @@ class RestaurantViewController: UIViewController {
                         
             tableView.reloadData()
         }
-        
         // 맛집 추가 -> APIData 데이터 할당
         else if let restaurantAPIData {
             resNameLabel.text = restaurantAPIData.placeName
@@ -410,18 +421,11 @@ extension RestaurantViewController: UITableViewDataSource {
         
         // 초기에 categoryCnt만큼 실행
         if isConfigured != dropCnt {
-            if let restaurantCoreData {
-                if let categorySet = restaurantCoreData.category as? Set<CategoryData> {
-                    let categoryArray = Array(categorySet)
-                    cell.nameDropLabel.text = categoryArray[indexPath.row].categoryName
-                    cell.textDropLabel.text = categoryArray[indexPath.row].categoryText
-                    print("restaurantCoreData 적용")
-                }
-            }
+            cell.nameDropLabel.text = arrayedCatName[indexPath.row]
+            cell.textDropLabel.text = arrayedCatText[indexPath.row]
+            print("restaurantCoreData 적용")
             isConfigured += 1
         }
-        
-        
         return cell
     }
 }

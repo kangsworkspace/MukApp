@@ -300,18 +300,12 @@ final class MainViewModel {
     
     // MARK: - RestaurantViewController
     // 맛집 정보 수정 (수정 버튼 눌렸을 때)
-    func handleUpdateResData(restaurantData: RestaurantData) {
-        // 카테고리 Text, Name 가져오기
-        var catNameArray = categoryModel.getSelCatNameArray()
-        var catTextArray = categoryModel.getSelCatTextArray()
-        
-        catNameArray.append("Name수정됨")
-        catTextArray.append("Name수정됨")
-        
+    func handleUpdateResData(restaurantData: RestaurantData, catNameArray: [String], catTextArray: [String]) {
         coreDataManager.updateCoreData(newResData: restaurantData, catNameArray: catNameArray, catTextArray: catTextArray) {
             print("정보 수정 완료")
         }
     }
+    
     
     // 카테고리 선택 이벤트
     func handleCatSelActionT(fromVC: UIViewController, item: String, category: String, completion: @escaping (String) -> Void) {
