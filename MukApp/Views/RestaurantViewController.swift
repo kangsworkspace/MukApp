@@ -291,6 +291,9 @@ class RestaurantViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
+        // 구분선 없애기
+        tableView.separatorStyle = .none
+        
         // 셀의 높이 설정
         tableView.rowHeight = 60
         

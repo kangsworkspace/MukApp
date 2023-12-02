@@ -32,7 +32,7 @@ class RestaurantTableViewCell: UITableViewCell {
     // nameDropDown UI: 카테고리 이름 UI
     var nameDropView: UIView = {
         let view = UIView()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .white
         view.layer.cornerRadius = 8
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -67,7 +67,7 @@ class RestaurantTableViewCell: UITableViewCell {
     // TextDropDown UI: 카테고리 내용 UI
     var textDropView: UIView = {
         let view = UIView()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .white
         view.layer.cornerRadius = 8
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

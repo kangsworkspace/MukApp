@@ -379,7 +379,7 @@ class MainViewController: UIViewController {
 // MARK: - Extension
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("dk")
+        
     }
 }
 

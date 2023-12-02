@@ -570,35 +570,4 @@ final class MainViewModel {
         nextViewController.modalPresentationStyle = .fullScreen
         navVC!.pushViewController(nextViewController, animated: true)
     }
-    
-    // ********* 삭제할 코드 **********
-    private func setIsCatSelected() {
-        categoryModel.setIsCatSelected()
-    }
-    
-    // *** 삭제할 코드 *** (뷰에서 직접 구하기)
-    // 저장한 맛집의 CategoryName과 CategoryText를 구하는 로직.
-    func setNameDropLabel(resData: RestaurantData, completion: @escaping (_ nameArray: [String], _ textArray: [String]) -> Void) {
-        
-        var catNameArray: [String] = []
-        var catTextArray: [String] = []
-        
-        print("반복문 시작 전전")
-        
-        if let categorySet = resData.category as? Set<CategoryData> {
-            print("반복문 시작 전")
-            for category in categorySet {
-                if let categoryName = category.categoryName, let categoryText = category.categoryText {
-                    print("categoryName = \(categoryName)")
-                    print("categoryText = \(categoryText)")
-                    catNameArray.append(categoryName)
-                    catTextArray.append(categoryText)
-                    print("반복문 끝")
-                }
-            }
-        }
-        
-        completion(catNameArray, catTextArray)
-    }
-    // *******
 }
