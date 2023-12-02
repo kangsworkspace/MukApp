@@ -420,11 +420,13 @@ extension RestaurantViewController: UITableViewDataSource {
         cell.backgroundColor = .white
         
         // 초기에 categoryCnt만큼 실행
-        if isConfigured != dropCnt {
-            cell.nameDropLabel.text = arrayedCatName[indexPath.row]
-            cell.textDropLabel.text = arrayedCatText[indexPath.row]
-            print("restaurantCoreData 적용")
-            isConfigured += 1
+        if let restaurantCoreData {
+            if isConfigured != dropCnt {
+                cell.nameDropLabel.text = arrayedCatName[indexPath.row]
+                cell.textDropLabel.text = arrayedCatText[indexPath.row]
+                print("restaurantCoreData 적용")
+                isConfigured += 1
+            }
         }
         return cell
     }

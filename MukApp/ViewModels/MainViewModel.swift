@@ -515,12 +515,9 @@ final class MainViewModel {
             self.categoryModel.setCategoryTextArray(text: (item))
             completion(item)
         }
-    } // ********* 삭제할 코드 ***********
+    }
     
-    
-        
-    
-    
+    // ********* 삭제할 코드 ***********
     // MARK: - 코어 데이터 테스팅 *** 삭제할 코드 ***
     func handeTestingCoreData() {
         let resData = categoryModel.getSelResData()
