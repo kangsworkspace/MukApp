@@ -48,6 +48,11 @@ class RouletteViewController: UIViewController {
         setAddView()
         setAutoLayout()
         setPickerView()
+        setTabBar()
+    }
+    
+    func setTabBar() {
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     func setAddView() {
