@@ -325,11 +325,17 @@ class RestaurantViewController: UIViewController {
         
         // 정보를 수정하는 경우
         else if let restaurantCoreData {
+            // 코어 데이터에 정보 업데이트
             viewModel.handleUpdateResData(restaurantData: restaurantCoreData, catNameArray: catNameArray, catTextArray: catTextArray)
+            // 루트 뷰로 돌아가기
+            viewModel.goBackRootView(fromCurrentVC: self, animated: true)
         }
         // 맛집을 추가하는 경우
         else if let restaurantAPIData {
+            // 코어 데이터에 정보 생성
             viewModel.addResToCoreData(restaurantData: restaurantAPIData, catNameArray: catNameArray, catTextArray: catTextArray)
+            // 루트 뷰로 돌아가기
+            viewModel.goBackRootView(fromCurrentVC: self, animated: true)
         }
     }
     

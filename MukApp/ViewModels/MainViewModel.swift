@@ -200,12 +200,11 @@ final class MainViewModel {
     
     // MARK: - RouletteViewController(룰렛 돌아가는 페이지)
     func goResultViewController(fromCurrentVC: UIViewController, targetRes: RestaurantData,animated: Bool) {
-        let resultVC = ResultViewController()
+        let resultVC = ResultViewController(viewModel: self)
         resultVC.targetRes = targetRes
         goNextVC(fromCurrentVC: fromCurrentVC, nextViewController: resultVC, animated: animated)
     }
     
-
     // MARK: - ResViewController (맛집 추가/관리 페이지)
     // 저장된 맛집 셀 동작
     func handleEditCellTapped(resData: RestaurantData, fromCurrentVC: UIViewController, animated: Bool) {
@@ -305,7 +304,6 @@ final class MainViewModel {
             print("정보 수정 완료")
         }
     }
-    
     
     // 카테고리 선택 이벤트
     func handleCatSelActionT(fromVC: UIViewController, item: String, category: String, completion: @escaping (String) -> Void) {
@@ -551,6 +549,18 @@ final class MainViewModel {
         let resList = coreDataManager.getDataFromCoreData()
         return resList
     }
+    
+    // 루트 뷰로 돌아가기
+    func goBackRootView(fromCurrentVC: UIViewController, animated: Bool) {
+        // 현재 뷰 컨트롤러
+        let navVC = fromCurrentVC.navigationController
+        navVC?.popToRootViewController(animated: true)
+    }
+    
+    
+    
+    
+    
     
     // 화면 이동 로직(필요한가?) ********* 삭제할 코드 ********** 데이터 전달이 필요할 때 안쓰는 코드
     private func goNextVC(fromCurrentVC: UIViewController, nextViewController: UIViewController, animated: Bool) {

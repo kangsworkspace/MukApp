@@ -9,6 +9,18 @@ import UIKit
 
 class ResultViewController: UIViewController {
 
+    // MARK: - ViewModel
+    let viewModel: MainViewModel
+    
+    init(viewModel: MainViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - 변수
     // Target Restaurant 정보
     var targetRes: RestaurantData?
@@ -200,7 +212,6 @@ class ResultViewController: UIViewController {
     }
     
     @objc func confirmButtonTapped() {
-        print("메인 화면으로")
-        self.navigationController?.popToRootViewController(animated: true)
+        viewModel.goBackRootView(fromCurrentVC: self, animated: true)
     }
 }
