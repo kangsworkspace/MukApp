@@ -99,6 +99,8 @@ class MainViewController: UIViewController {
     // 카테고리 설정 카운트
     private var categoryCnt: Int = 1
     
+    private var isLoaded = false
+    
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,6 +113,12 @@ class MainViewController: UIViewController {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        
+        if isLoaded {
+            resetHashTag()
+        }
+        
+        isLoaded = true
     }
     
     // MARK: - viewDidLayoutSubviews
@@ -373,6 +381,31 @@ class MainViewController: UIViewController {
         
         // cell 터치 가능 처리
         cell.isUserInteractionEnabled = true
+    }
+    
+    func resetHashTag() {
+        // 카테고리 전체 삭제
+        for _ in 1...categoryCnt {
+            deleteCell()
+        }
+        
+        // 카테고리 추가
+        addNewCell()
+        
+        // 싱글톤 데이터 처리 (후보식당 관련)
+        viewModel.resetHashTagData()
+
+        // 카테고리 데이터 설정
+        let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! MainViewControllerTableViewCell
+        cell.setDropDownData()
+        
+        // UI 변경
+        // 버튼 그레이로
+        menuButton.setTitleColor(MyColor.disableColor, for: .normal)
+        // + 불가능
+        plusButton.setTitleColor(MyColor.disableColor, for: .normal)
+        
+        // 레이블 초기화
     }
 }
 

@@ -35,7 +35,7 @@ class MainViewControllerTableViewCell: UITableViewCell {
         view.backgroundColor = .white
         view.layer.borderColor = UIColor.black.cgColor
         view.layer.borderWidth = 1
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = CommonCGSize.dropDownViewCornerRadius
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -54,6 +54,7 @@ class MainViewControllerTableViewCell: UITableViewCell {
         label.text = "선택해주세요"
         label.font = UIFont.boldSystemFont(ofSize: 12)
         label.backgroundColor = .clear
+        label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -81,7 +82,7 @@ class MainViewControllerTableViewCell: UITableViewCell {
         view.backgroundColor = .white
         view.layer.borderColor = UIColor.black.cgColor
         view.layer.borderWidth = 1
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = CommonCGSize.dropDownViewCornerRadius
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -100,6 +101,7 @@ class MainViewControllerTableViewCell: UITableViewCell {
         label.text = "선택해주세요"
         label.font = UIFont.boldSystemFont(ofSize: 12)
         label.backgroundColor = .clear
+        label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -160,7 +162,7 @@ class MainViewControllerTableViewCell: UITableViewCell {
         DropDown.appearance().selectedTextColor = UIColor.black // 선택된 아이템 텍스트 색상
         DropDown.appearance().backgroundColor = UIColor.white // 아이템 팝업 배경 색상
         DropDown.appearance().selectionBackgroundColor = UIColor.lightGray // 선택한 아이템 배경 색상
-        DropDown.appearance().setupCornerRadius(8)
+        DropDown.appearance().setupCornerRadius(CommonCGSize.dropDownViewCornerRadius)
         
         // 드롭다운 표시되는 위치 설정
         nameDropDown.anchorView = nameDropButton
@@ -195,7 +197,7 @@ class MainViewControllerTableViewCell: UITableViewCell {
     
     // 초기 데이터 소스 설정
     func setDropDownData() {
-        nameDropDown.dataSource = viewModel.getCatNameFromCoreDataToMain()
+        nameDropDown.dataSource = viewModel.getCatNameToMain()
         textDropDown.dataSource = []
     }
     
@@ -217,10 +219,10 @@ class MainViewControllerTableViewCell: UITableViewCell {
         nameDropView.addSubview(nameDropImageView)
         nameDropView.addSubview(nameDropButton)
         
+        textDropView.addSubview(textHashLabel)
         textDropView.addSubview(textDropLabel)
         textDropView.addSubview(textDropImageView)
         textDropView.addSubview(textDropButton)
-        textDropView.addSubview(textHashLabel)
         
         dropDownStackView.addArrangedSubview(nameDropView)
         dropDownStackView.addArrangedSubview(textDropView)
@@ -232,15 +234,17 @@ class MainViewControllerTableViewCell: UITableViewCell {
     func setAutoLayout() {
         // nameHashLabel, textHashLabel 오토 레이아웃
         NSLayoutConstraint.activate([
-            // nameDropLabel
+            // nameHashLabel
             nameHashLabel.leadingAnchor.constraint(equalTo: nameDropView.leadingAnchor, constant: 10),
             nameHashLabel.topAnchor.constraint(equalTo: nameDropView.topAnchor, constant: 10),
             nameHashLabel.bottomAnchor.constraint(equalTo: nameDropView.bottomAnchor, constant: -10),
+            nameHashLabel.widthAnchor.constraint(equalToConstant: 10),
             
             // textHashLabel
             textHashLabel.leadingAnchor.constraint(equalTo: textDropView.leadingAnchor, constant: 10),
             textHashLabel.topAnchor.constraint(equalTo: textDropView.topAnchor, constant: 10),
             textHashLabel.bottomAnchor.constraint(equalTo: textDropView.bottomAnchor, constant: -10),
+            textHashLabel.widthAnchor.constraint(equalToConstant: 10)
         ])
         
         // nameDropLabel, textDropLabel 오토 레이아웃
@@ -248,11 +252,13 @@ class MainViewControllerTableViewCell: UITableViewCell {
             // nameDropLabel
             nameDropLabel.leadingAnchor.constraint(equalTo: nameHashLabel.trailingAnchor, constant: 4),
             nameDropLabel.topAnchor.constraint(equalTo: nameDropView.topAnchor, constant: 10),
+            nameDropLabel.trailingAnchor.constraint(equalTo: nameDropImageView.leadingAnchor, constant: -4),
             nameDropLabel.bottomAnchor.constraint(equalTo: nameDropView.bottomAnchor, constant: -10),
 
             // textDropLabel
             textDropLabel.leadingAnchor.constraint(equalTo: textHashLabel.trailingAnchor, constant: 4),
             textDropLabel.topAnchor.constraint(equalTo: textDropView.topAnchor, constant: 10),
+            textDropLabel.trailingAnchor.constraint(equalTo: textDropImageView.leadingAnchor, constant: -4),
             textDropLabel.bottomAnchor.constraint(equalTo: textDropView.bottomAnchor, constant: -10)
         ])
         

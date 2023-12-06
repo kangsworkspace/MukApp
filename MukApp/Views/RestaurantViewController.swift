@@ -295,7 +295,7 @@ class RestaurantViewController: UIViewController {
         tableView.separatorStyle = .none
         
         // 셀의 높이 설정
-        tableView.rowHeight = 60
+        tableView.rowHeight = CommonCGSize.hashTagTableHeight
         
         // 셀 등록
         tableView.register(RestaurantTableViewCell.self, forCellReuseIdentifier: "RestaurantTableViewCell")

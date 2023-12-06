@@ -35,11 +35,14 @@ final class CategoryModel {
     }
     
     // MARK: - MainViewController
-    // 화면 이동 시 초기화해야할 데이터
-    // selCatNameArray
-    // selCatTextArray
-    // resListNum
-    // nextCatNameArray
+    
+    // 해시태그 데이터 리셋
+    func resetHashTagData() {
+        selCatNameArray = [""]
+        selCatTextArray = [""]
+        resListNum = 0
+        nextCatNameArray = []
+    }
     
     // 룰렛을 돌릴 때 나올 후보 식당 수
     private var resListNum = 0

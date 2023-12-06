@@ -33,15 +33,26 @@ class RestaurantTableViewCell: UITableViewCell {
     var nameDropView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.layer.cornerRadius = 8
+        view.layer.cornerRadius = CommonCGSize.dropDownViewCornerRadius
+        view.layer.borderColor = UIColor.black.cgColor
+        view.layer.borderWidth = 1
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
+    }()
+    
+    var nameHashLabel: UILabel = {
+        let label = UILabel()
+        label.text = "#"
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.backgroundColor = .clear
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     var nameDropLabel: UILabel = {
         let label = UILabel()
         label.text = "선택해주세요"
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.boldSystemFont(ofSize: 12)
         label.backgroundColor = .clear
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -51,7 +62,7 @@ class RestaurantTableViewCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.tintColor = UIColor.gray
         imageView.image = UIImage(systemName: "arrowtriangle.down.fill")
-        imageView.backgroundColor = .lightGray
+        imageView.backgroundColor = .clear
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -68,16 +79,28 @@ class RestaurantTableViewCell: UITableViewCell {
     var textDropView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.layer.cornerRadius = 8
+        view.layer.cornerRadius = CommonCGSize.dropDownViewCornerRadius
+        view.layer.borderColor = UIColor.black.cgColor
+        view.layer.borderWidth = 1
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
+    }()
+    
+    var textHashLabel: UILabel = {
+        let label = UILabel()
+        label.text = "#"
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.backgroundColor = .clear
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     var textDropLabel: UILabel = {
         let label = UILabel()
         label.text = "선택해주세요"
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.backgroundColor = .lightGray
+        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.backgroundColor = .clear
+        label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -86,7 +109,7 @@ class RestaurantTableViewCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.tintColor = UIColor.gray
         imageView.image = UIImage(systemName: "arrowtriangle.down.fill")
-        imageView.backgroundColor = .lightGray
+        imageView.backgroundColor = .clear
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -128,7 +151,6 @@ class RestaurantTableViewCell: UITableViewCell {
         // pickerview가 터치 되도록 컨텐츠 뷰 뒤로 보내기
         sendSubviewToBack(contentView)
         
-        // setData()
         setDropDown()
         setCatNameData()
         setAddView()
@@ -140,7 +162,7 @@ class RestaurantTableViewCell: UITableViewCell {
         DropDown.appearance().selectedTextColor = UIColor.black // 선택된 아이템 텍스트 색상
         DropDown.appearance().backgroundColor = UIColor.white // 아이템 팝업 배경 색상
         DropDown.appearance().selectionBackgroundColor = UIColor.lightGray // 선택한 아이템 배경 색상
-        DropDown.appearance().setupCornerRadius(8)
+        DropDown.appearance().setupCornerRadius(CommonCGSize.dropDownViewCornerRadius)
         
         // 드롭다운 표시되는 위치 설정
         nameDropDown.anchorView = nameDropButton
@@ -167,7 +189,7 @@ class RestaurantTableViewCell: UITableViewCell {
     }
     
     func setCatNameData() {
-        nameDropDown.dataSource = viewModel.getCatNameFromCoreData()
+        nameDropDown.dataSource = viewModel.getCatNameToResVC()
         textDropDown.dataSource = []
     }
     
@@ -180,10 +202,12 @@ class RestaurantTableViewCell: UITableViewCell {
     
     // 셋업 - 애드뷰
     func setAddView() {
+        nameDropView.addSubview(nameHashLabel)
         nameDropView.addSubview(nameDropLabel)
         nameDropView.addSubview(nameDropImageView)
         nameDropView.addSubview(nameDropButton)
         
+        textDropView.addSubview(textHashLabel)
         textDropView.addSubview(textDropLabel)
         textDropView.addSubview(textDropImageView)
         textDropView.addSubview(textDropButton)
@@ -197,16 +221,33 @@ class RestaurantTableViewCell: UITableViewCell {
     // 셋업 - 오토 레이아웃
     func setAutoLayout() {
         
+        // nameHashLabel, textHashLabel 오토 레이아웃
+        NSLayoutConstraint.activate([
+            // nameHashLabel
+            nameHashLabel.leadingAnchor.constraint(equalTo: nameDropView.leadingAnchor, constant: 10),
+            nameHashLabel.topAnchor.constraint(equalTo: nameDropView.topAnchor, constant: 10),
+            nameHashLabel.bottomAnchor.constraint(equalTo: nameDropView.bottomAnchor, constant: -10),
+            nameHashLabel.widthAnchor.constraint(equalToConstant: 10),
+            
+            // textHashLabel
+            textHashLabel.leadingAnchor.constraint(equalTo: textDropView.leadingAnchor, constant: 10),
+            textHashLabel.topAnchor.constraint(equalTo: textDropView.topAnchor, constant: 10),
+            textHashLabel.bottomAnchor.constraint(equalTo: textDropView.bottomAnchor, constant: -10),
+            textHashLabel.widthAnchor.constraint(equalToConstant: 10)
+        ])
+        
         // nameDropLabel, textDropLabel 오토 레이아웃
         NSLayoutConstraint.activate([
             // nameDropLabel
-            nameDropLabel.leadingAnchor.constraint(equalTo: nameDropView.leadingAnchor, constant: 10),
+            nameDropLabel.leadingAnchor.constraint(equalTo: nameHashLabel.trailingAnchor, constant: 4),
             nameDropLabel.topAnchor.constraint(equalTo: nameDropView.topAnchor, constant: 10),
+            nameDropLabel.trailingAnchor.constraint(equalTo: nameDropImageView.leadingAnchor, constant: -4),
             nameDropLabel.bottomAnchor.constraint(equalTo: nameDropView.bottomAnchor, constant: -10),
 
             // textDropLabel
-            textDropLabel.leadingAnchor.constraint(equalTo: textDropView.leadingAnchor, constant: 10),
+            textDropLabel.leadingAnchor.constraint(equalTo: textHashLabel.trailingAnchor, constant: 4),
             textDropLabel.topAnchor.constraint(equalTo: textDropView.topAnchor, constant: 10),
+            textDropLabel.trailingAnchor.constraint(equalTo: textDropImageView.leadingAnchor, constant: -4),
             textDropLabel.bottomAnchor.constraint(equalTo: textDropView.bottomAnchor, constant: -10)
         ])
         
@@ -244,10 +285,10 @@ class RestaurantTableViewCell: UITableViewCell {
  
         // dropDownStackView 오토 레이아웃
         NSLayoutConstraint.activate([
-            dropDownStackView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            dropDownStackView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            dropDownStackView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            dropDownStackView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: 0),
             dropDownStackView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0),
-            dropDownStackView.heightAnchor.constraint(equalToConstant: 40)
+            dropDownStackView.heightAnchor.constraint(equalToConstant: CommonCGSize.hashTagHeight)
         ])
     }
     
