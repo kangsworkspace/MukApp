@@ -129,55 +129,30 @@ final class CategoryModel {
         }
     }
 
-    // 후보 식당 숫자 세팅 **** 코드 필요한지 체크하기 ****
-    func setResListNum(resNum: Int) {
-        resListNum = resNum
-    }
-    
-    // 후보 식당 숫자 리턴
-    func getResListNum() -> Int {
-        return resListNum
-    }
- 
-    // MARK: - RestaurantViewController
-    
-  
-    
+//    // 후보 식당 숫자 세팅 **** 코드 필요한지 체크하기 ****
+//    func setResListNum(resNum: Int) {
+//        resListNum = resNum
+//    }
+//    
+//    // 후보 식당 숫자 리턴
+//    func getResListNum() -> Int {
+//        return resListNum
+//    }    
     
     // MARK: - 기타
     // 코어 데이터에 저장할 카테고리 배열 세팅
-    func setCategoryNameArray(text: String, category: String) {
-        // 카테고리 텍스트 수정 // 카테고리 텍스트 추가
-        if category == "Name" {
-            self.selCatNameArray.append(text)
-            print("저장 후 selCatNameArray: \(self.selCatNameArray)")
-        } else if selCatNameArray.count == selCatTextArray.count {
-            self.selCatTextArray[selCatTextArray.count - 1] = text
-            print("저장 후 selCatTextArray: \(self.selCatTextArray)")
-            // 카테고리 텍스트  추가
-        } else {
-            self.selCatTextArray.append(text)
-            print("저장 후 selCatTextArray: \(self.selCatTextArray)")
-        }
-    }
-
-    // 저장할 때 사용?
-    private var selResData: Document?
-    
-    // resData 배열 리턴
-    func getSelResData () -> (Document) {
-        return selResData!
-    }
-    
-    // 코어 데이터에 저장할 resData 배열 세팅
-    func setResData(resData: Document) {
-        print("setResData")
-        print(resData.phone ?? "")
-        print(resData.placeName ?? "")
-        print(resData.placeURL ?? "")
-        print(resData.roadAddress ?? "")
-        print(resData.address ?? "")
-        print(resData.group ?? "")
-        selResData = resData
-    }
+//    func setCategoryNameArray(text: String, category: String) {
+//        // 카테고리 텍스트 수정 // 카테고리 텍스트 추가
+//        if category == "Name" {
+//            self.selCatNameArray.append(text)
+//            print("저장 후 selCatNameArray: \(self.selCatNameArray)")
+//        } else if selCatNameArray.count == selCatTextArray.count {
+//            self.selCatTextArray[selCatTextArray.count - 1] = text
+//            print("저장 후 selCatTextArray: \(self.selCatTextArray)")
+//            // 카테고리 텍스트  추가
+//        } else {
+//            self.selCatTextArray.append(text)
+//            print("저장 후 selCatTextArray: \(self.selCatTextArray)")
+//        }
+//    }
 }

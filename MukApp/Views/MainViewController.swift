@@ -52,9 +52,9 @@ class MainViewController: UIViewController {
         let label = UILabel()
         
         // 텍스트 설정
-        label.text = "1개 이상의 해시태그를 정해주세요"
+        label.text = "등록한 전체 맛집 ???개"
         label.textColor = .black
-        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -62,19 +62,6 @@ class MainViewController: UIViewController {
     
     // 테이블 뷰
     private let tableView = UITableView()
-    
-    // resListLabel
-    var resListLabel: UILabel = {
-        let label = UILabel()
-        
-        // 텍스트 설정
-        label.text = ""
-        label.textColor = .black
-        label.font = UIFont.boldSystemFont(ofSize: 12)
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
     
     // 카테고리 추가 버튼
     private var plusButton: UIButton = {
@@ -98,8 +85,13 @@ class MainViewController: UIViewController {
     
     // 카테고리 설정 카운트
     private var categoryCnt: Int = 1
-    
     private var isLoaded = false
+    
+    // 해시태그를 저장할 함수
+    var hashTagNameArray: [String] = ["선택해주세요"]
+    var hashTagTextArray: [String] = ["선택해주세요"]
+    var hashImageArray: [UIImage] = [MyImage.arrowDown]
+    lazy var nextNameArray: [String] = viewModel.getCatNameToMain()
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
@@ -175,7 +167,6 @@ class MainViewController: UIViewController {
         view.addSubview(menuButton)
         view.addSubview(categoryTextLabel)
         view.addSubview(tableView)
-        view.addSubview(resListLabel)
         view.addSubview(plusButton)
         view.addSubview(minusButton)
     }
@@ -230,14 +221,7 @@ class MainViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
             tableView.topAnchor.constraint(equalTo: categoryTextLabel.bottomAnchor, constant: 5),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
-            tableView.bottomAnchor.constraint(equalTo: resListLabel.topAnchor, constant: -20)
-        ])
-        
-        // resListLabel 오토 레이아웃
-        NSLayoutConstraint.activate([
-            resListLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
-            resListLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
-            resListLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40)
         ])
         
         // plusButton, minusButton 오토 레이아웃
@@ -258,24 +242,30 @@ class MainViewController: UIViewController {
     
     // MARK: - Function
     @objc func menuButtonTapped() {
-        viewModel.handleRouletteTapped(fromCurrentVC: self, animated: true)
+        viewModel.handleRouletteTapped(fromCurrentVC: self, selHashTagText: hashTagTextArray, animated: true)
     }
     
     // 플러스 버튼 눌림
     @objc func plusButtonTapped() {
-        // 뷰 모델의 handleMainPlusButtonTapped이 True 일 때
-        if viewModel.handleMainPlusButtonTapped() {
-            // 셀 추가 함수
-            addNewCell()
+        // catText가 결정되었을 때 조건
+        if hashTagTextArray.last != "선택해주세요" {
             
-            // Cell에 접근해서 다음 Cat Name Array 설정
-            setNextCatName()
+            categoryCnt += 1
+            
+            // 다음 Hash Name Array 설정
+            getNextHashName(hashTagNameArray: hashTagNameArray, hashTagTextArray: hashTagTextArray)
+            
+            // 셀 추가 함수
+            addHashTag()
+            
+            // 버튼 이미지 설정
+            hashImageArray = hashImageArray.enumerated().map { (index, element) in
+                return index == hashImageArray.count - 1 ? MyImage.arrowDown : MyImage.lock
+            }
             
             // + 버튼 색상 설정
             setPlusButtonTappedColor()
-        }
-        // 뷰 모델의 handleMainPlusButtonTapped이 False 일 때 -> 리턴
-        else {
+        } else {
             return
         }
     }
@@ -285,58 +275,52 @@ class MainViewController: UIViewController {
         // categoryCnt가 1이면 진행 X
         if categoryCnt == 1 {
             return
-        // categoryCnt가 1이 아니면 진행
+            // categoryCnt가 1이 아니면 진행
         } else {
             // 싱글톤 데이터 삭제
-            viewModel.handleMainMinusButtonTapped()
+            // viewModel.handleMainMinusButtonTapped()
             
             // Cell 삭제
-            deleteCell()
+            categoryCnt -= 1
+            
+            // deleteCell()
+            deleteHashTag()
+            
+            // 다음 Hash Name Array 설정
+            // Array에서 마지막 값을 뺀 배열
+            let hashTagNameArray = Array(hashTagNameArray.dropLast())
+            let hashTagTextArray = Array(hashTagTextArray.dropLast())
+            getNextHashName(hashTagNameArray: hashTagNameArray, hashTagTextArray: hashTagTextArray)
             
             // 버튼 컬러 설정
             setMinusButtonTappedColor()
+            
+            // +버튼 동작 가능
+            self.plusButton.isUserInteractionEnabled = true
         }
     }
     
     // 새로운 Cell 생성
-    func addNewCell() {
-        // 카테고리 카운트 + 1
-        categoryCnt += 1
-        print("categoryCnt: \(categoryCnt)")
-
-        // 테이블 뷰 마지막 순서에 셀 생성
-        tableView.insertRows(at: [IndexPath(row: categoryCnt - 1, section: 0)], with: .fade)
-        
-        // 셀의 Label.text = "선택해주세요"
-        let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! MainViewControllerTableViewCell
-        
-        cell.nameDropLabel.text = "선택해주세요"
-        cell.textDropLabel.text = "선택해주세요"
-    }
+    //    func addNewCell() {
+    //        // 카테고리 카운트 + 1
+    //        categoryCnt += 1
+    //        print("categoryCnt: \(categoryCnt)")
+    //
+    //        // 테이블 뷰 마지막 순서에 셀 생성
+    //        tableView.insertRows(at: [IndexPath(row: categoryCnt - 1, section: 0)], with: .fade)
+    //    }
     
     // 마지막 Cell 삭제
-    func deleteCell() {
-        categoryCnt -= 1
-        print("categoryCnt: \(categoryCnt)")
-        tableView.deleteRows(at: [IndexPath(row: categoryCnt, section: 0)], with: .fade)
-    }
+    //    func deleteCell() {
+    //        categoryCnt -= 1
+    //        print("categoryCnt: \(categoryCnt)")
+    //        tableView.deleteR ows(at: [IndexPath(row: categoryCnt, section: 0)], with: .fade)
+    //    }
     
     // 다음 Cell의 CategoryName 설정하기
-    func setNextCatName() {
-        // 셀 가져오기
-        let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! MainViewControllerTableViewCell
-        
-        // 싱글톤 데이터에 데이터 세팅
-        viewModel.setNextCatNameArray()
-        
-        // 셀에 데이터 할당
-        cell.nameDropDown.dataSource = viewModel.getNextCatNameArray()
-    }
-    
-    // 후보 맛집 레이블 바꾸기
-    func setResListText(resListNum: Int) {
-        resListLabel.text = "해당되는 맛집: \(resListNum)개"
-    }
+    //    func getNextCatName(selHashTagText: [String]) {
+    //        // viewModel.getNextCatNameArray(selHashTagText: selHashTagText)
+    //    }
     
     // 룰렛 색상 변경하기
     func setRouletteColor(resListNum: Int) {
@@ -358,13 +342,6 @@ class MainViewController: UIViewController {
         plusButton.backgroundColor = MyColor.disableColor
         // - 버튼 흰색
         minusButton.backgroundColor = .white
-        // 마지막 이전 셀 색상 변경
-        let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 2, section: 0)) as! MainViewControllerTableViewCell
-        cell.nameDropView.backgroundColor = MyColor.themeColor
-        cell.textDropView.backgroundColor = MyColor.themeColor
-        
-        // cell 터치 불가 처리
-        cell.isUserInteractionEnabled = false
     }
     
     func setMinusButtonTappedColor() {
@@ -373,39 +350,71 @@ class MainViewController: UIViewController {
         }
         
         plusButton.backgroundColor = .white
-        
-        // 마지막 이전 셀 색상 변경
-        let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! MainViewControllerTableViewCell
-        cell.nameDropView.backgroundColor = .white
-        cell.textDropView.backgroundColor = .white
-        
-        // cell 터치 가능 처리
-        cell.isUserInteractionEnabled = true
     }
     
     func resetHashTag() {
         // 카테고리 전체 삭제
         for _ in 1...categoryCnt {
-            deleteCell()
+            // deleteCell()
         }
         
         // 카테고리 추가
-        addNewCell()
+        // addNewCell()
         
         // 싱글톤 데이터 처리 (후보식당 관련)
         viewModel.resetHashTagData()
-
+        
         // 카테고리 데이터 설정
         let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! MainViewControllerTableViewCell
         cell.setDropDownData()
         
+        cell.textDropLabel.text = "선택해주세요"
+        
         // UI 변경
         // 버튼 그레이로
-        menuButton.setTitleColor(MyColor.disableColor, for: .normal)
-        // + 불가능
+        menuButton.backgroundColor = MyColor.disableColor
+        // +, - 불가능
         plusButton.setTitleColor(MyColor.disableColor, for: .normal)
+        minusButton.setTitleColor(MyColor.disableColor, for: .normal)
+        
+        // +버튼 동작은 가능
+        self.plusButton.isUserInteractionEnabled = true
         
         // 레이블 초기화
+        categoryTextLabel.text = "해당되는 맛집: \(0)개"
+    }
+    
+    private func setCatTextLabel(resListNum: Int) {
+        categoryTextLabel.text = "해당되는 맛집: \(resListNum)개"
+    }
+    
+    // 해시태그 추가
+    func addHashTag() {
+        hashTagNameArray.append("선택해주세요")
+        hashTagTextArray.append("선택해주세요")
+        hashImageArray.append(MyImage.arrowDown)
+        tableView.reloadData()
+        
+        print("hashTagNameArray: \(hashTagNameArray)")
+        print("hashTagTextArray: \(hashTagTextArray)")
+    }
+    
+    // 해시태그 삭제
+    func deleteHashTag() {
+        hashTagNameArray.removeLast()
+        hashTagTextArray.removeLast()
+        hashImageArray.removeLast()
+        hashImageArray[hashImageArray.count - 1] = MyImage.arrowDown
+        tableView.reloadData()
+    }
+    
+    // MARK: - 클로저
+//    var getNextHashName: () -> () = {}
+    
+    func getNextHashName(hashTagNameArray: [String], hashTagTextArray: [String]) {
+        self.nextNameArray = self.viewModel.getNextCatNameArray(selHashTagName: self.hashTagNameArray, selHashTagText: self.hashTagTextArray)
+        print("nextNameArray: \(self.nextNameArray))")
+        print("+ 버튼 동작, getNextHash함수 동작")
     }
 }
 
@@ -426,21 +435,69 @@ extension MainViewController: UITableViewDataSource {
         cell.backgroundColor = .white
         cell.selectionStyle = .none
         
-        // 카테고리 텍스트가 바뀌었을 때
-        cell.catTextSet = {
-            // 후보 식당 갯수 가져오기
-            let resListNum = self.viewModel.getResListNum()
-
+        // cell에 정보 할당
+        cell.nameDropLabel.text = hashTagNameArray[indexPath.row]
+        cell.textDropLabel.text = hashTagTextArray[indexPath.row]
+        cell.nameDropImageView.image = hashImageArray[indexPath.row]
+        cell.textDropImageView.image = hashImageArray[indexPath.row]
+        cell.nameDropDown.dataSource = nextNameArray
+        
+        // + 버튼 동작 -> getNextHash함수로 다음 데이터 세팅
+//        getNextHashName = {
+//            self.nextNameArray = self.viewModel.getNextCatNameArray(selHashTagName: self.hashTagNameArray, selHashTagText: self.hashTagTextArray)
+//            print("nextNameArray: \(self.nextNameArray))")
+//            print("+ 버튼 동작, getNextHash함수 동작")
+//        }
+        
+        // lock이 아닌 셀만 터치 가능
+        if hashImageArray[indexPath.row] == MyImage.lock {
+            cell.isUserInteractionEnabled = false
+        } else {
+            cell.isUserInteractionEnabled = true
+        }
+        
+        // 해시태그 변경 시 변경값과 indexPath.row를 클로저로 전달받음
+        cell.hashTagNameChanged = { hashTagName, indexRow in
+            self.hashTagNameArray[indexRow] = hashTagName
+            self.hashTagTextArray[indexRow] = "선택해주세요"
+            cell.textDropLabel.text = self.hashTagTextArray[indexPath.row]
+            self.plusButton.backgroundColor = MyColor.disableColor
+        }
+        
+        // 해시태그 텍스트 변경 시
+        cell.hashTagTextChanged = { hashTagText, indexRow in
+            self.hashTagTextArray[indexRow] = hashTagText
+            print("hashTagNameArray: \(self.hashTagNameArray)")
+            print("hashTagTextArray: \(self.hashTagTextArray)")
+            
+            var resListNum = 0
+            
+            // 예상 후보 식당 갯수 찾기
+            self.viewModel.handleCatTextSelAction(selHashTagText: self.hashTagTextArray) { resNum in
+                resListNum = resNum
+            }
+            
             // 룰렛 색상 설정하기
             self.setRouletteColor(resListNum: resListNum)
             
             // 후보 식당 텍스트 바꾸기
-            self.setResListText(resListNum: resListNum)
+            self.setCatTextLabel(resListNum: resListNum)
             
-            // +버튼 색상 설정하기?
-            self.setPlusButtonColorWhite()
+            // +버튼 색 설정
+            self.plusButton.backgroundColor = .white
+            
+            //            // 후보 식당이 0일때 +버튼 사용 불가
+            //            if resListNum == 0 {
+            //                // or 전체 식당 로직을 넣어도 좋을듯
+            //                self.plusButton.isUserInteractionEnabled = false
+            //                self.plusButton.setTitleColor(MyColor.disableColor, for: .normal)
+            //                print("후보식당 x")
+            //            } else {
+            //                // +버튼 색상 설정하기?
+            //                self.plusButton.isUserInteractionEnabled = true
+            //                self.setPlusButtonColorWhite()
+            //            }
         }
-        
         return cell
     }
 }

@@ -28,6 +28,10 @@ class MainViewControllerTableViewCell: UITableViewCell {
         return dropDown
     }()
     
+    // DropDown 이미지 처리를 위한 변수
+    var isNameDropShowed = false
+    var isTextDropShowed = false
+    
     // MARK: - Interface
     // nameDropDown UI: 카테고리 이름 UI
     var nameDropView: UIView = {
@@ -146,6 +150,18 @@ class MainViewControllerTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // cell 초기화
+    override func prepareForReuse() {
+        nameDropLabel.text = "선택해주세요"
+        textDropLabel.text = "선택해주세요"
+        self.isUserInteractionEnabled = true
+        nameDropImageView.image = UIImage(systemName: "arrowtriangle.down.fill")
+        textDropImageView.image = UIImage(systemName: "arrowtriangle.down.fill")
+        isNameDropShowed = false
+        isTextDropShowed = false
+        textDropDown.dataSource = []
+    }
+    
     func setMain() {
         // pickerview가 터치 되도록 컨텐츠 뷰 뒤로 보내기
         sendSubviewToBack(contentView)
@@ -173,25 +189,62 @@ class MainViewControllerTableViewCell: UITableViewCell {
         // nameDropDown 선택 시 이벤트 처리
         nameDropDown.selectionAction = { [weak self] (index, item) in
             // 싱글톤 데이터 설정
-            self!.viewModel.handleMainCatNameSelAction(item: item)
+
+            // 뷰컨의 hashNameArray에 값 전달하기
+            // 현재 cell의 indexPath 가져오기
+            if let tableView = self!.superview as? UITableView {
+                if let indexPath = tableView.indexPath(for: self!) {
+                    // indexPath.row값과 item 전달
+                    self!.hashTagNameChanged(item, indexPath.row)
+                    print("전달하는 text: \(item), 전달하는 row: \(indexPath.row)")
+                }
+            }
             
             // 레이블 텍스트 변경
             self!.nameDropLabel.text = item
             
             // 텍스트 데이터 설정
             self!.setCatTextData(item: item)
+            
+            // 이미지 원래대로 돌리기
+            self!.nameDropImageView.image = UIImage(systemName: "arrowtriangle.down.fill")
+            self!.isNameDropShowed = false
         }
         
         // textDropDown 선택 시 이벤트 처리
         textDropDown.selectionAction = { [weak self] (index, item) in
             // 싱글톤 데이터 설정
-            self!.viewModel.handleCatTextSelAction(item: item) {item in
-                
+//            self!.viewModel.handleCatTextSelAction(item: item) {item in
+//                
+//            }
+            
+            // 뷰컨의 hashTextArray에 값 전달하기
+            // 현재 cell의 indexPath 가져오기
+            if let tableView = self!.superview as? UITableView {
+                if let indexPath = tableView.indexPath(for: self!) {
+                    // indexPath.row값과 item 전달
+                    self!.hashTagTextChanged(item, indexPath.row)
+                    
+                    print("전달하는 text: \(item), 전달하는 row: \(indexPath.row)")
+                }
             }
             
             // 레이블 텍스트 변경
             self!.textDropLabel.text = item
-            self!.catTextSet()
+            // self!.catTextSet()
+            
+            // 이미지 원래대로 돌리기
+            self!.textDropImageView.image = UIImage(systemName: "arrowtriangle.down.fill")
+            self!.isTextDropShowed = false
+        }
+        
+        // 드랍다운 취소 시 이미지 원래대로 돌리기
+        nameDropDown.cancelAction = {
+            self.nameDropImageView.image = UIImage(systemName: "arrowtriangle.down.fill")
+        }
+        // 드랍다운 취소 시 이미지 원래대로 돌리기
+        textDropDown.cancelAction = {
+            self.textDropImageView.image = UIImage(systemName: "arrowtriangle.down.fill")
         }
     }
     
@@ -202,10 +255,7 @@ class MainViewControllerTableViewCell: UITableViewCell {
     }
     
     // nameDropDown 선택 시 해당하는 Text 가져오기
-    func setCatTextData(item: String) {
-        // 텍스트 = "선택해주세요"
-        self.textDropLabel.text = "선택해주세요"
-        
+    func setCatTextData(item: String) {        
         // Name에 해당하는 데이터 가져와서 할당하기
         viewModel.changeMainNameSelAction(item: item, completion: { categoryTextArray in
             self.textDropDown.dataSource = categoryTextArray
@@ -303,18 +353,46 @@ class MainViewControllerTableViewCell: UITableViewCell {
         ])
     }
     
-    var catTextSet: () -> () = {}
+    // var catTextSet: () -> () = {}
     
     // MARK: - Function
     @objc func nameDropButtonTapped() {
-        nameDropDown.show()
+        // DropDown 버튼 문제 해결하기 위해( .show()가 씹힌다.)
+        // 버튼을 처음 누를 때 -> TRUE -> 이후 버튼을 다시 눌러도 False
+        isNameDropShowed.toggle()
+
+        // NameDrop과 TextDrop을 연달아 눌렀을 때 매끄럽게 동작하기 위해
+        isTextDropShowed = false
+        
+        // 클릭했을 때 이미지 변경
+        if isNameDropShowed {
+            nameDropDown.show()
+            self.nameDropImageView.image = UIImage(systemName: "arrowtriangle.up.fill")
+        } else {
+            self.nameDropImageView.image = UIImage(systemName: "arrowtriangle.down.fill")
+        }
     }
     
     @objc func textDropButtonTapped() {
-        textDropDown.show()
+        // DropDown 버튼 문제 해결하기 위해( .show()가 씹힌다.)
+        // 버튼을 처음 누를 때 -> TRUE -> 이후 버튼을 다시 눌러도 False
+        isTextDropShowed.toggle()
+        // NameDrop과 TextDrop을 연달아 눌렀을 때 매끄럽게 동작하기 위해
+        isNameDropShowed = false
+        
+        // 클릭했을 때 이미지 변경
+        if isTextDropShowed {
+            textDropDown.show()
+            self.textDropImageView.image = UIImage(systemName: "arrowtriangle.up.fill")
+        } else {
+            self.textDropImageView.image = UIImage(systemName: "arrowtriangle.down.fill")
+        }
     }
+    
+    // 해시태그 값이 변했을 때 값과 indexPath.row를 전달할 클로저
+    var hashTagNameChanged: ((String, Int) -> Void) = {_,_ in }
+    var hashTagTextChanged: ((String, Int) -> Void) = {_,_ in }
 }
-
 // MARK: - Extension
 
 

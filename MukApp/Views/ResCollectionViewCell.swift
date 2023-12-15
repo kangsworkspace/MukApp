@@ -9,6 +9,8 @@ import UIKit
 
 class ResCollectionViewCell: UICollectionViewCell {
     
+    var indexPathNum: Int = 0
+    
     // MARK: - Interfave
     var imageUrl: String? {
         didSet {

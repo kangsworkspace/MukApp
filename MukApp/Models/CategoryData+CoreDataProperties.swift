@@ -2,7 +2,7 @@
 //  CategoryData+CoreDataProperties.swift
 //  MukApp
 //
-//  Created by Kang on 12/1/23.
+//  Created by Kang on 12/12/23.
 //
 //
 
@@ -18,6 +18,7 @@ extension CategoryData {
 
     @NSManaged public var categoryName: String?
     @NSManaged public var categoryText: String?
+    @NSManaged public var order: Int32
     @NSManaged public var menu: RestaurantData?
 
 }

@@ -33,46 +33,16 @@ final class MainViewModel {
     
     // MARK: - MainViewController(메인 화면, 룰렛 돌리는 페이지)
     // 룰렛 버튼이 눌렸을 때
-    func handleRouletteTapped(fromCurrentVC: UIViewController, animated: Bool) {
-        if categoryModel.getResListNum() == 0 {
-            print("후보가 없습니다!")
-            return
-        }
-        
-        // 선택된 카테고리 배열 가져오기
-        let selCatTextArray = categoryModel.getSelCatTextArray()[0]
-        
-        // 코어 데이터에서 맛집 데이터 가져오기
-        resDataList = coreDataManager.getDataFromCoreData()
-        
-        // 옵셔널 해제
-        guard let resDataList = resDataList else { return }
-        
-        // 해당하는 식당을 담을 빈 배열
-        var resArray: [String] = []
-        var targetResDataList: [RestaurantData] = []
-        
-        // 메뉴 데이터 배열 -> 카테고리 -> 카테고리 이름을 가진 카테고리 엔티티 -> 카테고리 텍스트 -> 반복문으로 할당
-        for resData in resDataList {
-            if let category = resData.category as? Set<CategoryData> {
-                for category in category {
-                    if category.categoryText == selCatTextArray {
-                        guard let resName = resData.placeName else { return }
-                        resArray.append(resName)
-                        targetResDataList.append(resData)
-                    }
-                }
-            }
-        }
-        
-        print("후보 식당: \(resArray)")
+    func handleRouletteTapped(fromCurrentVC: UIViewController, selHashTagText: [String], animated: Bool) {
+        // 해당되는 식당 찾기
+        let targetRes = getTargetRestaurant(selHashTagText: selHashTagText)
         
         // 화면 이동 로직
         let navVC = fromCurrentVC.navigationController
         let nextVC = RouletteViewController(viewModel: self)
         
         // 데이터 전달
-        nextVC.targetResDataList = targetResDataList
+        nextVC.targetResDataList = targetRes
         
         // TestViewController로 이동
         nextVC.modalPresentationStyle = .fullScreen
@@ -80,19 +50,19 @@ final class MainViewModel {
     }
     
     // 카테고리 텍스트가 결정되었을 때 -> 후보 식당 찾기
-    func selCatText() {
-        // 텍스트를 만족하는 ResData 가져오기
-        let resultResArray = getRouletteTarget()
-        
-        // 후보 식당 갯수 셋
-        categoryModel.setResListNum(resNum: resultResArray.count)
-        
-        print(resultResArray.count)
-        
-        for resultRes in resultResArray {
-            print(resultRes.placeName ?? "데이터 없음")
-        }
-    }
+//    func selCatText(selHashTagText: [String]) {
+//        // 텍스트를 만족하는 ResData 가져오기
+//        let resultResArray = getRouletteTarget(selHashTagText: selHashTagText)
+//        
+//        // 후보 식당 갯수 셋
+//        categoryModel.setResListNum(resNum: resultResArray.count)
+//        
+//        // 해당 식당 프린트
+//        print(resultResArray.count)
+//        for resultRes in resultResArray {
+//            print(resultRes.placeName ?? "데이터 없음")
+//        }
+//    }
     
     // 코어 데이터에서 CategoryName 가져오기
     func getCatNameToMain() -> [String] {
@@ -161,51 +131,79 @@ final class MainViewModel {
     }
     
     // 카테고리 텍스트 선택 이벤트
-    func handleCatTextSelAction(item: String, completion: @escaping (String) -> Void) {
-        // 데이터 저장
-        self.categoryModel.setCategoryTextArray(text: (item))
-        selCatText()
-        completion(item)
+    func handleCatTextSelAction(selHashTagText: [String], completion: @escaping (Int) -> Void) {
+        // 텍스트를 만족하는 ResData 가져오기
+        let resultResArray = getTargetRestaurant(selHashTagText: selHashTagText)
+
+        // 해당 식당 프린트
+        print(resultResArray.count)
+        for resultRes in resultResArray {
+            print(resultRes.placeName ?? "데이터 없음")
+        }
+        completion(resultResArray.count)
     }
     
-    // Next Category Name Array 리턴
-    func getNextCatNameArray() -> [String] {
-        return categoryModel.getNextNameArray()
-    }
-    
-    // 후보 식당 수 리턴
-    func getResListNum() -> Int {
-        return categoryModel.getResListNum()
+    // 다음 CatNameArray 정하는 로직
+    func getNextCatNameArray(selHashTagName: [String], selHashTagText: [String]) -> [String] {
+        // 해당되는 맛집 목록
+        let resSelDataList = getTargetRestaurant(selHashTagText: selHashTagText)
+        
+        var nextCatNameArray: [String] = []
+
+        // 후보 식당에 포함되는 CatName 가져오기
+        for resSelData in resSelDataList {
+            print("후보 식당: \(resSelData.placeName)")
+            // 카테고리 옵셔널 해제
+            guard let categoryDataList = resSelData.category else { return ["error 해당 식당 없음"]}
+            // categoryData 반복문
+            for categoryData in categoryDataList as! Set<CategoryData> {
+                if let categoryName = categoryData.categoryName {
+                    nextCatNameArray.append(categoryName)
+                    print("후보 식당: \(resSelData.placeName), 추가된 카테고리 네임: \(categoryName)")
+                }
+            }
+        }
+
+        // 중복된 값 제거
+        nextCatNameArray = Array(Set(nextCatNameArray))
+        print("중복값 제거 후: \(nextCatNameArray)")
+
+        print("이전값: \(selHashTagName)")
+
+        // 이전 값 제거
+        nextCatNameArray = nextCatNameArray.filter { !selHashTagName.contains($0) }
+        print("이전값 제거 후: \(nextCatNameArray)")
+
+
+        print("결과: \(nextCatNameArray)")
+        return nextCatNameArray
     }
     
     func resetHashTagData() {
         categoryModel.resetHashTagData()
     }
     
-    // MARK: - RouletteViewController(룰렛 돌아가는 페이지)
-    func goResultViewController(fromCurrentVC: UIViewController, targetRes: RestaurantData,animated: Bool) {
-        let resultVC = ResultViewController(viewModel: self)
-        resultVC.targetRes = targetRes
-        goNextVC(fromCurrentVC: fromCurrentVC, nextViewController: resultVC, animated: animated)
+    // 해쉬 텍스트에 해당하는 맛집 찾는 로직
+    func getTargetRestaurant(selHashTagText: [String]) -> [RestaurantData] {
+        // 코어 데이터에서 맛집 데이터 가져오기
+        let resDataList = coreDataManager.getDataFromCoreData()
+        
+        // 로직 (텍스트 카테고리를 모두 만족하는 resData)
+        let targetResArray = resDataList.filter { resData in
+            // resData의 CategoryList에 접근
+            guard let categoryDataList = resData.category as? Set<CategoryData> else { return false }
+            
+            // resData의 categoryDataList가 selCatTextArray를 모두 포함하는 경우 해당 resData TRUE 리턴
+            return selHashTagText.filter { $0 != "" }.allSatisfy { selCatText in
+                categoryDataList.contains { categoryData in
+                    categoryData.categoryText?.contains(selCatText) ?? false
+                }
+            }
+        }
+        return targetResArray
     }
     
     // MARK: - ResViewController (맛집 추가/관리 페이지)
-    // 저장된 맛집 셀 동작
-    func handleEditCellTapped(resData: RestaurantData, fromCurrentVC: UIViewController, animated: Bool) {
-        let navVC = fromCurrentVC.navigationController
-        let nextVC = RestaurantViewController(viewModel: self)
-        
-        // 데이터 전달
-        nextVC.restaurantCoreData = resData
-        
-        // CategoryModel에 데이터 전달(나중에 코어 데이터로 저장할수도 있기 때문)
-        // categoryModel.setResData(resData: resData)
-        
-        // RestaurantViewController로 이동
-        nextVC.modalPresentationStyle = .fullScreen
-        navVC?.pushViewController(nextVC, animated: true)
-    }
-    
     // "맛집 추가" 버튼 동작 후 화면 이동
     func handleAddResButtonTapped(fromCurrentVC: UIViewController, animated: Bool) {
         let navVC = fromCurrentVC.navigationController
@@ -216,75 +214,46 @@ final class MainViewModel {
         navVC?.pushViewController(nextVC, animated: true)
     }
     
-    // 다음 CatNameArray 정하는 로직
-    func setNextCatNameArray() {
-                
-        let resSelDataList = getRouletteTarget()
-        
-        // next에 해당하는 식당 리스트의 Cat Name
-        var nextCatNameArray: [String] = []
-        let selCatNameArray = categoryModel.getSelCatNameArray()
-
-        // 후보 식당 -> CatName 가져오기
-        for resSelData in resSelDataList {
-            print("후보 식당: \(resSelData.placeName)")
-            // 카테고리 옵셔널 해제
-            guard let categoryDataList = resSelData.category else { return }
-            // categoryData 반복문
-            for categoryData in categoryDataList as! Set<CategoryData> {
-                if let categoryName = categoryData.categoryName {
-                    nextCatNameArray.append(categoryName)
-                    print("후보 식당: \(resSelData.placeName), 추가된 카테고리 네임: \(categoryName)")
+    func collectionCellLongPressed(savedResData: RestaurantData, fromVC: UIViewController, completion: @escaping () -> Void) {
+        // 얼럿 창 띄우기
+        addDeleteAlert(fromVC: fromVC) { delete in
+            // 삭제를 눌렀을 때
+            if delete {
+                // 삭제
+                self.coreDataManager.deleteFromCoreData(savedResData: savedResData) {
                 }
+                completion()
+                return
+            } else {
+                completion()
+                return
             }
         }
-        
-        // 중복된 값 제거
-        nextCatNameArray = Array(Set(nextCatNameArray))
-        print("중복값 제거 후: \(nextCatNameArray)")
-        
-        print("이전값: \(selCatNameArray)")
-        
-        // 이전 값 제거
-        nextCatNameArray = nextCatNameArray.filter { !selCatNameArray.contains($0) }
-        print("이전값 제거 후: \(nextCatNameArray)")
-        
-        // next
-        categoryModel.setNextNameArray(catNameArray: nextCatNameArray)
-        
-        print("결과: \(nextCatNameArray)")
     }
     
-    
-    func getRouletteTarget() -> [RestaurantData] {
-        // 선택된 카테고리 배열 가져오기
-        let selCatTextArray = categoryModel.getSelCatTextArray()
-        
-        // 코어 데이터에서 맛집 데이터 가져오기
-        let resDataList = coreDataManager.getDataFromCoreData()
-        
-        // 로직 (텍스트 카테고리를 모두 만족하는 resData)
-        let targetResArray = resDataList.filter { resData in
-            
-            // resData의 CategoryList에 접근
-            guard let categoryDataList = resData.category as? Set<CategoryData> else { return false }
-            
-            // resData의 categoryDataList가 selCatTextArray를 모두 포함하는 경우 해당 resData TRUE 리턴
-            return selCatTextArray.filter { $0 != "" }.allSatisfy { selCatText in
-                categoryDataList.contains { categoryData in
-                    categoryData.categoryText?.contains(selCatText) ?? false
-                }
-            }
+    private func addDeleteAlert(fromVC: UIViewController, completion: @escaping (Bool) -> Void) {
+        let alert = UIAlertController(title: "맛집 삭제", message: "정말 맛집을 삭제하시겠습니까?", preferredStyle: .alert)
+        // alert창 1
+        let cancel = UIAlertAction(title: "취소", style: .cancel) { cancelAction in
+            completion(false)
         }
-        return targetResArray
+        
+        // alert창 2
+        let ok = UIAlertAction(title: "삭제", style: .destructive) { saveAction in
+            completion(true)
+        }
+        
+        alert.addAction(cancel)
+        alert.addAction(ok)
+        
+        // 얼럿 창 띄우기
+        fromVC.present(alert, animated: true, completion: nil)
     }
-    
-    // MARK: - EditResViewController
     
     // MARK: - RestaurantViewController
-    // 맛집 정보 수정 (수정 버튼 눌렸을 때)
+    // 맛집 정보 수정 (수정/추가 버튼 눌렸을 때)
     func handleUpdateResData(restaurantData: RestaurantData, catNameArray: [String], catTextArray: [String]) {
-        coreDataManager.updateCoreData(newResData: restaurantData, catNameArray: catNameArray, catTextArray: catTextArray) {
+        coreDataManager.updateCoreData(savedResData: restaurantData, catNameArray: catNameArray, catTextArray: catTextArray) {
             print("정보 수정 완료")
         }
     }
@@ -353,12 +322,12 @@ final class MainViewModel {
         let placeName = restaurantData.placeName ?? ""
         let roadAddress = restaurantData.roadAddress ?? ""
         let placeURL = restaurantData.placeURL ?? ""
-                
+        
         guard catNameArray.count == catTextArray.count else {
             fatalError("The length of catNameArray and catTextArray must be the same.")
         }
         
-        coreDataManager.testCreateCoreData(address: address, group: group, phone: phone, placeName: placeName, roadAddress: roadAddress, placeURL: placeURL, categoryNameArray: catNameArray, categoryTextArray: catTextArray) {
+        coreDataManager.saveResToCoreData(address: address, group: group, phone: phone, placeName: placeName, roadAddress: roadAddress, placeURL: placeURL, categoryNameArray: catNameArray, categoryTextArray: catTextArray) {
             print("테스트 최종 성공 텍스트")
         }
     }
@@ -420,29 +389,7 @@ final class MainViewModel {
         }
     }
     
-    // 검색된 맛집 Cell 동작
-    func handleResCellTapped(resData: Document, fromCurrentVC: UIViewController, animated: Bool) {
-        let navVC = fromCurrentVC.navigationController
-        let nextVC = RestaurantViewController(viewModel: self)
-        
-        // 데이터 전달
-        nextVC.restaurantAPIData = resData
-        
-        // CategoryModel에 데이터 전달(나중에 코어 데이터로 저장할수도 있기 때문)
-        categoryModel.setResData(resData: resData)
-        
-        // RestaurantViewController로 이동
-        nextVC.modalPresentationStyle = .fullScreen
-        navVC?.pushViewController(nextVC, animated: true)
-    }
-    
-    // MARK: - Common
-    // 코어 데이터에서 저장된 맛집 데이터 가져오기
-    func getDataFromCoreData() -> [RestaurantData] {
-        let resList = coreDataManager.getDataFromCoreData()
-        return resList
-    }
-    
+    // MARK: - 화면 이동 로직
     // 루트 뷰로 돌아가기
     func goBackRootView(fromCurrentVC: UIViewController, animated: Bool) {
         // 현재 뷰 컨트롤러
@@ -450,13 +397,49 @@ final class MainViewModel {
         navVC?.popToRootViewController(animated: true)
     }
     
+    // 룰렛이 돌아간 후 -> 결과 창으로 이동
+    func goResultViewController(fromCurrentVC: UIViewController, targetRes: RestaurantData,animated: Bool) {
+        let resultVC = ResultViewController(viewModel: self)
+        resultVC.targetRes = targetRes
+        pushToNextVC(fromCurrentVC: fromCurrentVC, nextViewController: resultVC, animated: animated)
+    }
+    
+    // 저장된 레스토랑 컨트롤러로 이동
+    func goRestaurantController(resData: RestaurantData, fromCurrentVC: UIViewController, animated: Bool) {
+        // 이동할 화면
+        let nextVC = RestaurantViewController(viewModel: self)
+        // 데이터 전달
+        nextVC.restaurantCoreData = resData
+        // 화면 이동
+        pushToNextVC(fromCurrentVC: fromCurrentVC, nextViewController: nextVC, animated: animated)
+    }
+    
+    // 검색된 레스토랑 컨트롤러로 이동
+    func goSearchedRestaurantController(resData: Document, fromCurrentVC: UIViewController, animated: Bool) {
+        // 이동할 화면
+        let nextVC = RestaurantViewController(viewModel: self)
+        // 데이터 전달
+        nextVC.restaurantAPIData = resData
+        // CategoryModel에 데이터 전달(나중에 코어 데이터로 저장할수도 있기 때문) *** 필요한지 체크 ***
+        // categoryModel.setResData(resData: resData)
+        // 화면 이동
+        pushToNextVC(fromCurrentVC: fromCurrentVC, nextViewController: nextVC, animated: true)
+    }
+    
     // 화면 이동 로직
-    private func goNextVC(fromCurrentVC: UIViewController, nextViewController: UIViewController, animated: Bool) {
+    private func pushToNextVC(fromCurrentVC: UIViewController, nextViewController: UIViewController, animated: Bool) {
         // 화면 이동 로직
         let navVC = fromCurrentVC.navigationController
         
         nextViewController.modalPresentationStyle = .fullScreen
         navVC!.pushViewController(nextViewController, animated: true)
+    }
+    
+    // MARK: - Common
+    // 코어 데이터에서 저장된 맛집 데이터 가져오기
+    func getDataFromCoreData() -> [RestaurantData] {
+        let resList = coreDataManager.getDataFromCoreData()
+        return resList
     }
     
     // 코어 데이터에서 CategoryName 리스트 가져오기 -> catNameArray에 할당

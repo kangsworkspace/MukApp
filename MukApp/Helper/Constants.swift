@@ -20,3 +20,22 @@ public enum CommonCGSize {
     // 드랍 다운 뷰 둥글게 설정(해시태그 Cell)
     static let dropDownViewCornerRadius = CGFloat(12)
 }
+
+public enum MyColor {
+    // 테마 컬러 - 분홍
+    static let themeColor = UIColor(hexString: "#ff477e")
+    
+    // 테마 컬러 - 동작하지 않을 때
+    static let disableColor = UIColor(hexString: "#b2b2b2")
+}
+
+public enum MyImage {
+    // 아래 화살표
+    static let arrowDown = UIImage(systemName: "arrowtriangle.down.fill")!
+    
+    // 위 화살표
+    static let arrowUp = UIImage(systemName: "arrowtriangle.up.fill")!
+    
+    // 자물쇠
+    static let lock = UIImage(systemName: "lock.fill")!
+}

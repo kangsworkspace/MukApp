@@ -116,7 +116,7 @@ extension SearchViewController: UITableViewDelegate {
     // 셀이 선택이 되었을때 어떤 동작을 할 것인지 뷰컨트롤러에게 물어봄
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let resData = viewModel.getResArray()
-        viewModel.handleResCellTapped(resData: resData[indexPath.row], fromCurrentVC: self, animated: true)
+        viewModel.goSearchedRestaurantController(resData: resData[indexPath.row], fromCurrentVC: self, animated: true)
     }
 }
 

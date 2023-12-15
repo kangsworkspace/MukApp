@@ -9,7 +9,7 @@ import UIKit
 import DropDown
 
 class RestaurantTableViewCell: UITableViewCell {
-
+    
     // MARK: - 뷰 모델
     let viewModel: MainViewModel
     
@@ -121,7 +121,7 @@ class RestaurantTableViewCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-
+    
     var dropDownStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -133,7 +133,6 @@ class RestaurantTableViewCell: UITableViewCell {
         return stackView
     }()
     
-    
     // MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.viewModel = MainViewModel(coreDataManager: CoreDataManager(), apiServie: APIService())
@@ -141,9 +140,14 @@ class RestaurantTableViewCell: UITableViewCell {
         
         setMain()
     }
-    
+        
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        nameDropLabel.text = "선택해주세요"
+        textDropLabel.text = "선택해주세요"
     }
     
     
@@ -177,27 +181,49 @@ class RestaurantTableViewCell: UITableViewCell {
                 self!.nameDropLabel.text = item
                 // setCatTextData에 item 전달 -> item에 해당하는 text 찾는 로직 실행
                 self!.setCatTextData(item: item)
+                // textDropDown 초기화
+                self?.textDropLabel.text = "선택해주세요"
+                
+                // 뷰컨의 hashNameArray에 값 전달하기
+                // 현재 cell의 indexPath 가져오기
+                if let tableView = self!.superview as? UITableView {
+                    if let indexPath = tableView.indexPath(for: self!) {
+                        // indexPath.row값과 item 전달
+                        self!.hashTagNameChanged(item, indexPath.row)
+                    }
+                }
             }
         }
         
         // textDropDown 선택 시 이벤트 처리
         textDropDown.selectionAction = { [weak self] (index, item) in
             self!.viewModel.handleCatSelActionT(fromVC: (self?.window!.rootViewController!)!, item: item, category: "text") {item in
+                // TextDropLabel 변경
                 self!.textDropLabel.text = item
+                
+                // 뷰컨의 hashTextArray에 값 전달하기
+                // 현재 cell의 indexPath 가져오기
+                if let tableView = self!.superview as? UITableView {
+                    if let indexPath = tableView.indexPath(for: self!) {
+                        // indexPath.row값과 item 전달
+                        self!.hashTagTextChanged(item, indexPath.row)
+                    }
+                }
             }
         }
     }
     
     func setCatNameData() {
         nameDropDown.dataSource = viewModel.getCatNameToResVC()
-        textDropDown.dataSource = []
     }
     
     func setCatTextData(item: String) {
         // 전달받은 setCatName -> 뷰 모델에서 해당하는 Text 가져오기
-        viewModel.changeNameSelAction(item: item, completion: { categoryTextArray in
-            self.textDropDown.dataSource = categoryTextArray
-        })
+        if item != "선택해주세요" {
+            viewModel.changeNameSelAction(item: item, completion: { categoryTextArray in
+                self.textDropDown.dataSource = categoryTextArray
+            })
+        }
     }
     
     // 셋업 - 애드뷰
@@ -243,7 +269,7 @@ class RestaurantTableViewCell: UITableViewCell {
             nameDropLabel.topAnchor.constraint(equalTo: nameDropView.topAnchor, constant: 10),
             nameDropLabel.trailingAnchor.constraint(equalTo: nameDropImageView.leadingAnchor, constant: -4),
             nameDropLabel.bottomAnchor.constraint(equalTo: nameDropView.bottomAnchor, constant: -10),
-
+            
             // textDropLabel
             textDropLabel.leadingAnchor.constraint(equalTo: textHashLabel.trailingAnchor, constant: 4),
             textDropLabel.topAnchor.constraint(equalTo: textDropView.topAnchor, constant: 10),
@@ -259,7 +285,7 @@ class RestaurantTableViewCell: UITableViewCell {
             
             nameDropImageView.heightAnchor.constraint(equalToConstant: 16),
             nameDropImageView.widthAnchor.constraint(equalToConstant: 16),
-                        
+            
             // textDropImageView
             textDropImageView.trailingAnchor.constraint(equalTo: textDropView.trailingAnchor, constant: -10),
             textDropImageView.centerYAnchor.constraint(equalTo: textDropView.centerYAnchor, constant: 0),
@@ -275,14 +301,14 @@ class RestaurantTableViewCell: UITableViewCell {
             nameDropButton.topAnchor.constraint(equalTo: nameDropView.topAnchor, constant: 0),
             nameDropButton.trailingAnchor.constraint(equalTo: nameDropView.trailingAnchor, constant: 0),
             nameDropButton.bottomAnchor.constraint(equalTo: nameDropView.bottomAnchor, constant: 0),
-                        
+            
             // textDropButton
             textDropButton.leadingAnchor.constraint(equalTo: textDropView.leadingAnchor, constant: 0),
             textDropButton.topAnchor.constraint(equalTo: textDropView.topAnchor, constant: 0),
             textDropButton.trailingAnchor.constraint(equalTo: textDropView.trailingAnchor, constant: 0),
             textDropButton.bottomAnchor.constraint(equalTo: textDropView.bottomAnchor, constant: 0)
         ])
- 
+        
         // dropDownStackView 오토 레이아웃
         NSLayoutConstraint.activate([
             dropDownStackView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 0),
@@ -300,4 +326,8 @@ class RestaurantTableViewCell: UITableViewCell {
     @objc func textDropButtonTapped() {
         textDropDown.show()
     }
+    
+    // 해시태그 값이 변했을 때 값과 indexPath.row를 전달할 클로저
+    var hashTagNameChanged: ((String, Int) -> Void) = {_,_ in }
+    var hashTagTextChanged: ((String, Int) -> Void) = {_,_ in }
 }

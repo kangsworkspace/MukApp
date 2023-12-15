@@ -31,7 +31,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // 네이게이션 바 설정
         let vc1 = UINavigationController(rootViewController: MainViewController(viewModel: mainViewModel))
         let vc2 = UINavigationController(rootViewController: ResViewController(viewModel: mainViewModel))
-        let vc3 = EditViewController()
+        let vc3 = EditViewController(viewModel: mainViewModel)
         
         // 뷰 컨트롤러 -> 탭 바 설정
         tabBarCon.setViewControllers([vc1, vc2, vc3], animated: false)

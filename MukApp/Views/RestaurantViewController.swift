@@ -35,7 +35,6 @@ class RestaurantViewController: UIViewController {
         }
     }
     
-    
     // MARK: - Interface
     // 이미지뷰
     private lazy var resImageView: UIImageView = {
@@ -114,7 +113,7 @@ class RestaurantViewController: UIViewController {
         button.setTitle("저     장", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = .lightGray
+        button.backgroundColor = MyColor.themeColor
         button.addTarget(self, action: #selector(addResButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -143,12 +142,9 @@ class RestaurantViewController: UIViewController {
     // 카테고리 설정 카운트
     private var categoryCnt: Int = 1
     
-    // 초기에만 데이터 셋팅하도록 설정해줄 변수
-    var isConfigured: Int = 0
-    // category 갯수 맞추기
-    var dropCnt = 0
-    var arrayedCatName: [String] = []
-    var arrayedCatText: [String] = []
+    // 해시태그를 저장할 함수
+    var hashTagNameArray: [String] = []
+    var hashTagTextArray: [String] = []
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
@@ -198,28 +194,42 @@ class RestaurantViewController: UIViewController {
     // MARK: - Setup
     func setMain() {
         view.backgroundColor = .white
-        self.title = "추가"
         
+        setTitle()
+        setHashTag()
         setAddView()
         setAutoLayout()
         setTableView()
-        setDropDown()
     }
     
-    func setDropDown() {
-        dropCnt = categoryCnt
-        
-        if let restaurantCoreData {
-            guard let categorySet = restaurantCoreData.category as? Set<CategoryData> else { return }
-            let categoryArray = Array(categorySet)
-            
-            for category in categoryArray {
-                arrayedCatName.append(category.categoryName ?? "데이터 없음")
-                arrayedCatText.append(category.categoryText ?? "데이터 없음")
-            }
+    func setTitle() {
+        // 수정하는 경우
+        if restaurantCoreData != nil {
+            self.title = "수정"
+        } else {
+            self.title = "추가"
         }
     }
     
+    func setHashTag() {
+        // 저장된 데이터가 있는 경우(수정)
+        if let restaurantCoreData {
+            // 카테고리를 배열로 가져오기
+            // 정렬 -> order 순서대로
+            let sortDescriptor = NSSortDescriptor(key: "order", ascending: true)
+            if let categoryArray = restaurantCoreData.category?.sortedArray(using: [sortDescriptor]) as? [CategoryData] {
+                // 기존 데이터를 hashTagArray에 할당
+                for category in categoryArray {
+                    hashTagNameArray.append(category.categoryName ?? "데이터 없음")
+                    hashTagTextArray.append(category.categoryText ?? "데이터 없음")
+                    print("restaurantCoreData 적용")
+                }
+            }
+            // 저장된 데이터가 없는 경우(추가)
+        } else {
+            addHashTag()
+        }
+    }
     
     func setAddView() {
         view.addSubview(resImageView)
@@ -303,57 +313,49 @@ class RestaurantViewController: UIViewController {
     
     // MARK: - Function
     @objc func addResButtonTapped() {
-        
-        var catNameArray: [String] = []
-        var catTextArray: [String] = []
-        
-        // 각 셀의 Text 가져오기.
-        for index in 0...categoryCnt - 1 {
-            let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as! RestaurantTableViewCell
-            catNameArray.append(cell.nameDropLabel.text ?? "")
-            print("\(index)번째 Name 텍스트: \(cell.nameDropLabel.text ?? "")")
-            
-            catTextArray.append(cell.textDropLabel.text ?? "")
-            print("\(index)번째 Text 텍스트: \(cell.textDropLabel.text ?? "")")
-        }
-    
         // 포함되면 안되는 문자열을 가진 경우 리턴
-        if catNameArray.contains("") || catNameArray.contains("선택해주세요") || catTextArray.contains("") || catTextArray.contains("선택해주세요") {
-            
+        if hashTagNameArray.contains("") || hashTagNameArray.contains("선택해주세요") || hashTagTextArray.contains("") || hashTagTextArray.contains("선택해주세요") {
             // 텍스트 안내문 추가해주기
             print("포함되면 안되는 문자열 포함")
-            
             return
         }
         
         // 정보를 수정하는 경우
         else if let restaurantCoreData {
             // 코어 데이터에 정보 업데이트
-            viewModel.handleUpdateResData(restaurantData: restaurantCoreData, catNameArray: catNameArray, catTextArray: catTextArray)
+            viewModel.handleUpdateResData(restaurantData: restaurantCoreData, catNameArray: hashTagNameArray, catTextArray: hashTagTextArray)
             // 루트 뷰로 돌아가기
             viewModel.goBackRootView(fromCurrentVC: self, animated: true)
         }
+        
         // 맛집을 추가하는 경우
         else if let restaurantAPIData {
             // 코어 데이터에 정보 생성
-            viewModel.addResToCoreData(restaurantData: restaurantAPIData, catNameArray: catNameArray, catTextArray: catTextArray)
+            viewModel.addResToCoreData(restaurantData: restaurantAPIData, catNameArray: hashTagNameArray, catTextArray: hashTagTextArray)
             // 루트 뷰로 돌아가기
             viewModel.goBackRootView(fromCurrentVC: self, animated: true)
         }
     }
     
-    // addResButtonTapped이 눌렸을 때 -> 델리게이트로 사용 ****코드 필요한지 체크하기 ******
-    var handleAddResButtonTapped: (() -> ()) = {}
-    
     @objc func plusButtonTapped() {
-        addNewCell()
+        // 카테고리 카운트 + 1
+        categoryCnt += 1
+        print("categoryCnt: \(categoryCnt)")
+        
+        // 해쉬태그 추가
+        addHashTag()
     }
     
     @objc func minusButtonTapped() {
         if categoryCnt == 1 {
             return
         } else {
-            deleteCell()
+            // 카테고리 카운트 - 1
+            categoryCnt -= 1
+            print("categoryCnt: \(categoryCnt)")
+            
+            // 해쉬태그 삭제
+            deleteHashTag()
         }
     }
     
@@ -369,10 +371,10 @@ class RestaurantViewController: UIViewController {
             
             guard let categorySet = restaurantCoreData.category as? Set<CategoryData> else { return }
             let categoryArray = Array(categorySet)
-
+            
             // categoryCnt 갯수 맞추기
             categoryCnt = categoryArray.count
-                        
+            
             tableView.reloadData()
         }
         // 맛집 추가 -> APIData 데이터 할당
@@ -384,27 +386,24 @@ class RestaurantViewController: UIViewController {
             addResButton.setTitle("SAVE", for: .normal)
         }
     }
-    
-    // 새로운 Cell 생성
-    func addNewCell() {
-        // 카테고리 카운트 + 1
-        categoryCnt += 1
-        print("categoryCnt: \(categoryCnt)")
         
-        // 테이블 뷰 마지막 순서에 셀 생성
-        tableView.insertRows(at: [IndexPath(row: categoryCnt - 1, section: 0)], with: .fade)
-        
-        // 셀의 Label.text = "선택해주세요"
-        let cell = tableView.cellForRow(at: IndexPath(row: categoryCnt - 1, section: 0)) as! RestaurantTableViewCell
-        cell.nameDropLabel.text = "선택해주세요"
-        cell.textDropLabel.text = "선택해주세요"
-    }
-    
     // 마지막 Cell 삭제
     func deleteCell() {
         categoryCnt -= 1
         print("categoryCnt: \(categoryCnt)")
         tableView.deleteRows(at: [IndexPath(row: categoryCnt, section: 0)], with: .fade)
+    }
+    
+    func addHashTag() {
+        hashTagNameArray.append("선택해주세요")
+        hashTagTextArray.append("선택해주세요")
+        tableView.reloadData()
+    }
+    
+    func deleteHashTag() {
+        hashTagNameArray.removeLast()
+        hashTagTextArray.removeLast()
+        tableView.reloadData()
     }
 }
 
@@ -412,7 +411,7 @@ class RestaurantViewController: UIViewController {
 extension RestaurantViewController: UITableViewDelegate {
     // 테이블 뷰 셀이 눌렸을 때
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+
     }
 }
 
@@ -428,15 +427,25 @@ extension RestaurantViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         cell.backgroundColor = .white
         
-        // 초기에 categoryCnt만큼 실행
-        if let restaurantCoreData {
-            if isConfigured != dropCnt {
-                cell.nameDropLabel.text = arrayedCatName[indexPath.row]
-                cell.textDropLabel.text = arrayedCatText[indexPath.row]
-                print("restaurantCoreData 적용")
-                isConfigured += 1
-            }
+        // cell에 정보 할당
+        cell.nameDropLabel.text = hashTagNameArray[indexPath.row]
+        cell.textDropLabel.text = hashTagTextArray[indexPath.row]
+        
+        // textDropDown 데이터 할당
+        cell.setCatTextData(item: hashTagNameArray[indexPath.row])
+        
+        // 해시태그 변경 시 변경값과 indexPath.row를 클로저로 전달받음
+        cell.hashTagNameChanged = { hashTagName, indexRow in
+            self.hashTagNameArray[indexRow] = hashTagName
+            self.hashTagTextArray[indexRow] = "선택해주세요"
+            print("\(self.hashTagNameArray)")
         }
+        
+        cell.hashTagTextChanged = { hashTagText, indexRow in
+            self.hashTagTextArray[indexRow] = hashTagText
+            print("\(self.hashTagNameArray)")
+        }
+        
         return cell
     }
 }

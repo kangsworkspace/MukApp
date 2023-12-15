@@ -106,6 +106,7 @@ class ResultViewController: UIViewController {
         let button = UIButton()
         button.setTitle("맛집 관리하기", for: .normal)
         button.backgroundColor = .blue
+        button.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -219,5 +220,10 @@ class ResultViewController: UIViewController {
     
     @objc func confirmButtonTapped() {
         viewModel.goBackRootView(fromCurrentVC: self, animated: true)
+    }
+    
+    @objc func editButtonTapped() {
+        guard let targetRes = targetRes else { return }
+        viewModel.goRestaurantController(resData: targetRes, fromCurrentVC: self, animated: true)
     }
 }

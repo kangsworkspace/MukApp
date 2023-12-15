@@ -41,7 +41,7 @@ class ResViewController: UIViewController {
         button.setTitle("맛집 추가", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
         button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = .lightGray
+        button.backgroundColor = MyColor.themeColor
         button.addTarget(self, action: #selector(addResButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -173,7 +173,7 @@ extension ResViewController: UICollectionViewDelegateFlowLayout {
         // 코어 데이터의 맛집 정보
         let resData = viewModel.getDataFromCoreData()
         // EditCell
-        viewModel.handleEditCellTapped(resData: resData[indexPath.row], fromCurrentVC: self, animated: true)
+        viewModel.goRestaurantController(resData: resData[indexPath.row], fromCurrentVC: self, animated: true)
     }
 }
 
@@ -187,11 +187,49 @@ extension ResViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ResCollectionViewCell", for: indexPath) as! ResCollectionViewCell
         cell.backgroundColor = .lightGray
         
-        let resData = viewModel.getDataFromCoreData()
+        let resDataList = viewModel.getDataFromCoreData()
         
-        cell.addressLabel.text = resData[indexPath.row].address
-        cell.retaurantNameLabel.text = resData[indexPath.row].placeName
+        cell.addressLabel.text = resDataList[indexPath.row].address
+        cell.retaurantNameLabel.text = resDataList[indexPath.row].placeName
+        
+        // 길게 눌러서 삭제 기능 추가
+        // Long Press Gesture Recognizer 생성
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        
+        // Long Press Gesture의 속성 설정 (옵션에 따라 조절 가능)
+        longPressGesture.minimumPressDuration = 0.5 // 최소 press 시간 설정
+        longPressGesture.allowableMovement = 10 // 허용 가능한 이동 거리 설정
+        
+        // Gesture Recognizer를 셀에 추가
+        cell.addGestureRecognizer(longPressGesture)
+        
+        // 셀 위치를 파악할 변수
+        cell.indexPathNum = indexPath.row
         
         return cell
+    }
+    
+    // // 길게 눌러서 삭제 기능 추가
+    @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == .began {
+            
+            let resDataList = viewModel.getDataFromCoreData()
+            // gestureRecognizer의 view 속성을 통해 셀에 접근
+            guard let cell = gestureRecognizer.view as? ResCollectionViewCell else { return }
+            // 셀에서 indexPath 가져오기
+            let indexPath = cell.indexPathNum
+            // 삭제할 식당
+            let savedResData = resDataList[indexPath]
+            print("삭제할 데이터: \(savedResData.placeName)")
+            
+            // 뷰 모델에서 삭제 로직 실행
+            viewModel.collectionCellLongPressed(savedResData: savedResData, fromVC: self) {
+                // 컬렉션 뷰 초기화
+                self.collectionView.reloadData()
+            }
+        } else if gestureRecognizer.state == .ended {
+            // Long Press가 끝났을 때 실행할 코드
+            print("Long Press 종료")
+        }
     }
 }
