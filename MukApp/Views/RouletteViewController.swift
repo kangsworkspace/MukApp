@@ -34,6 +34,19 @@ class RouletteViewController: UIViewController {
         setMain()
     }
     
+    // 중간 테두리
+    let highlightView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 22
+        view.clipsToBounds = true
+        view.backgroundColor = .clear
+        view.layer.borderColor = MyColor.themeColor.cgColor
+        view.layer.borderWidth = 5.0
+        return view
+    }()
+    
+    
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -44,7 +57,7 @@ class RouletteViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         pickerView.subviews[1].isHidden = true
     }
-        
+    
     func setMain() {
         // 백그라운드 색상 설정
         view.backgroundColor = .white
@@ -60,11 +73,21 @@ class RouletteViewController: UIViewController {
     }
     
     func setAddView() {
+        view.addSubview(highlightView)
         view.addSubview(pickerView)
     }
     
     // 오토 레이아웃 설정
     func setAutoLayout() {
+        highlightView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            highlightView.leadingAnchor.constraint(equalTo: pickerView.leadingAnchor),
+            highlightView.trailingAnchor.constraint(equalTo: pickerView.trailingAnchor),
+            
+            highlightView.centerYAnchor.constraint(equalTo: pickerView.centerYAnchor),
+            highlightView.heightAnchor.constraint(equalToConstant: 66)
+        ])
+        
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             pickerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
@@ -72,6 +95,8 @@ class RouletteViewController: UIViewController {
             pickerView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: 0),
             pickerView.heightAnchor.constraint(equalToConstant: 260)
         ])
+        
+        
     }
     
     func setPickerView() {
@@ -112,6 +137,7 @@ class RouletteViewController: UIViewController {
         self.pickerView.selectRow(49, inComponent: 0, animated: true)
     }
     
+    // 타겟 레스토랑 get
     func getTargetRes() {
         targetRes = targetResDataList?.randomElement()
     }
@@ -134,14 +160,14 @@ extension RouletteViewController: UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 100
+        return 200
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
         let exampleRes: [String] = ["배가 불러지는 마법의 알약", "빵 없는 소금빵", "아이스 핫초코", "얼리지 않은 삼다수바", "팥없는 붕어 싸만코"]
         
-        var randomArray: [String] = (1...100).map { _ in exampleRes.randomElement() ?? "존재하지 않는 맛집" }
+        var randomArray: [String] = (1...200).map { _ in exampleRes.randomElement() ?? "존재하지 않는 맛집" }
         
         randomArray[49] = targetRes?.placeName ?? "에러 - 존재하지 않는 맛집"
         

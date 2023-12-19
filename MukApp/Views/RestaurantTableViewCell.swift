@@ -10,6 +10,8 @@ import DropDown
 
 class RestaurantTableViewCell: UITableViewCell {
     
+    var indexPathNum: Int = 0
+    
     // MARK: - 뷰 모델
     let viewModel: MainViewModel
     

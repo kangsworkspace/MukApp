@@ -257,9 +257,11 @@ class MainViewControllerTableViewCell: UITableViewCell {
     // nameDropDown 선택 시 해당하는 Text 가져오기
     func setCatTextData(item: String) {        
         // Name에 해당하는 데이터 가져와서 할당하기
-        viewModel.changeMainNameSelAction(item: item, completion: { categoryTextArray in
-            self.textDropDown.dataSource = categoryTextArray
-        })
+        if item != "선택해주세요" {
+            viewModel.changeMainNameSelAction(item: item, completion: { categoryTextArray in
+                self.textDropDown.dataSource = categoryTextArray
+            })
+        }
     }
     
     // 셋업 - 애드뷰

@@ -206,6 +206,18 @@ extension ResViewController: UICollectionViewDataSource {
         // 셀 위치를 파악할 변수
         cell.indexPathNum = indexPath.row
         
+        
+        // 셀을 둥글게 설정
+        cell.layer.cornerRadius = 10
+        cell.clipsToBounds = true
+        
+        // 셀에 그림자 추가
+        cell.layer.shadowColor = UIColor.black.cgColor
+        cell.layer.masksToBounds = false
+        cell.layer.shadowOffset = CGSize(width: 1, height: 4)
+        cell.layer.shadowRadius = 5
+        cell.layer.shadowOpacity = 0.3
+        
         return cell
     }
     

@@ -38,4 +38,19 @@ public enum MyImage {
     
     // 자물쇠
     static let lock = UIImage(systemName: "lock.fill")!
+    
+    // 식당 이미지
+    static let restaurant = UIImage(systemName: "fork.knife.circle")!
+    
+    // 카페 이미지
+    static let cafe = UIImage(systemName: "cup.and.saucer.fill")!
+    
+    // 주소 이미지
+    static let address = UIImage(systemName: "map")!
+    
+    // 전화번호 이미지
+    static let number = UIImage(systemName: "phone.circle")!
+    
+    // URL 이미지
+    static let url = UIImage(systemName: "network")!
 }

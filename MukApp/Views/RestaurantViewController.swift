@@ -41,6 +41,8 @@ class RestaurantViewController: UIViewController {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person")
         imageView.backgroundColor = .yellow
+        imageView.layer.cornerRadius = 10
+        imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -386,7 +388,7 @@ class RestaurantViewController: UIViewController {
             addResButton.setTitle("SAVE", for: .normal)
         }
     }
-        
+    
     // 마지막 Cell 삭제
     func deleteCell() {
         categoryCnt -= 1
@@ -411,7 +413,7 @@ class RestaurantViewController: UIViewController {
 extension RestaurantViewController: UITableViewDelegate {
     // 테이블 뷰 셀이 눌렸을 때
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        
     }
 }
 
@@ -446,6 +448,52 @@ extension RestaurantViewController: UITableViewDataSource {
             print("\(self.hashTagNameArray)")
         }
         
+        // 길게 눌러서 삭제 기능 추가
+        // Long Press Gesture Recognizer 생성
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        
+        // Long Press Gesture의 속성 설정 (옵션에 따라 조절 가능)
+        longPressGesture.minimumPressDuration = 0.5 // 최소 press 시간 설정
+        longPressGesture.allowableMovement = 10 // 허용 가능한 이동 거리 설정
+        
+        // Gesture Recognizer를 셀에 추가
+        cell.addGestureRecognizer(longPressGesture)
+        
+        // 셀 위치를 파악할 변수
+        cell.indexPathNum = indexPath.row
+        
         return cell
+    }
+    
+    // 길게 눌러서 삭제 기능 추가
+    @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == .began {
+            // 카테고리가 한개일 때 삭제 불가 얼럿
+            if categoryCnt == 1 {
+                // viewModel.tableViewCellLongPressedError
+                
+                
+            } else {
+                // 카테고리가 한개 이상일 때 뷰 모델에서 삭제 알럿 실행
+                viewModel.tableViewCellLongPressed(fromVC: self) { delete in
+                    if delete {
+                        // gestureRecognizer의 view 속성을 통해 셀에 접근
+                        guard let cell = gestureRecognizer.view as? RestaurantTableViewCell else { return }
+                        // 셀에서 indexPath 가져오기
+                        let indexPath = cell.indexPathNum
+                        
+                        self.categoryCnt -= 1
+                        
+                        // 해당 해시태그 삭제
+                        self.hashTagNameArray.remove(at: indexPath)
+                        self.hashTagTextArray.remove(at: indexPath)
+                        
+                        self.tableView.reloadData()
+                    } else {
+                        return
+                    }
+                }
+            }
+        }
     }
 }

@@ -28,14 +28,6 @@ class EditViewController: UIViewController {
     }
     
     func setMain() {
-        view.backgroundColor = .white
-        
-        let selHashTagName: [String] = ["a"]
-        let selHashTagText: [String] = ["a"]
-        let resultResConName = viewModel.getNextCatNameArray(selHashTagName: selHashTagName, selHashTagText: selHashTagText)
 
-        for resultRes in resultResConName {
-            print("\(resultRes)")
-        }
     }
 }

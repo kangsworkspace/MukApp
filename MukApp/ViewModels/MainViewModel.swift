@@ -21,7 +21,7 @@ final class MainViewModel {
     }
     
     // MARK: - CategoryModel(싱글톤)
-    private let categoryModel = CategoryModel.shared
+    // private let categoryModel = CategoryModel.shared
     
     // MARK: - 데이터 모델
     // 코어 데이터 모델
@@ -48,21 +48,6 @@ final class MainViewModel {
         nextVC.modalPresentationStyle = .fullScreen
         navVC?.pushViewController(nextVC, animated: true)
     }
-    
-    // 카테고리 텍스트가 결정되었을 때 -> 후보 식당 찾기
-//    func selCatText(selHashTagText: [String]) {
-//        // 텍스트를 만족하는 ResData 가져오기
-//        let resultResArray = getRouletteTarget(selHashTagText: selHashTagText)
-//        
-//        // 후보 식당 갯수 셋
-//        categoryModel.setResListNum(resNum: resultResArray.count)
-//        
-//        // 해당 식당 프린트
-//        print(resultResArray.count)
-//        for resultRes in resultResArray {
-//            print(resultRes.placeName ?? "데이터 없음")
-//        }
-//    }
     
     // 코어 데이터에서 CategoryName 가져오기
     func getCatNameToMain() -> [String] {
@@ -107,47 +92,15 @@ final class MainViewModel {
         
         completion(catTextArray)
     }
-    
-    // 플러스 버튼이 눌렸을 때
-    func handleMainPlusButtonTapped() -> Bool {
-        if categoryModel.plusButtonTapped() {
-            print("플러스 버튼 진행시켜")
-            return true
-        } else {
-            print("플러스 버튼 진행불가")
-            return false
-        }
-    }
-    
-    // 마이너스 버튼이 눌렸을 때
-    func handleMainMinusButtonTapped() {
-        categoryModel.minusButtonTapped()
-    }
-    
-    // 카테고리 선택 이벤트
-    func handleMainCatNameSelAction(item: String) {
-        // 데이터 저장(변경)
-        self.categoryModel.setCategoryNameArray(text: item)
-    }
-    
-    // 카테고리 텍스트 선택 이벤트
-    func handleCatTextSelAction(selHashTagText: [String], completion: @escaping (Int) -> Void) {
-        // 텍스트를 만족하는 ResData 가져오기
-        let resultResArray = getTargetRestaurant(selHashTagText: selHashTagText)
-
-        // 해당 식당 프린트
-        print(resultResArray.count)
-        for resultRes in resultResArray {
-            print(resultRes.placeName ?? "데이터 없음")
-        }
-        completion(resultResArray.count)
-    }
-    
+        
     // 다음 CatNameArray 정하는 로직
     func getNextCatNameArray(selHashTagName: [String], selHashTagText: [String]) -> [String] {
         // 해당되는 맛집 목록
         let resSelDataList = getTargetRestaurant(selHashTagText: selHashTagText)
         
+        print("전달받은 값1: \(selHashTagName)")
+        
+        // 리턴할 결과값 변수
         var nextCatNameArray: [String] = []
 
         // 후보 식당에 포함되는 CatName 가져오기
@@ -179,10 +132,6 @@ final class MainViewModel {
         return nextCatNameArray
     }
     
-    func resetHashTagData() {
-        categoryModel.resetHashTagData()
-    }
-    
     // 해쉬 텍스트에 해당하는 맛집 찾는 로직
     func getTargetRestaurant(selHashTagText: [String]) -> [RestaurantData] {
         // 코어 데이터에서 맛집 데이터 가져오기
@@ -194,6 +143,8 @@ final class MainViewModel {
             guard let categoryDataList = resData.category as? Set<CategoryData> else { return false }
             
             // resData의 categoryDataList가 selCatTextArray를 모두 포함하는 경우 해당 resData TRUE 리턴
+            // selHashTagText 가 ""가 아닌 경우
+            // selCatTextArray를 포함하는 경우
             return selHashTagText.filter { $0 != "" }.allSatisfy { selCatText in
                 categoryDataList.contains { categoryData in
                     categoryData.categoryText?.contains(selCatText) ?? false
@@ -214,6 +165,7 @@ final class MainViewModel {
         navVC?.pushViewController(nextVC, animated: true)
     }
     
+    // 맛집 삭제 동작(LongPressed)
     func collectionCellLongPressed(savedResData: RestaurantData, fromVC: UIViewController, completion: @escaping () -> Void) {
         // 얼럿 창 띄우기
         addDeleteAlert(fromVC: fromVC) { delete in
@@ -231,6 +183,7 @@ final class MainViewModel {
         }
     }
     
+    // 맛집 삭제 알럿
     private func addDeleteAlert(fromVC: UIViewController, completion: @escaping (Bool) -> Void) {
         let alert = UIAlertController(title: "맛집 삭제", message: "정말 맛집을 삭제하시겠습니까?", preferredStyle: .alert)
         // alert창 1
@@ -372,6 +325,44 @@ final class MainViewModel {
         // 얼럿 창 띄우기
         fromVC.present(alert, animated: true, completion: nil)
     }
+    
+    // 해시태그 삭제 동작(LongPressed)
+    func tableViewCellLongPressed(fromVC: UIViewController, completion: @escaping (Bool) -> Void) {
+        // 얼럿 창 띄우기
+        hashDeleteAlert(fromVC: fromVC) { delete in
+            // 삭제를 눌렀을 때
+            if delete {
+                // true 전달
+                completion(delete)
+                return
+            } else {
+                // false 전달
+                completion(delete)
+                return
+            }
+        }
+    }
+    
+    // 해시태그 삭제 알럿
+    private func hashDeleteAlert(fromVC: UIViewController, completion: @escaping (Bool) -> Void) {
+        let alert = UIAlertController(title: "해시태그 삭제", message: "해당 해시태그를 삭제하시겠습니까?", preferredStyle: .alert)
+        // alert창 1
+        let cancel = UIAlertAction(title: "취소", style: .cancel) { cancelAction in
+            completion(false)
+        }
+        
+        // alert창 2
+        let ok = UIAlertAction(title: "삭제", style: .destructive) { saveAction in
+            completion(true)
+        }
+        
+        alert.addAction(cancel)
+        alert.addAction(ok)
+        
+        // 얼럿 창 띄우기
+        fromVC.present(alert, animated: true, completion: nil)
+    }
+    
     
     // MARK: - SearchViewController (맛집 검색 페이지)
     // API 결과 리턴
