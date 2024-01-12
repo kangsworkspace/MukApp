@@ -20,7 +20,7 @@ class SearchViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: - Interface
     // 서치 컨트롤러
     let searchController = UISearchController(searchResultsController: nil)
@@ -128,15 +128,66 @@ extension SearchViewController: UITableViewDataSource {
     
     // 2) 셀의 구성(셀에 표시하고자 하는 데이터 표시)을 뷰컨트롤러에게 물어봄
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchTableViewCell", for: indexPath) as! SearchTableViewCell
         cell.backgroundColor = .white
         
         let resData = viewModel.getResArray()
         cell.resNameLabel.text = resData[indexPath.row].placeName
-        cell.resAddressLabel.text = resData[indexPath.row].roadAddress
+        
+        // cell 이미지 처리
+        // 13개
+        if let resGroup = resData[indexPath.row].group {
+            switch resGroup {
+            case let groupString where groupString.contains("한식"):
+                cell.resImageView.image = RestaurantImages.korean
+            case let groupString where groupString.contains("치킨"):
+                cell.resImageView.image = RestaurantImages.chicken
+            case let groupString where groupString.contains("제과"):
+                cell.resImageView.image = RestaurantImages.bakery
+            case let groupString where groupString.contains("디저트카페"):
+                cell.resImageView.image = RestaurantImages.dessertCafe
+            case let groupString where groupString.contains("카페"):
+                cell.resImageView.image = RestaurantImages.cafe
+            case let groupString where groupString.contains("일식"):
+                cell.resImageView.image = RestaurantImages.japanese
+            case let groupString where groupString.contains("햄버거"):
+                cell.resImageView.image = RestaurantImages.hamburger
+            case let groupString where groupString.contains("양식"):
+                cell.resImageView.image = RestaurantImages.europe
+            case let groupString where groupString.contains("인도음식"):
+                cell.resImageView.image = RestaurantImages.indian
+            case let groupString where groupString.contains("중식"):
+                cell.resImageView.image = RestaurantImages.chinese
+            case let groupString where groupString.contains("아시아음식"):
+                cell.resImageView.image = RestaurantImages.asian
+            case let groupString where groupString.contains("술집"):
+                cell.resImageView.image = RestaurantImages.alcohol
+            default:
+                cell.resImageView.image = RestaurantImages.restaurant
+            }
+        } else {
+            // 그룹이 설정되지 않은 경우
+            cell.resImageView.image = RestaurantImages.restaurant
+        }
+        
+        // 주소 에러처리
+        if resData[indexPath.row].roadAddress != "" {
+            cell.resAddressLabel.text = resData[indexPath.row].roadAddress
+        } else if resData[indexPath.row].address != "" {
+            cell.resAddressLabel.text = resData[indexPath.row].address
+        } else {
+            cell.resAddressLabel.text = "주소정보 없음"
+        }
+        
         cell.resGroupLabel.text = resData[indexPath.row].group
-        cell.resPhoneLabel.text = resData[indexPath.row].phone
+        
+        if resData[indexPath.row].phone != "" {
+            cell.resPhoneLabel.text = resData[indexPath.row].phone
+        } else {
+            cell.resPhoneLabel.text = "번호 정보없음"
+        }
+        
         return cell
     }
 }

@@ -6,6 +6,14 @@
 //
 
 import UIKit
+import SafariServices
+import AVFoundation
+import Photos
+
+// 커스텀 델리게이트
+protocol AddResButtonDelegate: AnyObject {
+    func addResButtonActive()
+}
 
 final class MainViewModel {
     // MARK: - APIService
@@ -14,14 +22,15 @@ final class MainViewModel {
     // MARK: - CoreDataManager
     private let coreDataManager: CoreDataManagerType
     
+    // MARK: - ImageManager
+    private let imageManager: ImageManager
+    
     // MARK: - Init (의존성 주입)
-    init(coreDataManager: CoreDataManagerType, apiServie: APIServiceType) {
+    init(coreDataManager: CoreDataManagerType, apiServie: APIServiceType, imageManager: ImageManager) {
         self.coreDataManager = coreDataManager
         self.apiService = apiServie
+        self.imageManager = imageManager
     }
-    
-    // MARK: - CategoryModel(싱글톤)
-    // private let categoryModel = CategoryModel.shared
     
     // MARK: - 데이터 모델
     // 코어 데이터 모델
@@ -92,43 +101,33 @@ final class MainViewModel {
         
         completion(catTextArray)
     }
-        
+    
     // 다음 CatNameArray 정하는 로직
     func getNextCatNameArray(selHashTagName: [String], selHashTagText: [String]) -> [String] {
         // 해당되는 맛집 목록
         let resSelDataList = getTargetRestaurant(selHashTagText: selHashTagText)
         
-        print("전달받은 값1: \(selHashTagName)")
-        
         // 리턴할 결과값 변수
         var nextCatNameArray: [String] = []
-
+        
         // 후보 식당에 포함되는 CatName 가져오기
         for resSelData in resSelDataList {
-            print("후보 식당: \(resSelData.placeName)")
             // 카테고리 옵셔널 해제
             guard let categoryDataList = resSelData.category else { return ["error 해당 식당 없음"]}
             // categoryData 반복문
             for categoryData in categoryDataList as! Set<CategoryData> {
                 if let categoryName = categoryData.categoryName {
                     nextCatNameArray.append(categoryName)
-                    print("후보 식당: \(resSelData.placeName), 추가된 카테고리 네임: \(categoryName)")
                 }
             }
         }
-
+        
         // 중복된 값 제거
         nextCatNameArray = Array(Set(nextCatNameArray))
-        print("중복값 제거 후: \(nextCatNameArray)")
-
-        print("이전값: \(selHashTagName)")
-
+        
         // 이전 값 제거
         nextCatNameArray = nextCatNameArray.filter { !selHashTagName.contains($0) }
-        print("이전값 제거 후: \(nextCatNameArray)")
-
-
-        print("결과: \(nextCatNameArray)")
+        
         return nextCatNameArray
     }
     
@@ -171,6 +170,11 @@ final class MainViewModel {
         addDeleteAlert(fromVC: fromVC) { delete in
             // 삭제를 눌렀을 때
             if delete {
+                // 이미지 패스가 있을때만 삭제
+                if let imagePath = savedResData.imagePath {
+                    // 해당 이미지 삭제
+                    self.imageManager.deleteFile(urlPath: imagePath)
+                }
                 // 삭제
                 self.coreDataManager.deleteFromCoreData(savedResData: savedResData) {
                 }
@@ -205,10 +209,21 @@ final class MainViewModel {
     
     // MARK: - RestaurantViewController
     // 맛집 정보 수정 (수정/추가 버튼 눌렸을 때)
-    func handleUpdateResData(restaurantData: RestaurantData, catNameArray: [String], catTextArray: [String]) {
+    func handleUpdateResData(restaurantData: RestaurantData, catNameArray: [String], catTextArray: [String], resImage: UIImage) {
         coreDataManager.updateCoreData(savedResData: restaurantData, catNameArray: catNameArray, catTextArray: catTextArray) {
-            print("정보 수정 완료")
         }
+        
+        // 이전에 기본 이미지로 저장한 경우(기존 경로 x)
+        if imageManager.readFile(urlPath: restaurantData.imagePath!) == UIImage(systemName: "person") {
+            // 앨범 이미지를 저장하는 경우(경로 생성)
+            if !checkCommonImage(image: resImage) {
+                imageManager.createFile(urlPath: restaurantData.imagePath!, image: resImage)
+            }
+            // 앨범의 이미지를 저장한 경우(기존 경로 o)
+        } else {
+            imageManager.createFile(urlPath: restaurantData.imagePath!, image: resImage)
+        }
+        // imageManager.createFile(urlPath: restaurantData.imagePath!, image: resImage)
     }
     
     // 유저가 카테고리를 선택할 때 이벤트
@@ -267,21 +282,38 @@ final class MainViewModel {
     }
     
     // 코어 데이터에 맛집 추가
-    func addResToCoreData(restaurantData: Document, catNameArray: [String], catTextArray: [String]) {
+    func addResToCoreData(restaurantData: Document, catNameArray: [String], catTextArray: [String], resImage: UIImage) {
+        
         // 데이터 할당
         let address = restaurantData.address ?? ""
         let group = restaurantData.group ?? ""
-        let phone = restaurantData.phone ?? ""
+        
+        // 번호 에러처리
+        let phone = if restaurantData.phone != "" {
+            restaurantData.phone
+        } else {
+            "번호 정보 없음"
+        }
+        
         let placeName = restaurantData.placeName ?? ""
         let roadAddress = restaurantData.roadAddress ?? ""
         let placeURL = restaurantData.placeURL ?? ""
+        let date = Date()
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMddHHmmss"
+        let dateString: String = formatter.string(from: date)
+        
+        // 기본 이미지가 아니면 이미지 파일 생성
+        if !checkCommonImage(image: resImage) {
+            imageManager.createFile(urlPath: dateString, image: resImage)
+        }
         
         guard catNameArray.count == catTextArray.count else {
             fatalError("The length of catNameArray and catTextArray must be the same.")
         }
         
-        coreDataManager.saveResToCoreData(address: address, group: group, phone: phone, placeName: placeName, roadAddress: roadAddress, placeURL: placeURL, categoryNameArray: catNameArray, categoryTextArray: catTextArray) {
-            print("테스트 최종 성공 텍스트")
+        coreDataManager.saveResToCoreData(address: address, group: group, phone: phone!, placeName: placeName, roadAddress: roadAddress, placeURL: placeURL, date: date, imagePath: dateString, categoryNameArray: catNameArray, categoryTextArray: catTextArray) {
         }
     }
     
@@ -363,7 +395,6 @@ final class MainViewModel {
         fromVC.present(alert, animated: true, completion: nil)
     }
     
-    
     // MARK: - SearchViewController (맛집 검색 페이지)
     // API 결과 리턴
     func getResArray() -> [Document] {
@@ -378,6 +409,11 @@ final class MainViewModel {
             self.resultResArray = result
             completion(self.resultResArray)
         }
+    }
+    
+    // 화면이 이동할 때 검색 데이터 초기화
+    func resetResArray() {
+        resultResArray = []
     }
     
     // MARK: - 화면 이동 로직
@@ -398,9 +434,11 @@ final class MainViewModel {
     // 저장된 레스토랑 컨트롤러로 이동
     func goRestaurantController(resData: RestaurantData, fromCurrentVC: UIViewController, animated: Bool) {
         // 이동할 화면
-        let nextVC = RestaurantViewController(viewModel: self)
+        let nextVC = RestaurantViewController(viewModel: self, imageManager: imageManager)
         // 데이터 전달
         nextVC.restaurantCoreData = resData
+        // 커스텀 델리게이트
+        nextVC.addResButtonDelegate = self
         // 화면 이동
         pushToNextVC(fromCurrentVC: fromCurrentVC, nextViewController: nextVC, animated: animated)
     }
@@ -408,11 +446,11 @@ final class MainViewModel {
     // 검색된 레스토랑 컨트롤러로 이동
     func goSearchedRestaurantController(resData: Document, fromCurrentVC: UIViewController, animated: Bool) {
         // 이동할 화면
-        let nextVC = RestaurantViewController(viewModel: self)
+        let nextVC = RestaurantViewController(viewModel: self, imageManager: imageManager)
         // 데이터 전달
         nextVC.restaurantAPIData = resData
-        // CategoryModel에 데이터 전달(나중에 코어 데이터로 저장할수도 있기 때문) *** 필요한지 체크 ***
-        // categoryModel.setResData(resData: resData)
+        // 커스텀 델리게이트
+        nextVC.addResButtonDelegate = self
         // 화면 이동
         pushToNextVC(fromCurrentVC: fromCurrentVC, nextViewController: nextVC, animated: true)
     }
@@ -427,6 +465,16 @@ final class MainViewModel {
     }
     
     // MARK: - Common
+    // 이미지 매니저에 저장된 사진 가져오기
+    func getImageFromImageManager(restaurantData: RestaurantData) -> UIImage {
+        if let imagePath = restaurantData.imagePath {
+            return imageManager.readFile(urlPath: imagePath)
+        } else {
+            return UIImage(systemName: "person")!
+        }
+    }
+    
+    
     // 코어 데이터에서 저장된 맛집 데이터 가져오기
     func getDataFromCoreData() -> [RestaurantData] {
         let resList = coreDataManager.getDataFromCoreData()
@@ -457,5 +505,57 @@ final class MainViewModel {
         // 중복된 값 제거
         catNameArray = Array(Set(catNameArray))
         return catNameArray
+    }
+    
+    // URL 이동
+    func goWebPage(url: String, fromVC: UIViewController) {
+        if url != "등록된 정보가 없습니다" {
+            guard let url = URL(string: url) else { return }
+            let safariViewController = SFSafariViewController(url: url)
+            safariViewController.modalPresentationStyle = .automatic
+            fromVC.present(safariViewController, animated: true)
+        }
+    }
+    
+    private func checkCommonImage(image: UIImage) -> Bool {
+        
+        //  13개
+        switch image {
+        case let image where image == RestaurantImages.korean :
+            return true
+        case let image where image == RestaurantImages.chicken :
+            return true
+        case let image where image == RestaurantImages.bakery :
+            return true
+        case let image where image == RestaurantImages.dessertCafe :
+            return true
+        case let image where image == RestaurantImages.cafe :
+            return true
+        case let image where image == RestaurantImages.japanese :
+            return true
+        case let image where image == RestaurantImages.hamburger :
+            return true
+        case let image where image == RestaurantImages.europe :
+            return true
+        case let image where image == RestaurantImages.indian :
+            return true
+        case let image where image == RestaurantImages.chinese :
+            return true
+        case let image where image == RestaurantImages.asian :
+            return true
+        case let image where image == RestaurantImages.restaurant :
+            return true
+        case let image where image == RestaurantImages.alcohol :
+            return true
+        default:
+            return false
+        }
+    }
+}
+
+
+extension MainViewModel: AddResButtonDelegate {
+    func addResButtonActive() {
+        resetResArray()
     }
 }

@@ -12,8 +12,11 @@ class ResViewController: UIViewController {
     // MARK: - Main뷰 모델
     let viewModel: MainViewModel
     
-    init(viewModel: MainViewModel) {
+    let imageManager: ImageManager
+    
+    init(viewModel: MainViewModel, imageManager: ImageManager) {
         self.viewModel = viewModel
+        self.imageManager = imageManager
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -121,7 +124,7 @@ class ResViewController: UIViewController {
         // addResButton 오토 레이아웃
         NSLayoutConstraint.activate([
             addResButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 80),
-            addResButton.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 10),
+            addResButton.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 20),
             addResButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -80),
             
             addResButton.heightAnchor.constraint(equalToConstant: 46)
@@ -130,7 +133,7 @@ class ResViewController: UIViewController {
         // collectionView 오토 레이아웃
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 25),
-            collectionView.topAnchor.constraint(equalTo: addResButton.bottomAnchor, constant: 20),
+            collectionView.topAnchor.constraint(equalTo: addResButton.bottomAnchor, constant: 30),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -25),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -60)
         ])
@@ -185,12 +188,70 @@ extension ResViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ResCollectionViewCell", for: indexPath) as! ResCollectionViewCell
-        cell.backgroundColor = .lightGray
+        // cell.backgroundColor = .lightGray
+        
+
         
         let resDataList = viewModel.getDataFromCoreData()
         
-        cell.addressLabel.text = resDataList[indexPath.row].address
         cell.retaurantNameLabel.text = resDataList[indexPath.row].placeName
+        
+
+        // 오래걸리는 작업을 동시성 처리
+        DispatchQueue.global().async {
+            // URL을 가지고 데이터를 만드는 메서드
+            // (일반적으로 이미지를 가져올때 많이 사용)
+            if let imagePath = resDataList[indexPath.row].imagePath {
+                
+                let resImage = if self.imageManager.readFile(urlPath: imagePath) != UIImage(systemName: "person") {
+                    self.imageManager.readFile(urlPath: imagePath)
+                } else {
+                    if let resGroup = resDataList[indexPath.row].group {
+                        switch resGroup {
+                        case let groupString where groupString.contains("한식"):
+                            RestaurantImages.korean
+                        case let groupString where groupString.contains("치킨"):
+                            RestaurantImages.chicken
+                        case let groupString where groupString.contains("제과"):
+                            RestaurantImages.bakery
+                        case let groupString where groupString.contains("디저트카페"):
+                            RestaurantImages.dessertCafe
+                        case let groupString where groupString.contains("간식"):
+                            RestaurantImages.dessertCafe
+                        case let groupString where groupString.contains("카페"):
+                            RestaurantImages.cafe
+                        case let groupString where groupString.contains("일식"):
+                            RestaurantImages.japanese
+                        case let groupString where groupString.contains("햄버거"):
+                            RestaurantImages.hamburger
+                        case let groupString where groupString.contains("양식"):
+                            RestaurantImages.europe
+                        case let groupString where groupString.contains("인도음식"):
+                            RestaurantImages.indian
+                        case let groupString where groupString.contains("중식"):
+                            RestaurantImages.chinese
+                        case let groupString where groupString.contains("아시아음식"):
+                            RestaurantImages.asian
+                        case let groupString where groupString.contains("술집"):
+                            RestaurantImages.alcohol
+                        default:
+                            RestaurantImages.restaurant
+                        }
+                    } else {
+                        // 그룹이 설정되지 않은 경우
+                        RestaurantImages.restaurant
+                    }
+                }
+                
+                // let resImage = self.imageManager.readFile(urlPath: imagePath)
+                // 작업의 결과물을 이미지로 표시 (메인큐)
+                DispatchQueue.main.async {
+                    cell.mainImageView.image = resImage
+                }
+            } else {
+                cell.mainImageView.image = UIImage(systemName: "person")
+            }
+        }
         
         // 길게 눌러서 삭제 기능 추가
         // Long Press Gesture Recognizer 생성
@@ -211,37 +272,33 @@ extension ResViewController: UICollectionViewDataSource {
         cell.layer.cornerRadius = 10
         cell.clipsToBounds = true
         
-        // 셀에 그림자 추가
-        cell.layer.shadowColor = UIColor.black.cgColor
-        cell.layer.masksToBounds = false
-        cell.layer.shadowOffset = CGSize(width: 1, height: 4)
-        cell.layer.shadowRadius = 5
-        cell.layer.shadowOpacity = 0.3
+        cell.layer.borderWidth = 2
+        cell.layer.borderColor = MyColor.themeColor.cgColor
         
+        cell.backgroundColor = MyColor.themeColor
+    
         return cell
     }
     
     // // 길게 눌러서 삭제 기능 추가
     @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         if gestureRecognizer.state == .began {
-            
+
             let resDataList = viewModel.getDataFromCoreData()
-            // gestureRecognizer의 view 속성을 통해 셀에 접근
-            guard let cell = gestureRecognizer.view as? ResCollectionViewCell else { return }
-            // 셀에서 indexPath 가져오기
-            let indexPath = cell.indexPathNum
-            // 삭제할 식당
-            let savedResData = resDataList[indexPath]
-            print("삭제할 데이터: \(savedResData.placeName)")
+            let point = gestureRecognizer.location(in: collectionView)
             
-            // 뷰 모델에서 삭제 로직 실행
-            viewModel.collectionCellLongPressed(savedResData: savedResData, fromVC: self) {
-                // 컬렉션 뷰 초기화
-                self.collectionView.reloadData()
+            if let indexPath = collectionView.indexPathForItem(at: point) {
+                let savedResData = resDataList[indexPath.row]
+                
+                // 뷰 모델에서 삭제 로직 실행
+                viewModel.collectionCellLongPressed(savedResData: savedResData, fromVC: self) {
+                    // 컬렉션 뷰 초기화
+                    self.collectionView.reloadData()
+                }
             }
+    
         } else if gestureRecognizer.state == .ended {
             // Long Press가 끝났을 때 실행할 코드
-            print("Long Press 종료")
         }
     }
 }

@@ -137,7 +137,7 @@ class RestaurantTableViewCell: UITableViewCell {
     
     // MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        self.viewModel = MainViewModel(coreDataManager: CoreDataManager(), apiServie: APIService())
+        self.viewModel = MainViewModel(coreDataManager: CoreDataManager(), apiServie: APIService(), imageManager: ImageManager())
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         
         setMain()

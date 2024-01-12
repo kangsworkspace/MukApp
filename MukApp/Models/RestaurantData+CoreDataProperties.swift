@@ -2,7 +2,7 @@
 //  RestaurantData+CoreDataProperties.swift
 //  MukApp
 //
-//  Created by Kang on 12/12/23.
+//  Created by Kang on 1/3/24.
 //
 //
 
@@ -19,6 +19,7 @@ extension RestaurantData {
     @NSManaged public var address: String?
     @NSManaged public var date: Date?
     @NSManaged public var group: String?
+    @NSManaged public var imagePath: String?
     @NSManaged public var phone: String?
     @NSManaged public var placeName: String?
     @NSManaged public var placeURL: String?

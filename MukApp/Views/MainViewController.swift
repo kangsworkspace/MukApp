@@ -162,7 +162,15 @@ class MainViewController: UIViewController {
     }
     
     func setCategoryTextLabel() {
-        categoryTextLabel.text = "저장한 맛집: \(getResListNum())개"
+        
+        let resNum = getResListNum()
+        
+        if resNum != 0 {
+            categoryTextLabel.text = "저장한 맛집: \(resNum)개"
+        } else {
+            menuButton.backgroundColor = MyColor.disableColor
+            categoryTextLabel.text = "맛집을 추가하셔야 룰렛을 돌릴 수 있습니다."
+        }
     }
     
     // 셋업 - 애드뷰
@@ -420,11 +428,6 @@ class MainViewController: UIViewController {
         
         // 테스팅
         let testRes = viewModel.getTargetRestaurant(selHashTagText: modHashTagTextArray)
-        
-        for res in testRes {
-            print("테스팅 후보식당 \(String(describing: res.placeName))")
-        }
-        
         return resListNum
     }
 }
@@ -445,8 +448,6 @@ extension MainViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MainViewControllerTableViewCell", for: indexPath) as! MainViewControllerTableViewCell
         cell.backgroundColor = .white
         cell.selectionStyle = .none
-        
-        print("접근 인덱스 \(indexPath.row)")
         
         // cell에 정보 할당
         cell.nameDropLabel.text = hashTagNameArray[indexPath.row]
@@ -496,7 +497,6 @@ extension MainViewController: UITableViewDataSource {
                 // or 전체 식당 로직을 넣어도 좋을듯
                 // self.plusButton.isUserInteractionEnabled = false
                 self.plusButton.setTitleColor(MyColor.disableColor, for: .normal)
-                print("후보식당 x")
             } else {
                 // +버튼 색상 설정하기?
                 self.plusButton.isUserInteractionEnabled = true

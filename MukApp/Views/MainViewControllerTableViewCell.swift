@@ -140,7 +140,7 @@ class MainViewControllerTableViewCell: UITableViewCell {
     
     // MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        self.viewModel = MainViewModel(coreDataManager: CoreDataManager(), apiServie: APIService())
+        self.viewModel = MainViewModel(coreDataManager: CoreDataManager(), apiServie: APIService(), imageManager: ImageManager())
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         
         setMain()
@@ -196,9 +196,10 @@ class MainViewControllerTableViewCell: UITableViewCell {
                 if let indexPath = tableView.indexPath(for: self!) {
                     // indexPath.row값과 item 전달
                     self!.hashTagNameChanged(item, indexPath.row)
-                    print("전달하는 text: \(item), 전달하는 row: \(indexPath.row)")
                 }
             }
+            
+
             
             // 레이블 텍스트 변경
             self!.nameDropLabel.text = item
@@ -224,8 +225,6 @@ class MainViewControllerTableViewCell: UITableViewCell {
                 if let indexPath = tableView.indexPath(for: self!) {
                     // indexPath.row값과 item 전달
                     self!.hashTagTextChanged(item, indexPath.row)
-                    
-                    print("전달하는 text: \(item), 전달하는 row: \(indexPath.row)")
                 }
             }
             

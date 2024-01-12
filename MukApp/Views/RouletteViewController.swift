@@ -33,6 +33,10 @@ class RouletteViewController: UIViewController {
         
         setMain()
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        setTabBar()
+    }
     
     // 중간 테두리
     let highlightView: UIView = {
@@ -65,7 +69,6 @@ class RouletteViewController: UIViewController {
         setAddView()
         setAutoLayout()
         setPickerView()
-        setTabBar()
     }
     
     func setTabBar() {

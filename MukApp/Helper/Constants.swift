@@ -54,3 +54,31 @@ public enum MyImage {
     // URL 이미지
     static let url = UIImage(systemName: "network")!
 }
+
+// 13개
+public enum RestaurantImages {
+    static let korean = UIImage(named: "korean")
+    
+    static let chicken = UIImage(named: "chicken")
+    
+    static let bakery = UIImage(named: "bakery")
+    
+    static let dessertCafe = UIImage(named: "dessertCafe")
+    static let cafe = UIImage(named: "cafe")
+    
+    static let japanese = UIImage(named: "japanese")
+    
+    static let hamburger = UIImage(named: "hamburger")
+    static let europe = UIImage(named: "europe")
+    
+    static let indian = UIImage(named: "indian")
+    
+    static let chinese = UIImage(named: "chinese")
+    
+    static let asian = UIImage(named: "asian")
+    
+    static let alcohol = UIImage(named: "alcohol")
+    
+    static let restaurant = UIImage(named: "restaurant")
+    // static let = UIImage(named: "")
+}

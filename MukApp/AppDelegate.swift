@@ -13,9 +13,11 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
-
+    // 앱이 처음 시작될 때 호출
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let imageManager = ImageManager()
+        imageManager.makeDirectory()
         return true
     }
 

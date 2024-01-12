@@ -24,16 +24,16 @@
 		B06E01652AEC04AA0065E7FF /* MainViewControllerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06E01642AEC04AA0065E7FF /* MainViewControllerTableViewCell.swift */; };
 		B06E01672AEC259A0065E7FF /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06E01662AEC259A0065E7FF /* APIService.swift */; };
 		B074977F2AF6112D00D66CB1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B074977E2AF6112D00D66CB1 /* MainViewModel.swift */; };
+		B0902D8F2B44652E005C27FE /* CategoryData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0902D8B2B44652E005C27FE /* CategoryData+CoreDataClass.swift */; };
+		B0902D902B44652E005C27FE /* CategoryData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0902D8C2B44652E005C27FE /* CategoryData+CoreDataProperties.swift */; };
+		B0902D912B44652E005C27FE /* RestaurantData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0902D8D2B44652E005C27FE /* RestaurantData+CoreDataClass.swift */; };
+		B0902D922B44652E005C27FE /* RestaurantData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0902D8E2B44652E005C27FE /* RestaurantData+CoreDataProperties.swift */; };
+		B0A0D8AC2B3C6ECE0062D72E /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A0D8AB2B3C6ECE0062D72E /* ImageManager.swift */; };
 		B0A6BE622B05D144007779CF /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A6BE612B05D144007779CF /* UIColor+Extension.swift */; };
 		B0A6BE672B05D483007779CF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A6BE662B05D483007779CF /* Constants.swift */; };
-		B0A7B1142AEB53D300D33599 /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A7B1132AEB53D300D33599 /* Memo.swift */; };
 		B0D5FE242AEFA6A300D4B751 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D5FE232AEFA6A300D4B751 /* ResultViewController.swift */; };
 		B0D5FE262AF4966300D4B751 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D5FE252AF4966300D4B751 /* SearchTableViewCell.swift */; };
 		B0ED529E2B049DAF00F74816 /* RouletteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0ED529D2B049DAF00F74816 /* RouletteViewController.swift */; };
-		B0F274382B28254C00CE3A5E /* CategoryData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F274342B28254C00CE3A5E /* CategoryData+CoreDataClass.swift */; };
-		B0F274392B28254C00CE3A5E /* CategoryData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F274352B28254C00CE3A5E /* CategoryData+CoreDataProperties.swift */; };
-		B0F2743A2B28254C00CE3A5E /* RestaurantData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F274362B28254C00CE3A5E /* RestaurantData+CoreDataClass.swift */; };
-		B0F2743B2B28254C00CE3A5E /* RestaurantData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F274372B28254C00CE3A5E /* RestaurantData+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,16 +56,16 @@
 		B06E01642AEC04AA0065E7FF /* MainViewControllerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewControllerTableViewCell.swift; sourceTree = "<group>"; };
 		B06E01662AEC259A0065E7FF /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		B074977E2AF6112D00D66CB1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		B0902D8B2B44652E005C27FE /* CategoryData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CategoryData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		B0902D8C2B44652E005C27FE /* CategoryData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CategoryData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		B0902D8D2B44652E005C27FE /* RestaurantData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RestaurantData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		B0902D8E2B44652E005C27FE /* RestaurantData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RestaurantData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		B0A0D8AB2B3C6ECE0062D72E /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		B0A6BE612B05D144007779CF /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		B0A6BE662B05D483007779CF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		B0A7B1132AEB53D300D33599 /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
 		B0D5FE232AEFA6A300D4B751 /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 		B0D5FE252AF4966300D4B751 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		B0ED529D2B049DAF00F74816 /* RouletteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouletteViewController.swift; sourceTree = "<group>"; };
-		B0F274342B28254C00CE3A5E /* CategoryData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CategoryData+CoreDataClass.swift"; sourceTree = "<group>"; };
-		B0F274352B28254C00CE3A5E /* CategoryData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CategoryData+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		B0F274362B28254C00CE3A5E /* RestaurantData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RestaurantData+CoreDataClass.swift"; sourceTree = "<group>"; };
-		B0F274372B28254C00CE3A5E /* RestaurantData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RestaurantData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		D917FFD08D77FF828C384EE0 /* Pods-MukApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MukApp.release.xcconfig"; path = "Target Support Files/Pods-MukApp/Pods-MukApp.release.xcconfig"; sourceTree = "<group>"; };
 		F8943A63B7E8CA3C6CB82F9D /* Pods-MukApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MukApp.debug.xcconfig"; path = "Target Support Files/Pods-MukApp/Pods-MukApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -164,11 +164,12 @@
 		B037F7552AE3B5CE00C72F63 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				B0F274342B28254C00CE3A5E /* CategoryData+CoreDataClass.swift */,
-				B0F274352B28254C00CE3A5E /* CategoryData+CoreDataProperties.swift */,
-				B0F274362B28254C00CE3A5E /* RestaurantData+CoreDataClass.swift */,
-				B0F274372B28254C00CE3A5E /* RestaurantData+CoreDataProperties.swift */,
+				B0902D8B2B44652E005C27FE /* CategoryData+CoreDataClass.swift */,
+				B0902D8C2B44652E005C27FE /* CategoryData+CoreDataProperties.swift */,
+				B0902D8D2B44652E005C27FE /* RestaurantData+CoreDataClass.swift */,
+				B0902D8E2B44652E005C27FE /* RestaurantData+CoreDataProperties.swift */,
 				B037F7632AE43C0300C72F63 /* CoreDataManager.swift */,
+				B0A0D8AB2B3C6ECE0062D72E /* ImageManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -186,7 +187,6 @@
 			children = (
 				B0A6BE662B05D483007779CF /* Constants.swift */,
 				B0A6BE612B05D144007779CF /* UIColor+Extension.swift */,
-				B0A7B1132AEB53D300D33599 /* Memo.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -309,25 +309,25 @@
 				B02253282B135AD3002E9BCE /* RestaurantViewController.swift in Sources */,
 				B037F7412AE3B58500C72F63 /* SearchViewController.swift in Sources */,
 				B037F75A2AE3B8EA00C72F63 /* ResViewController.swift in Sources */,
-				B0A7B1142AEB53D300D33599 /* Memo.swift in Sources */,
+				B0902D912B44652E005C27FE /* RestaurantData+CoreDataClass.swift in Sources */,
 				B0A6BE672B05D483007779CF /* Constants.swift in Sources */,
+				B0902D8F2B44652E005C27FE /* CategoryData+CoreDataClass.swift in Sources */,
 				B00080682AED22A7003C55EE /* ResCollectionViewCell.swift in Sources */,
 				B074977F2AF6112D00D66CB1 /* MainViewModel.swift in Sources */,
 				B037F7472AE3B58500C72F63 /* MukApp.xcdatamodeld in Sources */,
 				B037F73D2AE3B58500C72F63 /* AppDelegate.swift in Sources */,
+				B0A0D8AC2B3C6ECE0062D72E /* ImageManager.swift in Sources */,
 				B037F7642AE43C0300C72F63 /* CoreDataManager.swift in Sources */,
-				B0F2743A2B28254C00CE3A5E /* RestaurantData+CoreDataClass.swift in Sources */,
-				B0F274392B28254C00CE3A5E /* CategoryData+CoreDataProperties.swift in Sources */,
 				B037F7582AE3B87100C72F63 /* MainViewController.swift in Sources */,
+				B0902D902B44652E005C27FE /* CategoryData+CoreDataProperties.swift in Sources */,
 				B022532A2B135BA3002E9BCE /* RestaurantTableViewCell.swift in Sources */,
-				B0F2743B2B28254C00CE3A5E /* RestaurantData+CoreDataProperties.swift in Sources */,
 				B0A6BE622B05D144007779CF /* UIColor+Extension.swift in Sources */,
 				B0D5FE262AF4966300D4B751 /* SearchTableViewCell.swift in Sources */,
 				B037F73F2AE3B58500C72F63 /* SceneDelegate.swift in Sources */,
 				B0ED529E2B049DAF00F74816 /* RouletteViewController.swift in Sources */,
 				B06E01672AEC259A0065E7FF /* APIService.swift in Sources */,
 				B06E01652AEC04AA0065E7FF /* MainViewControllerTableViewCell.swift in Sources */,
-				B0F274382B28254C00CE3A5E /* CategoryData+CoreDataClass.swift in Sources */,
+				B0902D922B44652E005C27FE /* RestaurantData+CoreDataProperties.swift in Sources */,
 				B0D5FE242AEFA6A300D4B751 /* ResultViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -471,11 +471,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = XUZ4CWYRGJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MukApp/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "앱 내 사진 첨부를 위한 카메라 사용 권한";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앱 내 사진 첨부를 위한 앨범 사용 권한";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -486,8 +489,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.HoduCode.MukApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.HealthyCode.MukApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -503,11 +507,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = XUZ4CWYRGJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MukApp/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "앱 내 사진 첨부를 위한 카메라 사용 권한";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앱 내 사진 첨부를 위한 앨범 사용 권한";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -518,8 +525,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.HoduCode.MukApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.HealthyCode.MukApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

@@ -12,7 +12,6 @@ class SearchTableViewCell: UITableViewCell {
     // MARK: - Interface
     lazy var resImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "person")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -21,7 +20,7 @@ class SearchTableViewCell: UITableViewCell {
         let label = UILabel()
         
         // 텍스트 설정
-        label.text = "번 패티 버어언"
+        label.text = ""
         label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textAlignment = .left
@@ -33,7 +32,7 @@ class SearchTableViewCell: UITableViewCell {
         let label = UILabel()
         
         // 텍스트 설정
-        label.text = "올림픽대로 대로변 1길 222리"
+        label.text = ""
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 12)
         label.textAlignment = .left
@@ -45,7 +44,7 @@ class SearchTableViewCell: UITableViewCell {
         let label = UILabel()
         
         // 텍스트 설정
-        label.text = "음식 > 중 최고 > 햄버거 > 맛있어"
+        label.text = ""
         label.textColor = .lightGray
         label.font = UIFont.systemFont(ofSize: 9)
         label.textAlignment = .left
@@ -57,15 +56,13 @@ class SearchTableViewCell: UITableViewCell {
         let label = UILabel()
         
         // 텍스트 설정
-        label.text = "010 - 1234 -5678"
+        label.text = ""
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 10)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    
     
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

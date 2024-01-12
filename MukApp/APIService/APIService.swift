@@ -109,12 +109,10 @@ class APIService: APIServiceType {
                         let resultArray = try decoder.decode(apiResult.self, from: jsonData)
                         completion(resultArray.documents)
                     } catch {
-                        print("JSON 문자열 디코딩 실패")
                         completion(nil)
                         return
                     }
                 } else {
-                    print("JSON 문자열을 Data로 변환하는 데 실패했습니다.")
                     completion(nil)
                     return
                 }
@@ -126,39 +124,3 @@ class APIService: APIServiceType {
         }
     }
 }
-
-
-//        AF.request(resUrlString,
-//                   method: .get,
-//                   parameters: parameters,
-//                   encoding: URLEncoding.default,
-//                   headers: headers)
-//        .responseJSON { response in
-//            switch response.result {
-//            case .success:
-//                // 데이터 문자열로 변환
-//                let resultString = String(data: response.data!, encoding: .utf8)
-//
-//                // JSON 문자열을 Data로 변환
-//                if let jsonData = resultString?.data(using: .utf8) {
-//                    do {
-//                        // 디코드
-//                        let decoder = JSONDecoder()
-//                        let resultArray = try decoder.decode(apiResult.self, from: jsonData)
-//                        completion(resultArray.documents)
-//                    } catch {
-//                        print("JSON 문자열 디코딩 실패")
-//                        completion(nil)
-//                        return
-//                    }
-//                } else {
-//                    print("JSON 문자열을 Data로 변환하는 데 실패했습니다.")
-//                    completion(nil)
-//                    return
-//                }
-//            case .failure(let error):
-//                print(error)
-//                completion(nil)
-//                return
-//            }
-//        }

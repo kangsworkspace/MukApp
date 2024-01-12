@@ -31,7 +31,7 @@ class ResultViewController: UIViewController {
         let label = UILabel()
         
         // 텍스트 설정
-        label.text = "지금 먹을 메뉴는?"
+        label.text = "지금 가볼 맛집은?"
         label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: 25)
         label.textAlignment = .center
@@ -39,44 +39,159 @@ class ResultViewController: UIViewController {
         return label
     }()
     
-    private var mainView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    private var resNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.font = UIFont.boldSystemFont(ofSize: 23)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
-    
     
     lazy var resImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .lightGray
-        imageView.image = UIImage(systemName: "person")
         imageView.backgroundColor = .lightGray
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    private var resNameLabel: UILabel = {
+    // 이미지뷰
+    private lazy var resPhoneImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = MyImage.number
+        imageView.backgroundColor = .clear
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    // 이미지뷰
+    private lazy var resAddressImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = MyImage.address
+        imageView.backgroundColor = .clear
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    // 이미지뷰
+    private lazy var resURLImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = MyImage.url
+        imageView.backgroundColor = .clear
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    // 번호 레이블
+    private var resPhoneLabel: UILabel = {
         let label = UILabel()
-        label.text = "어쭈꾸미"
-        label.font = UIFont.boldSystemFont(ofSize: 14)
+        // 텍스트 설정
+        label.text = "010 - 1234 - 5678"
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textAlignment = .left
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
+    // 주소 레이블
     private var resAddressLabel: UILabel = {
         let label = UILabel()
-        label.text = "올림픽대로 다리 밑 ㅇ으엥에아아132라"
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 14)
+        // 텍스트 설정
+        label.text = "올림픽대로 대로변 -1234"
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 11)
+        label.textAlignment = .left
+        label.numberOfLines = 3
+        label.lineBreakMode = .byWordWrapping
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    // url 레이블
+//    private var resURLLabel: UILabel = {
+//        let label = UILabel()
+//        // 텍스트 설정
+//        label.text = "http:"
+//        label.numberOfLines = 3
+//        label.textColor = .black
+//        label.font = UIFont.systemFont(ofSize: 13)
+//        label.textAlignment = .left
+//        label.lineBreakMode = .byWordWrapping
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//        return label
+//    }()
+    
+    private var resURLButton: UIButton = {
+        let button = UIButton()
+        // 텍스트 설정
+        button.setTitle("", for: .normal)
+        button.setTitleColor(.blue, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+        button.titleLabel?.textAlignment = .left
+        button.titleLabel?.lineBreakMode = .byWordWrapping
+        button.addTarget(self, action: #selector(resURLButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    
+    // 번호 스택뷰
+    private var resPhoneStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .leading
+        stackView.distribution = .fill
+        stackView.spacing = 5
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    // 주소 스택뷰
+    private var resAddressStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .leading
+        stackView.distribution = .fill
+        stackView.spacing = 5
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    // url 스택뷰
+    private var urlStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .leading
+        stackView.distribution = .fill
+        stackView.spacing = 5
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    // 메인 스택뷰
+    private var mainStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.distribution = .fill
+        stackView.spacing = 10
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    private var lineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     private var confirmButton: UIButton = {
         let button = UIButton()
         button.setTitle("결정!", for: .normal)
-        button.backgroundColor = .blue
+        button.backgroundColor = MyColor.themeColor
         button.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -85,7 +200,7 @@ class ResultViewController: UIViewController {
     private var rerollButton: UIButton = {
         let button = UIButton()
         button.setTitle("다시 돌리기!", for: .normal)
-        button.backgroundColor = .blue
+        button.backgroundColor = MyColor.themeColor
         button.addTarget(self, action: #selector(rerollButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -105,7 +220,7 @@ class ResultViewController: UIViewController {
     private var editButton: UIButton = {
         let button = UIButton()
         button.setTitle("맛집 관리하기", for: .normal)
-        button.backgroundColor = .blue
+        button.backgroundColor = MyColor.themeColor
         button.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -140,9 +255,23 @@ class ResultViewController: UIViewController {
     func setAddView() {
         view.addSubview(mainLabel)
         
-        resImageView.addSubview(resNameLabel)
-        resImageView.addSubview(resAddressLabel)
+        view.addSubview(resNameLabel)
         view.addSubview(resImageView)
+        
+        resPhoneStackView.addArrangedSubview(resPhoneImageView)
+        resPhoneStackView.addArrangedSubview(resPhoneLabel)
+        resAddressStackView.addArrangedSubview(resAddressImageView)
+        resAddressStackView.addArrangedSubview(resAddressLabel)
+        urlStackView.addArrangedSubview(resURLImageView)
+        urlStackView.addArrangedSubview(resURLButton)
+        
+        mainStackView.addArrangedSubview(resPhoneStackView)
+        mainStackView.addArrangedSubview(resAddressStackView)
+        mainStackView.addArrangedSubview(urlStackView)
+        view.addSubview(mainStackView)
+    
+        view.addSubview(lineView)
+        
         
         buttonStackView.addArrangedSubview(confirmButton)
         buttonStackView.addArrangedSubview(rerollButton)
@@ -161,34 +290,55 @@ class ResultViewController: UIViewController {
             mainLabel.heightAnchor.constraint(equalToConstant: 30)
         ])
         
-        // mainView 오토 레이아웃
+        // resNameLabel 오토 레이아웃
         NSLayoutConstraint.activate([
-            resImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 100),
-            resImageView.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 80),
-            resImageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -100),
+            resNameLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 30),
+            resNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0)
+        ])
+        
+        // resImageView 오토 레이아웃
+        NSLayoutConstraint.activate([
+            resImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            resImageView.topAnchor.constraint(equalTo: resNameLabel.bottomAnchor, constant: 10),
+            resImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             
-            resImageView.heightAnchor.constraint(equalToConstant: 220)
+            resImageView.heightAnchor.constraint(equalToConstant: 280)
         ])
         
-        // resImageView 오토 레이아웃
+        // Image 크기 오토 레이아웃
         NSLayoutConstraint.activate([
-            resAddressLabel.leadingAnchor.constraint(equalTo: resImageView.leadingAnchor, constant: 10),
-            resAddressLabel.trailingAnchor.constraint(equalTo: resImageView.trailingAnchor, constant: -10),
-            resAddressLabel.bottomAnchor.constraint(equalTo: resImageView.bottomAnchor, constant: -10),
+            resPhoneImageView.heightAnchor.constraint(equalToConstant: 20),
+            resPhoneImageView.widthAnchor.constraint(equalToConstant: 20),
+            resPhoneLabel.centerYAnchor.constraint(equalTo: resPhoneImageView.centerYAnchor),
+            
+            resAddressImageView.heightAnchor.constraint(equalToConstant: 20),
+            resAddressImageView.widthAnchor.constraint(equalToConstant: 20),
+            resAddressLabel.centerYAnchor.constraint(equalTo: resAddressImageView.centerYAnchor),
+            
+            resURLImageView.heightAnchor.constraint(equalToConstant: 20),
+            resURLImageView.widthAnchor.constraint(equalToConstant: 20),
+            resURLButton.centerYAnchor.constraint(equalTo: resURLImageView.centerYAnchor)
         ])
         
-        
-        // resImageView 오토 레이아웃
+        // mainStackView 오토 레이아웃
         NSLayoutConstraint.activate([
-            resNameLabel.bottomAnchor.constraint(equalTo: resAddressLabel.topAnchor, constant: -10),
-            resNameLabel.centerXAnchor.constraint(equalTo: resImageView.centerXAnchor, constant: 0)
+            mainStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            mainStackView.topAnchor.constraint(equalTo: resImageView.bottomAnchor, constant: 16),
+            mainStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
         ])
         
+        // lineView 오토 레이아웃
+        NSLayoutConstraint.activate([
+            lineView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            lineView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            lineView.topAnchor.constraint(equalTo: mainStackView.bottomAnchor, constant: 22),
+            lineView.heightAnchor.constraint(equalToConstant: 2)
+        ])
         
         // buttonStackView 오토 레이아웃
         NSLayoutConstraint.activate([
             buttonStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 40),
-            buttonStackView.topAnchor.constraint(equalTo: resImageView.bottomAnchor, constant: 20),
+            buttonStackView.topAnchor.constraint(equalTo: lineView.bottomAnchor, constant: 30),
             buttonStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -40),
             
             buttonStackView.heightAnchor.constraint(equalToConstant: 50)
@@ -199,7 +349,6 @@ class ResultViewController: UIViewController {
             editButton.leadingAnchor.constraint(equalTo: buttonStackView.leadingAnchor, constant: 0),
             editButton.topAnchor.constraint(equalTo: buttonStackView.bottomAnchor, constant: 10),
             editButton.trailingAnchor.constraint(equalTo: buttonStackView.trailingAnchor, constant: 0),
-            
             editButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
@@ -208,13 +357,66 @@ class ResultViewController: UIViewController {
     func setUI() {
         // 식당 이름
         resNameLabel.text = targetRes?.placeName
-        // 식당 주소
-        resAddressLabel.text = targetRes?.roadAddress
+        // 식당 번호
+        resPhoneLabel.text = targetRes?.phone
+        
+        // 도로명 주소가 없으면 일반주소
+        if targetRes?.roadAddress != "" {
+            resAddressLabel.text = targetRes?.roadAddress
+        } else if targetRes?.address != "" {
+            resAddressLabel.text = targetRes?.address
+        } else {
+            resAddressLabel.text = "주소 정보 없음"
+        }
+        
+        // 식당 URL
+        resURLButton.setTitle(targetRes?.placeURL, for: .normal)
+        // 식당 이미지
+        // resImageView.image = viewModel.getImageFromImageManager(restaurantData: targetRes!)
+        
+        resImageView.image = if viewModel.getImageFromImageManager(restaurantData: targetRes!) != UIImage(systemName: "person") {
+            viewModel.getImageFromImageManager(restaurantData: targetRes!)
+        } else {
+            if let resGroup = targetRes?.group {
+                switch resGroup {
+                case let groupString where groupString.contains("한식"):
+                    RestaurantImages.korean
+                case let groupString where groupString.contains("치킨"):
+                    RestaurantImages.chicken
+                case let groupString where groupString.contains("제과"):
+                    RestaurantImages.bakery
+                case let groupString where groupString.contains("디저트카페"):
+                    RestaurantImages.dessertCafe
+                case let groupString where groupString.contains("간식"):
+                    RestaurantImages.dessertCafe
+                case let groupString where groupString.contains("카페"):
+                    RestaurantImages.cafe
+                case let groupString where groupString.contains("일식"):
+                    RestaurantImages.japanese
+                case let groupString where groupString.contains("햄버거"):
+                    RestaurantImages.hamburger
+                case let groupString where groupString.contains("양식"):
+                    RestaurantImages.europe
+                case let groupString where groupString.contains("인도음식"):
+                    RestaurantImages.indian
+                case let groupString where groupString.contains("중식"):
+                    RestaurantImages.chinese
+                case let groupString where groupString.contains("아시아음식"):
+                    RestaurantImages.asian
+                case let groupString where groupString.contains("술집"):
+                    RestaurantImages.alcohol
+                default:
+                    RestaurantImages.restaurant
+                }
+            } else {
+                // 그룹이 설정되지 않은 경우
+                RestaurantImages.restaurant
+            }
+        }
     }
     
     // 리롤 버튼이 눌렸을 때
     @objc func rerollButtonTapped() {
-        print("다시 돌리기!")
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -225,5 +427,9 @@ class ResultViewController: UIViewController {
     @objc func editButtonTapped() {
         guard let targetRes = targetRes else { return }
         viewModel.goRestaurantController(resData: targetRes, fromCurrentVC: self, animated: true)
+    }
+    
+    @objc func resURLButtonTapped() {
+        viewModel.goWebPage(url: resURLButton.currentTitle ?? "", fromVC: self)
     }
 }

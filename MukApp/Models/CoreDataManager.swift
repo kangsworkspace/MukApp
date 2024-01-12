@@ -10,7 +10,7 @@ import CoreData
 
 protocol CoreDataManagerType {
     // Create
-    func saveResToCoreData(address: String, group: String, phone: String, placeName: String, roadAddress: String, placeURL: String, categoryNameArray: [String], categoryTextArray: [String], competion: @escaping () -> Void)
+    func saveResToCoreData(address: String, group: String, phone: String, placeName: String, roadAddress: String, placeURL: String, date: Date, imagePath: String, categoryNameArray: [String], categoryTextArray: [String], competion: @escaping () -> Void)
     
     // Read
     func getDataFromCoreData() -> [RestaurantData]
@@ -40,26 +40,21 @@ final class CoreDataManager: CoreDataManagerType {
     
     
     // MARK: - [CREATE]: 코어 데이터에 데이터 생성하기
-    func saveResToCoreData(address: String, group: String, phone: String, placeName: String, roadAddress: String, placeURL: String, categoryNameArray: [String], categoryTextArray: [String], competion: @escaping () -> Void) {
-        print("코어 데이터 생성 시작")
-        
+    func saveResToCoreData(address: String, group: String, phone: String, placeName: String, roadAddress: String, placeURL: String, date: Date, imagePath: String, categoryNameArray: [String], categoryTextArray: [String], competion: @escaping () -> Void) {
         // RestaurantData의 entity 유효한지 확인
         guard let entityRestaurant = NSEntityDescription.entity(forEntityName: entityName_Res, in: context) else {
-            print("entityRestaurant-유효하지 않음")
             competion()
             return
         }
         
         // CategoryData의 entity 유효한지 확인
         guard let entityCategory = NSEntityDescription.entity(forEntityName: entityName_Cat, in: context) else {
-            print("entityCategory-유효하지 않음")
             competion()
             return
         }
         
         // 할당할 데이터를 가진 객체 생성
         guard let newRes = NSManagedObject(entity: entityRestaurant, insertInto: context) as? RestaurantData else {
-            print("newRes 객체 생성 실패")
             competion()
             return
         }
@@ -71,15 +66,14 @@ final class CoreDataManager: CoreDataManagerType {
         newRes.placeName = placeName
         newRes.roadAddress = roadAddress
         newRes.placeURL = placeURL
-        newRes.date = Date()
-        print("newRes 객체에 데이터 할당 성공")
+        newRes.date = date
+        newRes.imagePath = imagePath
         
         // 카테고리 배열 할당
         for index in 0...categoryNameArray.count - 1 {
             
             // 할당할 데이터를 가진 객체 생성
             guard let newCat = NSManagedObject(entity: entityCategory, insertInto: context) as? CategoryData else {
-                print("newCat 객체 생성 실패")
                 competion()
                 return
             }
@@ -94,14 +88,11 @@ final class CoreDataManager: CoreDataManagerType {
         
         do {
             try context.save()
-            print("코어 데이터 업데이트 성공")
             competion()
         } catch {
             print(error)
-            print("코어 데이터 업데이트 실패")
             competion()
         }
-        print("코어 데이터 테스트 성공")
         competion()
     }
     
@@ -120,7 +111,7 @@ final class CoreDataManager: CoreDataManagerType {
                 restaurantList = fetchedResList
             }
         } catch {
-            print("코어데이터 가져오기 실패")
+            
         }
         return restaurantList
     }
@@ -132,7 +123,6 @@ final class CoreDataManager: CoreDataManagerType {
 
         // CategoryData의 entity 유효한지 확인
         guard let entityCategory = NSEntityDescription.entity(forEntityName: entityName_Cat, in: context) else {
-            print("entityCategory-유효하지 않음")
             competion()
             return
         }
@@ -162,7 +152,6 @@ final class CoreDataManager: CoreDataManagerType {
                     for index in 0...catNameArray.count - 1 {
                         // 할당할 데이터를 가진 객체 생성
                         guard let newCat = NSManagedObject(entity: entityCategory, insertInto: context) as? CategoryData else {
-                            print("newCat 객체 생성 실패")
                             competion()
                             return
                         }
@@ -178,11 +167,9 @@ final class CoreDataManager: CoreDataManagerType {
                     // Save the changes to the context
                     do {
                         try context.save()
-                        print("코어 데이터 업데이트 성공")
                         competion()
                     } catch {
                         print(error)
-                        print("코어 데이터 업데이트 실패")
                         competion()
                     }
                 }
@@ -200,7 +187,6 @@ final class CoreDataManager: CoreDataManagerType {
 
         // CategoryData의 entity 유효한지 확인
         guard let entityCategory = NSEntityDescription.entity(forEntityName: entityName_Cat, in: context) else {
-            print("entityCategory-유효하지 않음")
             competion()
             return
         }
@@ -233,11 +219,9 @@ final class CoreDataManager: CoreDataManagerType {
                 // Save the changes to the context
                 do {
                     try context.save()
-                    print("코어 데이터 삭제 성공")
                     competion()
                 } catch {
                     print(error)
-                    print("코어 데이터 삭제 실패")
                     competion()
                 }
             }

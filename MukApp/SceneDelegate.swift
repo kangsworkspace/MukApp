@@ -25,29 +25,34 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let coreDatamanager = CoreDataManager()
         // APIService 객체 생성
         let apiService = APIService()
+        // ImageManager 객체 생성
+        let imageManager = ImageManager()
         // MainViewModel 객체 생성
-        let mainViewModel = MainViewModel(coreDataManager: coreDatamanager, apiServie: apiService)
+        let mainViewModel = MainViewModel(coreDataManager: coreDatamanager, apiServie: apiService, imageManager: imageManager)
 
         // 네이게이션 바 설정
         let vc1 = UINavigationController(rootViewController: MainViewController(viewModel: mainViewModel))
-        let vc2 = UINavigationController(rootViewController: ResViewController(viewModel: mainViewModel))
-        let vc3 = EditViewController(viewModel: mainViewModel)
+        let vc2 = UINavigationController(rootViewController: ResViewController(viewModel: mainViewModel, imageManager: imageManager))
+        vc2.navigationBar.tintColor = .black
+        
+        let vc3 = EditViewController()
         
         // 뷰 컨트롤러 -> 탭 바 설정
         tabBarCon.setViewControllers([vc1, vc2, vc3], animated: false)
         tabBarCon.modalPresentationStyle = .fullScreen
         tabBarCon.tabBar.backgroundColor = .white
+        tabBarCon.tabBar.tintColor = MyColor.themeColor
         
         // 탭 바 이름
         vc1.title = "룰렛 돌리기"
         vc2.title = "맛집 관리하기"
-        vc3.title = "더 보기"
+        vc3.title = "정보"
         
         // 탭 바 이미지
         guard let items = tabBarCon.tabBar.items else { return }
         items[0].image = UIImage(systemName: "shuffle")
         items[1].image = UIImage(systemName: "folder")
-        items[2].image = UIImage(systemName: "gearshape")
+        items[2].image = UIImage(systemName: "info.circle")
         
         // 첫 화면(루트 뷰)를 설정
         window?.rootViewController = tabBarCon
