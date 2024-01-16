@@ -31,7 +31,6 @@
 		B0A0D8AC2B3C6ECE0062D72E /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A0D8AB2B3C6ECE0062D72E /* ImageManager.swift */; };
 		B0A6BE622B05D144007779CF /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A6BE612B05D144007779CF /* UIColor+Extension.swift */; };
 		B0A6BE672B05D483007779CF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A6BE662B05D483007779CF /* Constants.swift */; };
-		B0C072882B56BAA80021FD55 /* MukApp.app in Resources */ = {isa = PBXBuildFile; fileRef = B037F7392AE3B58500C72F63 /* MukApp.app */; };
 		B0D5FE242AEFA6A300D4B751 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D5FE232AEFA6A300D4B751 /* ResultViewController.swift */; };
 		B0D5FE262AF4966300D4B751 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D5FE252AF4966300D4B751 /* SearchTableViewCell.swift */; };
 		B0ED529E2B049DAF00F74816 /* RouletteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0ED529D2B049DAF00F74816 /* RouletteViewController.swift */; };
@@ -254,7 +253,6 @@
 			files = (
 				B037F74C2AE3B58600C72F63 /* LaunchScreen.storyboard in Resources */,
 				B037F7492AE3B58600C72F63 /* Assets.xcassets in Resources */,
-				B0C072882B56BAA80021FD55 /* MukApp.app in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
