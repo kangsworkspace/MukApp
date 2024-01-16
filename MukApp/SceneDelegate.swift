@@ -43,6 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         tabBarCon.tabBar.backgroundColor = .white
         tabBarCon.tabBar.tintColor = MyColor.themeColor
         
+        
         // 탭 바 이름
         vc1.title = "룰렛 돌리기"
         vc2.title = "맛집 관리하기"

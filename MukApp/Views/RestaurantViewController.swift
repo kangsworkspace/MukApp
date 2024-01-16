@@ -498,6 +498,13 @@ class RestaurantViewController: UIViewController {
     // MARK: - Function
     @objc func addResButtonTapped() {
         // 포함되면 안되는 문자열을 가진 경우 리턴
+        if hashTagNameArray.contains("태그 추가") || hashTagNameArray.contains("태그 추가") {
+            infoLabel.text = """
+                '태그 추가'는 저장할 수 없습니다.
+            """
+            return
+        }
+        
         if hashTagNameArray.contains("") || hashTagNameArray.contains("선택해주세요") || hashTagTextArray.contains("") || hashTagTextArray.contains("선택해주세요") {
             // 텍스트 안내문 추가해주기
             infoLabel.text = """
@@ -542,7 +549,7 @@ class RestaurantViewController: UIViewController {
         if categoryCnt == 1 {
             
             // 인포 메시지 업데이트
-            infoLabel.text = "1개 이상의 해시태그를 설정해야 합니다"
+            infoLabel.text = "1개 이상의 태그를 설정해야 합니다"
             
             return
         } else {
@@ -837,7 +844,7 @@ extension RestaurantViewController: UITableViewDataSource {
             // 카테고리가 한개일 때 삭제 불가 얼럿
             if categoryCnt == 1 {
                 // 인포 메시지 업데이트
-                infoLabel.text = "1개 이상의 해시태그를 설정해야 합니다"
+                infoLabel.text = "1개 이상의 태그를 설정해야 합니다"
             } else {
                 // 카테고리가 한개 이상일 때 뷰 모델에서 삭제 알럿 실행
                 viewModel.tableViewCellLongPressed(fromVC: self) { delete in

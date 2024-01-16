@@ -63,9 +63,9 @@ final class MainViewModel {
         // 코어 데이터에서 CategoryNameArray 가져오기
         var catNameArray: [String] = getCatNameFromCoreData()
         
-        // 카테고리 추가가 있으면 없애기
-        if catNameArray.contains("카테고리 추가") {
-            catNameArray.removeAll { $0 == "카테고리 추가" }
+        // 태그 추가가 있으면 없애기
+        if catNameArray.contains("태그 추가") {
+            catNameArray.removeAll { $0 == "태그 추가" }
         }
         
         return catNameArray
@@ -94,9 +94,9 @@ final class MainViewModel {
         // 중복된 값 제거
         catTextArray = Array(Set(catTextArray))
         
-        // 카테고리 추가가 있으면 없애기
-        if catTextArray.contains("카테고리 추가") {
-            catTextArray.removeAll { $0 == "카테고리 추가" }
+        // 태그 추가가 있으면 없애기
+        if catTextArray.contains("태그 추가") {
+            catTextArray.removeAll { $0 == "태그 추가" }
         }
         
         completion(catTextArray)
@@ -223,13 +223,12 @@ final class MainViewModel {
         } else {
             imageManager.createFile(urlPath: restaurantData.imagePath!, image: resImage)
         }
-        // imageManager.createFile(urlPath: restaurantData.imagePath!, image: resImage)
     }
     
     // 유저가 카테고리를 선택할 때 이벤트
     func handleCatSelActionT(fromVC: UIViewController, item: String, category: String, completion: @escaping (String) -> Void) {
-        // 카테고리 추가 이벤트
-        if item == "카테고리 추가" {
+        // 태그 추가 이벤트
+        if item == "태그 추가" {
             addCatAlert(fromVC: fromVC) { saveText, save in
                 // 저장
                 if save {
@@ -273,9 +272,9 @@ final class MainViewModel {
         // 중복값 빼기
         catTextArray = Array(Set(catTextArray))
         
-        // 카테고리 추가가 없으면 더하기
-        if !catTextArray.contains("카테고리 추가") {
-            catTextArray.append("카테고리 추가")
+        // 태그 추가가 없으면 더하기
+        if !catTextArray.contains("태그 추가") {
+            catTextArray.append("태그 추가")
         }
         
         completion(catTextArray)
@@ -322,19 +321,19 @@ final class MainViewModel {
         // 코어 데이터에서 CategoryNameArray 가져오기
         var catNameArray: [String] = getCatNameFromCoreData()
         
-        // 카테고리 추가가 없으면 더하기
-        if !catNameArray.contains("카테고리 추가") {
-            catNameArray.append("카테고리 추가")
+        // 태그 추가가 없으면 더하기
+        if !catNameArray.contains("태그 추가") {
+            catNameArray.append("태그 추가")
         }
         
         return catNameArray
     }
     
-    // 카테고리 추가 얼럿창 띄우기
+    // 태그 추가 얼럿창 띄우기
     private func addCatAlert(fromVC: UIViewController, completion: @escaping (String?, Bool) -> Void) {
-        let alert = UIAlertController(title: "카테고리 추가", message: "추가하려는 카테고리를 입력해주세요", preferredStyle: .alert)
+        let alert = UIAlertController(title: "태그 추가", message: "추가하려는 태그를 입력해주세요", preferredStyle: .alert)
         alert.addTextField { textField in
-            textField.placeholder = "새로운 카테고리"
+            textField.placeholder = "새로운 태그"
         }
         
         // 저장할 텍스트
