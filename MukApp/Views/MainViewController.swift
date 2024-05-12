@@ -249,7 +249,10 @@ class MainViewController: UIViewController {
             minusButton.bottomAnchor.constraint(equalTo: plusButton.topAnchor, constant: -10),
             minusButton.heightAnchor.constraint(equalToConstant: 40),
             minusButton.widthAnchor.constraint(equalToConstant: 40),
+            
+            
         ])
+        
     }
     
     // MARK: - Function
@@ -274,7 +277,7 @@ class MainViewController: UIViewController {
     @objc func plusButtonTapped() {
         // catText가 결정되었을 때 조건
         if hashTagTextArray.last != "선택해주세요" {
-            
+
             categoryCnt += 1
             
             // 다음 Hash Name Array 설정

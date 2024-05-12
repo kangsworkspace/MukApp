@@ -55,7 +55,6 @@ class ResViewController: UIViewController {
         // 컬렉션 뷰의 레이아웃을 담당하는 객체(필수)
         let flowlayout = UICollectionViewFlowLayout()
         flowlayout.scrollDirection = .vertical
-        
         let cv = UICollectionView(frame: .zero, collectionViewLayout: flowlayout)
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
@@ -187,10 +186,15 @@ extension ResViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        
+        
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ResCollectionViewCell", for: indexPath) as! ResCollectionViewCell
         // cell.backgroundColor = .lightGray
         
-
+        
+        
         
         let resDataList = viewModel.getDataFromCoreData()
         

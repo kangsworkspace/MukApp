@@ -46,7 +46,13 @@ class APIService: APIServiceType {
         
         var resultArray: [Document] = []
         
-        let apiKeyString: String = "aae19e621a75ab0a39bf676555887e27"
+        // let apiKeyString: String = "aae19e621a75ab0a39bf676555887e27"
+        
+        guard let apiKeyString = Bundle.main.kakaoApiKey else {
+            print("API 키를 로드하지 못했습니다.")
+            return
+        }
+        
         let resUrlString: String = "https://dapi.kakao.com/v2/local/search/keyword.json?category_group_code=CE7"
         let cafeUrlString: String = "https://dapi.kakao.com/v2/local/search/keyword.json?category_group_code=FD6"
         
@@ -122,5 +128,11 @@ class APIService: APIServiceType {
                 return
             }
         }
+    }
+}
+
+extension Bundle {
+    var kakaoApiKey: String? {
+        return infoDictionary?["KAKAO_API_KEY"] as? String
     }
 }

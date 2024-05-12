@@ -61,7 +61,6 @@ class ImageManager {
         } catch {
             print(error)
         }
-        
     }
     
     // MARK: - Read: 파일 읽기
@@ -107,5 +106,4 @@ class ImageManager {
             print(error)
         }
     }
-    
 }

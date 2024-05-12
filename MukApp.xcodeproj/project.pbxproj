@@ -37,6 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3BEF88AD2BF0A9A600ED67E0 /* Secret.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secret.xcconfig; sourceTree = "<group>"; };
 		7151ED8FBF918F2626EF22B3 /* Pods_MukApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MukApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B00080672AED22A7003C55EE /* ResCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResCollectionViewCell.swift; sourceTree = "<group>"; };
 		B02253272B135AD3002E9BCE /* RestaurantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantViewController.swift; sourceTree = "<group>"; };
@@ -102,6 +103,7 @@
 		B037F7302AE3B58500C72F63 = {
 			isa = PBXGroup;
 			children = (
+				3BEF88AD2BF0A9A600ED67E0 /* Secret.xcconfig */,
 				B037F73B2AE3B58500C72F63 /* MukApp */,
 				B037F73A2AE3B58500C72F63 /* Products */,
 				456DCC7C708892FD10E6DB8F /* Pods */,
@@ -478,6 +480,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MukApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "뭐 먹지? 맛집 관리 & 룰렛";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "앱 내 사진 첨부를 위한 카메라 사용 권한";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앱 내 사진 첨부를 위한 앨범 사용 권한";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -516,6 +519,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MukApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "뭐 먹지? 맛집 관리 & 룰렛";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "앱 내 사진 첨부를 위한 카메라 사용 권한";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앱 내 사진 첨부를 위한 앨범 사용 권한";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
