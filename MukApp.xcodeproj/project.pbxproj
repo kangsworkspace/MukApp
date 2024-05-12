@@ -469,7 +469,7 @@
 		};
 		B037F7512AE3B58600C72F63 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F8943A63B7E8CA3C6CB82F9D /* Pods-MukApp.debug.xcconfig */;
+			baseConfigurationReference = 3BEF88AD2BF0A9A600ED67E0 /* Secret.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -508,7 +508,7 @@
 		};
 		B037F7522AE3B58600C72F63 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D917FFD08D77FF828C384EE0 /* Pods-MukApp.release.xcconfig */;
+			baseConfigurationReference = 3BEF88AD2BF0A9A600ED67E0 /* Secret.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

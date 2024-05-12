@@ -46,8 +46,6 @@ class APIService: APIServiceType {
         
         var resultArray: [Document] = []
         
-        // let apiKeyString: String = "aae19e621a75ab0a39bf676555887e27"
-        
         guard let apiKeyString = Bundle.main.kakaoApiKey else {
             print("API 키를 로드하지 못했습니다.")
             return
