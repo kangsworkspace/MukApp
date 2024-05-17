@@ -10,7 +10,7 @@
 
 ### 앱 소개
 ### <뭐 먹지? 태그로 관리하는 맛집 & 룰렛>
-<img src="https://github.com/kangsworkspace/MukAppOfficial/assets/141600830/b8f26d2d-935a-42aa-9605-8b9751426f0c"  width="900" height="550"/>
+<img src="https://github.com/kangsworkspace/MukAppOfficial/assets/141600830/b8f26d2d-935a-42aa-9605-8b9751426f0c"  width="900" height="450"/>
 <br/>
 
 자주 가는 식당들을 **특정 키워드와 함께 등록**해두고 ex) 지역 - 수원역, 종류 - 양식
