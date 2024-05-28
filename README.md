@@ -204,12 +204,12 @@ func goWebPage(url: String, fromVC: UIViewController) {
 # 추가 / 보완하면 좋을 내용들
 ### 디자인 패턴
 - **문제점 1: 디자인 패턴에 대한 이해 부족**      
-  MVVM 패턴을 적용하려고 하였으나 패턴에 대한 기초적인 이해가 부족하여 실패한 디자인 패턴이 되었습니다.
-  Model을 적절하게 선언하지 않아 공통적인 데이터를 캡슐화 없이 하드코딩해서 전달했습니다.
-  CoreDataManager처럼 Model이 아닌 파일이 Model에 속해있습니다.
-  Data binding이 되어있지 않습니다.
-  일부 View에서 ViewModel이 들고있어야 할 Data를 가지고 있습니다.
-  사실상 MVC 패턴에 더 가깝고 ViewController가 더 거대해진 의미없는 패턴이 되었습니다.
+  MVVM 패턴을 적용하려고 하였으나 패턴에 대한 기초적인 이해가 부족하여 실패한 디자인 패턴이 되었습니다.  
+  Model을 적절하게 선언하지 않아 공통적인 데이터를 캡슐화 없이 하드코딩해서 전달했습니다.  
+  CoreDataManager처럼 Model이 아닌 파일이 Model에 속해있습니다.  
+  Data binding이 되어있지 않습니다.  
+  일부 View에서 ViewModel이 들고있어야 할 Data를 가지고 있습니다.  
+  사실상 MVC 패턴에 더 가깝고 ViewController가 더 거대해진 의미없는 패턴이 되었습니다.  
   
 - **문제점 2: `View Model`을 분리 X**  
   프로젝트를 시작할 때에는 간단한 메모앱으로 생각하였고 공통적으로 사용할만한 코드가 많아서  
